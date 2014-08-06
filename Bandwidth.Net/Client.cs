@@ -43,42 +43,59 @@ namespace Bandwidth.Net
             _jsonSerializerSettings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
         }
         #region Base Http methods
-        internal Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query, string id = null)
+        internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query = null, string id = null)
         {
             var urlPath = path;
             if(id != null)
             {
                 urlPath = urlPath + "/" + id;
             }
-            if (query.Count > 0)
+            if (query != null && query.Count > 0)
             {
                 urlPath = string.Format("{0}?{1}", urlPath, string.Join("&", from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(p.Value))));
             }
-            return _client.GetAsync(urlPath).ContinueWith((task) =>
-            {
-                task.Result.EnsureSuccessStatusCode();
-                return task.Result;
-            });
+            var response = await _client.GetAsync(urlPath);
+            response.EnsureSuccessStatusCode();
+            return response;
         }
 
-        internal Task<HttpResponseMessage> MakePostRequest(string path, object data)
+        internal async Task<TResult> MakeGetRequest<TResult>(string path, IDictionary<string, string> query = null,
+            string id = null)
+        {
+            var response = await MakeGetRequest(path, query, id);
+            if (response.Content.Headers.ContentType.MediaType == "application/json")
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return json.Length > 0 ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings) : default(TResult);
+            }
+            return default(TResult);
+        }
+
+        internal async Task<HttpResponseMessage> MakePostRequest(string path, object data)
         {
 
             var json = JsonConvert.SerializeObject(data, Formatting.None, _jsonSerializerSettings);
-            return _client.PostAsync(path, new StringContent(json, Encoding.UTF8, "application/json")).ContinueWith((task) =>
-            {
-                task.Result.EnsureSuccessStatusCode();
-                return task.Result;
-            });
+            var response = await _client.PostAsync(path, new StringContent(json, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+            return response;
         }
 
-        internal Task<HttpResponseMessage> MakeDeleteRequest(string path)
+        internal async Task<TResult> MakePostRequest<TResult>(string path, object data)
         {
-            return _client.DeleteAsync(path).ContinueWith((task) =>
+            var response = await MakePostRequest(path, data);
+            if (response.Content.Headers.ContentType.MediaType == "application/json")
             {
-                task.Result.EnsureSuccessStatusCode();
-                return task.Result;
-            });
+                var json = await response.Content.ReadAsStringAsync();
+                return json.Length > 0 ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings) : default(TResult);
+            }
+            return default(TResult);
+        }
+
+        internal async Task<HttpResponseMessage> MakeDeleteRequest(string path)
+        {
+            var response = await _client.DeleteAsync(path);
+            response.EnsureSuccessStatusCode();
+            return response;
         }
         #endregion
 
@@ -93,18 +110,38 @@ namespace Bandwidth.Net
             return string.Format("{0}/{1}", _userPath, path);
         }
 
-        public Task<HttpResponseMessage> MakeCall(Call call)
+        public async Task<Uri> MakeCall(Call call)
         {
-            return MakePostRequest(ConcatUserPath(CallsPath), call);
+            var response = await MakePostRequest(ConcatUserPath(CallsPath), call);
+            return response.Headers.Location;
         }
 
-        public Task<HttpResponseMessage> ChangeCall(string callId, CallData data)
+        public async Task<Uri> UpdateCall(string callId, CallData data)
         {
-            return MakePostRequest(ConcatUserPath(string.Format("{0}/{1}", CallsPath, callId)), data);
+            var response = await MakePostRequest(ConcatUserPath(string.Format("{0}/{1}", CallsPath, callId)), data);
+            return response.Headers.Location;
+        }
+        
+
+        public Task<Recording> GetRecording(string recordingId)
+        {
+            if (recordingId == null) throw new ArgumentNullException("recordingId");
+            return MakeGetRequest<Recording>(ConcatUserPath(RecordingsPath), null, recordingId);
         }
 
-
-
+        public Task<Recording[]> GetRecordings(int? page = null, int? pageSize = null)
+        {
+            var query = new Dictionary<string, string>();
+            if (page != null)
+            {
+                query.Add("page", page.ToString());
+            }
+            if (pageSize != null)
+            {
+                query.Add("size", pageSize.ToString());
+            }
+            return MakeGetRequest<Recording[]>(ConcatUserPath(RecordingsPath), query);
+        }
 
         public void Dispose()
         {

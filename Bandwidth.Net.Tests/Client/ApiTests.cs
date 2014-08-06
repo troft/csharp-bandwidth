@@ -18,20 +18,22 @@ namespace Bandwidth.Net.Tests.Client
         {
             using (ShimsContext.Create())
             {
+                var called = false;
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
                     Assert.AreEqual("Basic", c.DefaultRequestHeaders.Authorization.Scheme);
                     Assert.AreEqual(string.Format("{0}:{1}", Fake.ApiKey, Fake.Secret), Encoding.UTF8.GetString(Convert.FromBase64String(c.DefaultRequestHeaders.Authorization.Parameter)));
+                    called = true;
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created));
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakeCall(new Call
+                    client.MakeCall(new Call
                     {
                         From = "From",
                         To = "To"
-                    }).Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
+                    }).Wait();
+                    Assert.IsTrue(called);
                 }
             }
         }
@@ -53,19 +55,18 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakeCall(new Call
+                    var uri = client.MakeCall(new Call
                     {
                         From = "From",
                         To = "To"
                     }).Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
-                    Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), response.Headers.Location.ToString());
+                    Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), uri.ToString());
                 }
             }
         }
 
         [TestMethod]
-        public void ChangeCallTest()
+        public void UpdateCallTest()
         {
             using (ShimsContext.Create())
             {
@@ -82,14 +83,89 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.ChangeCall("1", new CallData
+                    var uri = client.UpdateCall("1", new CallData
                     {
                         State = CallState.Transferring,
                         TransferTo = "Number",
                         CallbackUrl = "http://localhost"
                     }).Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
-                    Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), response.Headers.Location.ToString());
+                    Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), uri.ToString());
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GetRecording()
+        {
+            using (ShimsContext.Create())
+            {
+                var recording = new Recording
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = RecordingState.Complete,
+                    Call = "call",
+                    Media = "media"
+                };
+                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                {
+                    Assert.AreEqual(string.Format("/users/{0}/recordings/1", Fake.UserId), url);
+                    var response = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = Fake.CreateJsonContent(recording)
+                    };
+                    return Task.Run(() => response);
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    var result = client.GetRecording("1").Result;
+                    Fake.AssertObjects(recording, result);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GetRecordings()
+        {
+            using (ShimsContext.Create())
+            {
+                var recordings = new[]
+                {
+                    new Recording
+                    {
+                        Id = "1",
+                        StartTime = DateTime.Now.AddMinutes(-10),
+                        EndTime = DateTime.Now.AddMinutes(-5),
+                        State = RecordingState.Complete,
+                        Call = "call",
+                        Media = "media"
+                    },
+                    new Recording
+                    {
+                        Id = "2",
+                        StartTime = DateTime.Now.AddMinutes(-15),
+                        EndTime = DateTime.Now.AddMinutes(-13),
+                        State = RecordingState.Error,
+                        Call = "call2",
+                        Media = "media2"
+                    }
+                };
+                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                {
+                    Assert.AreEqual(string.Format("/users/{0}/recordings?page=1", Fake.UserId), url);
+                    var response = new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = Fake.CreateJsonContent(recordings)
+                    };
+                    return Task.Run(() => response);
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    var result = client.GetRecordings(1).Result;
+                    Assert.AreEqual(2, result.Length);
+                    Fake.AssertObjects(recordings[0], result[0]);
+                    Fake.AssertObjects(recordings[1], result[1]);
                 }
             }
         }
