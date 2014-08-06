@@ -11,11 +11,6 @@ namespace Bandwidth.Net.Tests.Client
     [TestClass]
     public class HttpMethodsTests
     {
-        const string FakeUserId = "FakeUserId";
-        const string FakeApiKey = "FakeApiKey";
-        const string FakeSecret = "FakeSecret";
-        const string FakeHost = "FakeHost";
-        
         [TestMethod]
         public void MakeGetRequestTest()
         {
@@ -26,7 +21,7 @@ namespace Bandwidth.Net.Tests.Client
                     Assert.AreEqual("/test?test1=value1&test2=value2", url);
                     return Task.Run(()=> new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = new Net.Client(FakeUserId, FakeApiKey, FakeSecret, FakeHost))
+                using (var client = Fake.CreateClient())
                 {
                     var response = client.MakeGetRequest("/test", 
                         new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }).Result;
@@ -46,7 +41,7 @@ namespace Bandwidth.Net.Tests.Client
                     Assert.AreEqual("/test/id?test1=value1&test2=value2", url);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = new Net.Client(FakeUserId, FakeApiKey, FakeSecret, FakeHost))
+                using (var client = Fake.CreateClient())
                 {
                     var response = client.MakeGetRequest("/test",
                         new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id").Result;
@@ -69,7 +64,7 @@ namespace Bandwidth.Net.Tests.Client
                     Assert.AreEqual("application/json", content.Headers.ContentType.MediaType);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = new Net.Client(FakeUserId, FakeApiKey, FakeSecret, FakeHost))
+                using (var client = Fake.CreateClient())
                 {
                     var response = client.MakePostRequest("/test", new {Test = true}).Result;
                     Assert.IsTrue(response.IsSuccessStatusCode);
@@ -88,7 +83,7 @@ namespace Bandwidth.Net.Tests.Client
                     Assert.AreEqual("/test", url);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = new Net.Client(FakeUserId, FakeApiKey, FakeSecret, FakeHost))
+                using (var client = Fake.CreateClient())
                 {
                     var response = client.MakeDeleteRequest("/test").Result;
                     Assert.IsTrue(response.IsSuccessStatusCode);
