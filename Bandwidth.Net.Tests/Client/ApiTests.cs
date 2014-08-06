@@ -28,7 +28,7 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    client.MakeCall(new Call
+                    client.CreateCall(new Call
                     {
                         From = "From",
                         To = "To"
@@ -55,7 +55,7 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var uri = client.MakeCall(new Call
+                    var uri = client.CreateCall(new Call
                     {
                         From = "From",
                         To = "To"
@@ -83,11 +83,11 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var uri = client.UpdateCall("1", new CallData
+                    var uri = client.UpdateCall("1", new Call
                     {
                         State = CallState.Transferring,
                         TransferTo = "Number",
-                        CallbackUrl = "http://localhost"
+                        CallbackUrl = new Uri("http://localhost")
                     }).Result;
                     Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), uri.ToString());
                 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -110,17 +111,30 @@ namespace Bandwidth.Net
             return string.Format("{0}/{1}", _userPath, path);
         }
 
-        public async Task<Uri> MakeCall(Call call)
+        private readonly Regex _callIdExtractor = new Regex(@"/" + CallsPath + @"/(\w+)$");
+        public async Task<string> CreateCall(Call call)
         {
             var response = await MakePostRequest(ConcatUserPath(CallsPath), call);
-            return response.Headers.Location;
+            var match = _callIdExtractor.Match(response.Headers.Location.LocalPath);
+            if (match == null)
+            {
+                throw new Exception("Missing id in response");
+            }
+            return match.Groups[1].Value;
         }
 
-        public async Task<Uri> UpdateCall(string callId, CallData data)
+        public async Task<Uri> UpdateCall(string callId, Call data)
         {
             var response = await MakePostRequest(ConcatUserPath(string.Format("{0}/{1}", CallsPath, callId)), data);
             return response.Headers.Location;
         }
+
+        public Task<Call> GetCall(string callId)
+        {
+            if (callId == null) throw new ArgumentNullException("callId");
+            return MakeGetRequest<Call>(ConcatUserPath(CallsPath), null, callId);
+        }
+
         
 
         public Task<Recording> GetRecording(string recordingId)
