@@ -43,7 +43,7 @@ namespace Bandwidth.Net
             _jsonSerializerSettings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
         }
         #region Base Http methods
-        private Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query, string id = null)
+        internal Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query, string id = null)
         {
             var urlPath = path;
             if(id != null)
@@ -61,7 +61,7 @@ namespace Bandwidth.Net
             });
         }
 
-        private Task<HttpResponseMessage> MakePostRequest(string path, object data)
+        internal Task<HttpResponseMessage> MakePostRequest(string path, object data)
         {
 
             var json = JsonConvert.SerializeObject(data, Formatting.None, _jsonSerializerSettings);
@@ -72,7 +72,7 @@ namespace Bandwidth.Net
             });
         }
 
-        private Task<HttpResponseMessage> MakeDeleteRequest(string path)
+        internal Task<HttpResponseMessage> MakeDeleteRequest(string path)
         {
             return _client.DeleteAsync(path).ContinueWith((task) =>
             {
