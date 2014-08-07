@@ -12,7 +12,7 @@ namespace Bandwidth.Net.Tests.Clients
     public class RecordingsTests
     {
         [TestMethod]
-        public void GetRecording()
+        public void GetTest()
         {
             using (ShimsContext.Create())
             {
@@ -43,7 +43,7 @@ namespace Bandwidth.Net.Tests.Clients
         }
 
         [TestMethod]
-        public void GetRecordings()
+        public void GetAllTest()
         {
             using (ShimsContext.Create())
             {
