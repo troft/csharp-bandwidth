@@ -63,6 +63,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Clients\CallsTests.cs" />
+    <Compile Include="Clients\AccountTests.cs" />
     <Compile Include="Clients\RecordingsTests.cs" />
     <Compile Include="ClientTests.cs" />
     <Compile Include="Fake.cs" />

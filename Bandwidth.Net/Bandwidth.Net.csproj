@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Clients\Account.cs" />
+    <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\AccountTransaction.cs" />
     <Compile Include="Data\Audio.cs" />
     <Compile Include="Data\Call.cs" />
     <Compile Include="Clients\Calls.cs" />

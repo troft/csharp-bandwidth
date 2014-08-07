@@ -35,7 +35,10 @@ namespace Bandwidth.Net
             _jsonSerializerSettings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
             Calls = new Calls(this);
             Recordings = new Recordings(this);
+            Account = new Account(this);
         }
+
+        
         #region Base Http methods
         internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query = null, string id = null, bool disposeResponse = false)
         {
@@ -146,5 +149,6 @@ namespace Bandwidth.Net
 
         public Calls Calls { get; private set; }
         public Recordings Recordings { get; private set; }
+        public Account Account { get; private set; }
     }
 }
