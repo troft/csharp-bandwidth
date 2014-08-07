@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bandwidth.Net.Tests.Client
+namespace Bandwidth.Net.Tests
 {
     [TestClass]
-    public class HttpMethodsTests
+    public class ClientTests
     {
         [TestMethod]
         public void MakeGetRequestTest()

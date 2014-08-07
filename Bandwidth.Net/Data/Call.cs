@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Bandwidth.Net
+namespace Bandwidth.Net.Data
 {
     
     public class Call

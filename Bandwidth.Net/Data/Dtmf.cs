@@ -1,4 +1,4 @@
-﻿namespace Bandwidth.Net
+﻿namespace Bandwidth.Net.Data
 {
     public class Dtmf
     {

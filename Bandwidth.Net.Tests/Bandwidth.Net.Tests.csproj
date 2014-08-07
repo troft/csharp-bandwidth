@@ -62,8 +62,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Client\ApiTests.cs" />
-    <Compile Include="Client\HttpMethodsTests.cs" />
+    <Compile Include="Clients\CallsTests.cs" />
+    <Compile Include="ClientTests.cs" />
     <Compile Include="Fake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

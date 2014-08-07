@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bandwidth.Net
+namespace Bandwidth.Net.Data
 {
     public class Gather
     {

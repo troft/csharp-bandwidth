@@ -4,14 +4,15 @@ using System.Net.Http;
 using System.Net.Http.Fakes;
 using System.Text;
 using System.Threading.Tasks;
+using Bandwidth.Net.Data;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
-namespace Bandwidth.Net.Tests.Client
+namespace Bandwidth.Net.Tests.Clients
 {
     [TestClass]
-    public class ApiTests
+    public class CallTests
     {
         [TestMethod]
         public void AuthHeaderTest()
