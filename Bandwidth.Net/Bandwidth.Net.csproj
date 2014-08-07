@@ -36,10 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Audio.cs" />
     <Compile Include="Call.cs" />
     <Compile Include="Client.Call.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Client.Recording.cs" />
+    <Compile Include="Dtmf.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Gather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Recording.cs" />
