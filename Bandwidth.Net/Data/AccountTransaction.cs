@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Bandwidth.Net.Data
@@ -54,7 +55,7 @@ namespace Bandwidth.Net.Data
             var query = base.ToDictionary();
             if (MaxItems != null)
             {
-                query.Add("maxItems", MaxItems.ToString());
+                query.Add("maxItems", MaxItems.Value.ToString(CultureInfo.InvariantCulture));
             }
             if (ToDate != null)
             {
