@@ -37,8 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Call.cs" />
+    <Compile Include="Client.Call.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Client.Recording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query.cs" />
     <Compile Include="Recording.cs" />
   </ItemGroup>
   <ItemGroup>

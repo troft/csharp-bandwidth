@@ -24,4 +24,8 @@ namespace Bandwidth.Net
         Saving,
         Error
     }
+
+    public class RecordingQuery: Query
+    {
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Bandwidth.Net
 {
@@ -58,5 +59,35 @@ namespace Bandwidth.Net
     {
         In,
         Out
+    }
+
+    public class CallQuery : Query
+    {
+        public string BridgeId { get; set; }
+        public string ConferenceId { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+
+        public override IDictionary<string, string> ToDictionary()
+        {
+            var query =  base.ToDictionary();
+            if (BridgeId != null)
+            {
+                query.Add("bridgeId", BridgeId);
+            }
+            if (ConferenceId != null)
+            {
+                query.Add("conferenceId", ConferenceId);
+            }
+            if (From != null)
+            {
+                query.Add("from", From);
+            }
+            if (To != null)
+            {
+                query.Add("to", To);
+            }
+            return query;
+        }
     }
 }

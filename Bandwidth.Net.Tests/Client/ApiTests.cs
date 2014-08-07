@@ -83,13 +83,12 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var uri = client.UpdateCall("1", new Call
+                    client.UpdateCall("1", new Call
                     {
                         State = CallState.Transferring,
                         TransferTo = "Number",
                         CallbackUrl = new Uri("http://localhost")
-                    }).Result;
-                    Assert.AreEqual(string.Format("/v1/users/{0}/calls/1", Fake.UserId), uri.ToString());
+                    }).Wait();
                 }
             }
         }
@@ -162,7 +161,7 @@ namespace Bandwidth.Net.Tests.Client
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var result = client.GetRecordings(1).Result;
+                    var result = client.GetRecordings().Result;
                     Assert.AreEqual(2, result.Length);
                     Fake.AssertObjects(recordings[0], result[0]);
                     Fake.AssertObjects(recordings[1], result[1]);

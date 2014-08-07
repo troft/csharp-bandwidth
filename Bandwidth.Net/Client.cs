@@ -12,7 +12,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Bandwidth.Net
 {
-    public sealed class Client: IDisposable
+    public sealed partial class Client: IDisposable
     {
         private readonly HttpClient _client;
         private readonly string _userPath;
@@ -21,8 +21,6 @@ namespace Bandwidth.Net
         private const string MessagesPath = "messages";
         private const string PhoneNumbersPath = "phoneNumbers";
         private const string AvailableNumbersPath = "availableNumbers";
-        private const string CallsPath = "calls";
-        private const string RecordingsPath = "recordings";
         private const string ApplicationsPath = "applications";
         private const string PortInAvailablePath = "portInAvailable";
         private const string PortInPath = "portIns";
@@ -109,52 +107,6 @@ namespace Bandwidth.Net
                 return _userPath + path;
             }
             return string.Format("{0}/{1}", _userPath, path);
-        }
-
-        private readonly Regex _callIdExtractor = new Regex(@"/" + CallsPath + @"/(\w+)$");
-        public async Task<string> CreateCall(Call call)
-        {
-            var response = await MakePostRequest(ConcatUserPath(CallsPath), call);
-            var match = _callIdExtractor.Match(response.Headers.Location.LocalPath);
-            if (match == null)
-            {
-                throw new Exception("Missing id in response");
-            }
-            return match.Groups[1].Value;
-        }
-
-        public async Task<Uri> UpdateCall(string callId, Call data)
-        {
-            var response = await MakePostRequest(ConcatUserPath(string.Format("{0}/{1}", CallsPath, callId)), data);
-            return response.Headers.Location;
-        }
-
-        public Task<Call> GetCall(string callId)
-        {
-            if (callId == null) throw new ArgumentNullException("callId");
-            return MakeGetRequest<Call>(ConcatUserPath(CallsPath), null, callId);
-        }
-
-        
-
-        public Task<Recording> GetRecording(string recordingId)
-        {
-            if (recordingId == null) throw new ArgumentNullException("recordingId");
-            return MakeGetRequest<Recording>(ConcatUserPath(RecordingsPath), null, recordingId);
-        }
-
-        public Task<Recording[]> GetRecordings(int? page = null, int? pageSize = null)
-        {
-            var query = new Dictionary<string, string>();
-            if (page != null)
-            {
-                query.Add("page", page.ToString());
-            }
-            if (pageSize != null)
-            {
-                query.Add("size", pageSize.ToString());
-            }
-            return MakeGetRequest<Recording[]>(ConcatUserPath(RecordingsPath), query);
         }
 
         public void Dispose()
