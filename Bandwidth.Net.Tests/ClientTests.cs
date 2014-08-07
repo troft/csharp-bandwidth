@@ -18,14 +18,13 @@ namespace Bandwidth.Net.Tests
             {
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual("/test?test1=value1&test2=value2", url);
+                    Assert.AreEqual("test?test1=value1&test2=value2", url);
                     return Task.Run(()=> new HttpResponseMessage(HttpStatusCode.OK));
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakeGetRequest("/test", 
-                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }).Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
+                    client.MakeGetRequest("test", 
+                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, null, true).Wait();
                 }
             }
             
@@ -38,14 +37,43 @@ namespace Bandwidth.Net.Tests
             {
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual("/test/id?test1=value1&test2=value2", url);
+                    Assert.AreEqual("test/id?test1=value1&test2=value2", url);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakeGetRequest("/test",
-                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id").Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
+                    client.MakeGetRequest("test",
+                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id", true).Wait();
+                }
+            }
+
+        }
+
+        public class TestItem
+        {
+            public string Name { get; set; }
+            public bool? Flag { get; set; }
+        }
+        [TestMethod]
+        public void MakeGetRequestTTest()
+        {
+            using (ShimsContext.Create())
+            {
+                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                {
+                    Assert.AreEqual("test?test1=value1&test2=value2", url);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK){Content = Fake.CreateJsonContent(new TestItem
+                    {
+                        Name = "Name",
+                        Flag = true
+                    })});
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    var result = client.MakeGetRequest<TestItem>("test",
+                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }).Result;
+                    Assert.AreEqual("Name", result.Name);
+                    Assert.IsTrue(result.Flag != null && result.Flag.Value);
                 }
             }
 
@@ -58,7 +86,34 @@ namespace Bandwidth.Net.Tests
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual("/test", url);
+                    Assert.AreEqual("test", url);
+                    var json = content.ReadAsStringAsync().Result;
+                    Assert.AreEqual("{\"test\":true}", json);
+                    Assert.AreEqual("application/json", content.Headers.ContentType.MediaType);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK){Content = Fake.CreateJsonContent(new TestItem
+                    {
+                        Name = "Name",
+                        Flag = true
+                    })});
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    var result = client.MakePostRequest<TestItem>("test", new {Test = true}).Result;
+                    Assert.AreEqual("Name", result.Name);
+                    Assert.IsTrue(result.Flag != null && result.Flag.Value);
+                }
+            }
+
+        }
+
+        [TestMethod]
+        public void MakePostRequestTTest()
+        {
+            using (ShimsContext.Create())
+            {
+                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
+                {
+                    Assert.AreEqual("test", url);
                     var json = content.ReadAsStringAsync().Result;
                     Assert.AreEqual("{\"test\":true}", json);
                     Assert.AreEqual("application/json", content.Headers.ContentType.MediaType);
@@ -66,8 +121,7 @@ namespace Bandwidth.Net.Tests
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakePostRequest("/test", new {Test = true}).Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
+                    client.MakePostRequest("test", new { Test = true }, true).Wait();
                 }
             }
 
@@ -80,13 +134,12 @@ namespace Bandwidth.Net.Tests
             {
                 ShimHttpClient.AllInstances.DeleteAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual("/test", url);
+                    Assert.AreEqual("test", url);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
                 using (var client = Fake.CreateClient())
                 {
-                    var response = client.MakeDeleteRequest("/test").Result;
-                    Assert.IsTrue(response.IsSuccessStatusCode);
+                    client.MakeDeleteRequest("test").Wait();
                 }
             }
 
