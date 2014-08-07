@@ -21,7 +21,7 @@ namespace Bandwidth.Net.Clients
         {
             using (var response = await _client.MakePostRequest(_client.ConcatUserPath(CallsPath), call))
             {
-                var match = _callIdExtractor.Match(response.Headers.Location.LocalPath);
+                var match = (response.Headers.Location != null)?_callIdExtractor.Match(response.Headers.Location.OriginalString):null;
                 if (match == null)
                 {
                     throw new Exception("Missing id in response");

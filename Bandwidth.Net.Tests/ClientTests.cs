@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Fakes;
+using System.Text;
 using System.Threading.Tasks;
+using Bandwidth.Net.Data;
 using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -143,6 +146,33 @@ namespace Bandwidth.Net.Tests
                 }
             }
 
+        }
+
+        [TestMethod]
+        public void AuthHeaderTest()
+        {
+            using (ShimsContext.Create())
+            {
+                var called = false;
+                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
+                {
+                    Assert.AreEqual("Basic", c.DefaultRequestHeaders.Authorization.Scheme);
+                    Assert.AreEqual(string.Format("{0}:{1}", Fake.ApiKey, Fake.Secret), Encoding.UTF8.GetString(Convert.FromBase64String(c.DefaultRequestHeaders.Authorization.Parameter)));
+                    called = true;
+                    var response = new HttpResponseMessage(HttpStatusCode.Created);
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/calls/1", Fake.UserId));
+                    return Task.Run(() => response);
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    client.Calls.Create(new Call
+                    {
+                        From = "From",
+                        To = "To"
+                    }).Wait();
+                    Assert.IsTrue(called);
+                }
+            }
         }
 
     }

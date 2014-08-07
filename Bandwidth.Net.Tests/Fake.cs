@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +16,9 @@ namespace Bandwidth.Net.Tests
         public const string Secret = "FakeSecret";
         public const string Host = "FakeHost";
 
-        public static Net.Client CreateClient()
+        public static Client CreateClient()
         {
-            return new Net.Client(UserId, ApiKey, Secret, Host);
+            return new Client(UserId, ApiKey, Secret, Host);
         }
 
         public static StringContent CreateJsonContent(object data)
@@ -32,6 +29,17 @@ namespace Bandwidth.Net.Tests
             };
             settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
             return new StringContent(JsonConvert.SerializeObject(data, Formatting.Indented, settings), Encoding.UTF8, "application/json");
+        }
+
+        public async static Task<T> ParseJsonContent<T>(HttpContent content)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            settings.Converters.Add(new StringEnumConverter { CamelCaseText = true, AllowIntegerValues = false });
+            var json = await content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
 
         public static void AssertObjects(object estimated, object value)
