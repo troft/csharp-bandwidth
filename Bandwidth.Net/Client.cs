@@ -36,6 +36,7 @@ namespace Bandwidth.Net
             Calls = new Calls(this);
             Recordings = new Recordings(this);
             Account = new Account(this);
+            Applications = new Applications(this);
         }
 
         
@@ -150,5 +151,6 @@ namespace Bandwidth.Net
         public Calls Calls { get; private set; }
         public Recordings Recordings { get; private set; }
         public Account Account { get; private set; }
+        public Applications Applications { get; private set; }
     }
 }

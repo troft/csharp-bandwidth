@@ -37,8 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Clients\Account.cs" />
+    <Compile Include="Clients\Applications.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\AccountTransaction.cs" />
+    <Compile Include="Data\Application.cs" />
     <Compile Include="Data\Audio.cs" />
     <Compile Include="Data\Call.cs" />
     <Compile Include="Clients\Calls.cs" />
