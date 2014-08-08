@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Bandwidth.Net")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(".NET SDK for use with the Catapult API")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bandwidth")]
 [assembly: AssemblyProduct("Bandwidth.Net")]
