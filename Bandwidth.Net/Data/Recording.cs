@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Bandwidth.Net
+namespace Bandwidth.Net.Data
 {
     public class Recording
     {

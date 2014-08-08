@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bandwidth.Net.Data;
 
 namespace Bandwidth.Net.Clients
 {

@@ -11,7 +11,7 @@ namespace Bandwidth.Net.Clients
         {
             _client = client;
         }
-        private const string NumberInfoPath = "phoneNumbers/numberInfo";
+        private const string NumberInfoPath = "phoneNumbers/numberInfo"; 
         public Task<Data.NumberInfo> Get(string number)
         {
             if (number == null) throw new ArgumentNullException("number");

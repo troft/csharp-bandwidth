@@ -45,6 +45,7 @@ namespace Bandwidth.Net
             Media = new Media(this);
             Messages = new Messages(this);
             NumberInfo = new NumberInfo(this);
+            PhoneNumbers = new PhoneNumbers(this);
         }
 
         
@@ -201,5 +202,6 @@ namespace Bandwidth.Net
         public Media Media { get; private set; }
         public Messages Messages { get; private set; }
         public NumberInfo NumberInfo { get; private set; }
+        public PhoneNumbers PhoneNumbers { get; private set; }
     }
 }
