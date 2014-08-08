@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -40,6 +41,8 @@ namespace Bandwidth.Net
             AvailableNumbers = new AvailableNumbers(this);
             Bridges = new Bridges(this);
             Errors = new Errors(this);
+            Conferences = new Conferences(this);
+            Media = new Media(this);
         }
 
         
@@ -106,6 +109,40 @@ namespace Bandwidth.Net
             return null;
         }
 
+        internal async Task<HttpResponseMessage> PutFile(string path, Stream stream, string mediaType, bool disposeResponse = false)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+            return await PutFileContent(path, mediaType, disposeResponse, new StreamContent(stream));
+        }
+        internal async Task<HttpResponseMessage> PutFile(string path, byte[] buffer, string mediaType, bool disposeResponse = false)
+        {
+            if (buffer == null) throw new ArgumentNullException("buffer");
+            return await PutFileContent(path, mediaType, disposeResponse, new ByteArrayContent(buffer));
+        }
+
+        private async Task<HttpResponseMessage> PutFileContent(string path, string mediaType, bool disposeResponse, HttpContent content)
+        {
+            if (mediaType != null)
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+            }
+            var response = await _client.PutAsync(FixPath(path), content);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+            }
+            catch
+            {
+                response.Dispose();
+                throw;
+            }
+            if (!disposeResponse) return response;
+            response.Dispose();
+            return null;
+        }
+
+        
+
         internal async Task<TResult> MakePostRequest<TResult>(string path, object data)
         {
             using (var response = await MakePostRequest(path, data))
@@ -158,5 +195,7 @@ namespace Bandwidth.Net
         public AvailableNumbers AvailableNumbers { get; private set; }
         public Bridges Bridges { get; private set; }
         public Errors Errors { get; private set; }
+        public Conferences Conferences { get; private set; }
+        public Media Media { get; private set; }
     }
 }

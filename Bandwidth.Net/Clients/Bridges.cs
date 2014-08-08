@@ -42,10 +42,9 @@ namespace Bandwidth.Net.Clients
             return _client.MakeGetRequest<Bridge>(_client.ConcatUserPath(BridgesPath), null, bridgeId);
         }
 
-        public Task<Bridge[]> GetAll(CallQuery query = null)
+        public Task<Bridge[]> GetAll()
         {
-            query = query ?? new CallQuery();
-            return _client.MakeGetRequest<Bridge[]>(_client.ConcatUserPath(BridgesPath), query.ToDictionary());
+            return _client.MakeGetRequest<Bridge[]>(_client.ConcatUserPath(BridgesPath));
         }
 
         public Task SetAudio(string bridgeId, Audio audio)

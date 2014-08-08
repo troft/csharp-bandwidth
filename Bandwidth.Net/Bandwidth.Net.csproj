@@ -39,6 +39,8 @@
     <Compile Include="Clients\Account.cs" />
     <Compile Include="Clients\Applications.cs" />
     <Compile Include="Clients\AvailableNumbers.cs" />
+    <Compile Include="Clients\Media.cs" />
+    <Compile Include="Clients\Conferences.cs" />
     <Compile Include="Clients\Bridges.cs" />
     <Compile Include="Clients\Errors.cs" />
     <Compile Include="Data\Account.cs" />
@@ -51,10 +53,12 @@
     <Compile Include="Clients\Calls.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Clients\Recordings.cs" />
+    <Compile Include="Data\Conference.cs" />
     <Compile Include="Data\Dtmf.cs" />
     <Compile Include="Data\Error.cs" />
     <Compile Include="Data\Event.cs" />
     <Compile Include="Data\Gather.cs" />
+    <Compile Include="Data\Media.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Recording.cs" />
