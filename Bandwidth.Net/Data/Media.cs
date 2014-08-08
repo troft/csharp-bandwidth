@@ -14,10 +14,22 @@ namespace Bandwidth.Net.Data
         public Uri Content { get; set; }
     }
 
-    public class MediaContent
+    public sealed class MediaContent: IDisposable
     {
+        private readonly IDisposable _owner;
+
+        internal MediaContent(IDisposable owner)
+        {
+            if (owner == null) throw new ArgumentNullException("owner");
+            _owner = owner;
+        }
+
         public string MediaType { get; set; }
         public Stream Stream { get; set; }
         public byte[] Buffer { get; set; }
+        public void Dispose()
+        {
+            _owner.Dispose();
+        }
     }
 }

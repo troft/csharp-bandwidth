@@ -22,32 +22,36 @@ namespace Bandwidth.Net.Clients
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
             if (stream == null) throw new ArgumentNullException("stream");
-            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), stream, mediaType, true);
+            mediaType = mediaType ?? "application/octet-stream";
+            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName))), stream, mediaType, true);
         }
 
         public Task Set(string mediaName, byte[] buffer, string mediaType = null)
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
             if (buffer == null) throw new ArgumentNullException("buffer");
-            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), buffer, mediaType, true);
+            mediaType = mediaType ?? "application/octet-stream";
+            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName))), buffer, mediaType, true);
         }
 
         public async Task<MediaContent> Get(string mediaName, bool asStream = false)
         {
             if (mediaName == null) throw new ArgumentNullException("mediaName");
-            using (var response = await _client.MakeGetRequest(_client.ConcatUserPath(MediaPath), null, mediaName))
+            
+            var response =
+                await
+                    _client.MakeGetRequest(_client.ConcatUserPath(MediaPath), null, Uri.EscapeDataString(mediaName));
+            var content = new MediaContent(response) {MediaType = response.Content.Headers.ContentType.MediaType};
+            if (asStream)
             {
-                var content = new MediaContent {MediaType = response.Content.Headers.ContentType.MediaType};
-                if (asStream)
-                {
-                    content.Stream = await response.Content.ReadAsStreamAsync();
-                }
-                else
-                {
-                    content.Buffer = await response.Content.ReadAsByteArrayAsync();
-                }
-                return content;
+                content.Stream = await response.Content.ReadAsStreamAsync();
             }
+            else
+            {
+                content.Buffer = await response.Content.ReadAsByteArrayAsync();
+            }
+            return content;
+
         }
         
         public Task<Data.Media[]> GetAll()
@@ -59,7 +63,7 @@ namespace Bandwidth.Net.Clients
         public Task Remove(string mediaName)
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
-            return _client.MakeDeleteRequest(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)));
+            return _client.MakeDeleteRequest(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName))));
         }
     }
 }
