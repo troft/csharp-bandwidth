@@ -12,12 +12,12 @@ namespace Bandwidth.Net.Clients
         {
             _client = client;
         }
-        private const string ApplicationsPath = "applications";
+        private const string AvailableNumbersPath = "availableNumbers";
 
         public Task<AvailableNumber[]> GetAll(AvailableNumberQuery query = null)
         {
             query = query ?? new AvailableNumberQuery();
-            return _client.MakeGetRequest<AvailableNumber[]>(_client.ConcatUserPath(ApplicationsPath), query.ToDictionary());
+            return _client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersPath, query.ToDictionary());
         }
     }
 }
