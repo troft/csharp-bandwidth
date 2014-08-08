@@ -22,14 +22,14 @@ namespace Bandwidth.Net.Clients
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
             if (stream == null) throw new ArgumentNullException("stream");
-            return _client.PutFile(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), stream, mediaType, true);
+            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), stream, mediaType, true);
         }
 
         public Task Set(string mediaName, byte[] buffer, string mediaType = null)
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
             if (buffer == null) throw new ArgumentNullException("buffer");
-            return _client.PutFile(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), buffer, mediaType, true);
+            return _client.PutData(_client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, mediaName)), buffer, mediaType, true);
         }
 
         public async Task<MediaContent> Get(string mediaName, bool asStream = false)

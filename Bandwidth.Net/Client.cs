@@ -112,12 +112,12 @@ namespace Bandwidth.Net
             return null;
         }
 
-        internal async Task<HttpResponseMessage> PutFile(string path, Stream stream, string mediaType, bool disposeResponse = false)
+        internal async Task<HttpResponseMessage> PutData(string path, Stream stream, string mediaType, bool disposeResponse = false)
         {
             if (stream == null) throw new ArgumentNullException("stream");
             return await PutFileContent(path, mediaType, disposeResponse, new StreamContent(stream));
         }
-        internal async Task<HttpResponseMessage> PutFile(string path, byte[] buffer, string mediaType, bool disposeResponse = false)
+        internal async Task<HttpResponseMessage> PutData(string path, byte[] buffer, string mediaType, bool disposeResponse = false)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return await PutFileContent(path, mediaType, disposeResponse, new ByteArrayContent(buffer));

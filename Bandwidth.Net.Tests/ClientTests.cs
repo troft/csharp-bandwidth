@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Fakes;
@@ -174,6 +175,52 @@ namespace Bandwidth.Net.Tests
                 }
             }
         }
+        [TestMethod]
+        public void PutDataWithStreamTest()
+        {
+            using (ShimsContext.Create())
+            {
+                var data = new byte[]{1, 2, 3};
+                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
+                {
+                    Assert.AreEqual("test", url);
+                    var stream = content.ReadAsStreamAsync().Result;
+                    var buffer = new byte[3];
+                    stream.Read(buffer, 0, buffer.Length);
+                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
+                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    using (var stream = new MemoryStream(data))
+                    {
+                        client.PutData("test", stream, "media/type", true).Wait();
+                    }
+                }
+            }
 
+        }
+        [TestMethod]
+        public void PutDataWithByteArrayTest()
+        {
+            using (ShimsContext.Create())
+            {
+                var data = new byte[] { 1, 2, 3, 4 };
+                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
+                {
+                    Assert.AreEqual("test", url);
+                    var buffer = content.ReadAsByteArrayAsync().Result;
+                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
+                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
+                };
+                using (var client = Fake.CreateClient())
+                {
+                    client.PutData("test", data, "media/type", true).Wait();
+                }
+            }
+
+        }
     }
 }
