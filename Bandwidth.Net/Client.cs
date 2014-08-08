@@ -43,6 +43,7 @@ namespace Bandwidth.Net
             Errors = new Errors(this);
             Conferences = new Conferences(this);
             Media = new Media(this);
+            Messages = new Messages(this);
         }
 
         
@@ -197,5 +198,6 @@ namespace Bandwidth.Net
         public Errors Errors { get; private set; }
         public Conferences Conferences { get; private set; }
         public Media Media { get; private set; }
+        public Messages Messages { get; private set; }
     }
 }
