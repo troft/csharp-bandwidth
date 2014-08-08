@@ -38,6 +38,8 @@ namespace Bandwidth.Net
             Account = new Account(this);
             Applications = new Applications(this);
             AvailableNumbers = new AvailableNumbers(this);
+            Bridges = new Bridges(this);
+            Errors = new Errors(this);
         }
 
         
@@ -154,5 +156,7 @@ namespace Bandwidth.Net
         public Account Account { get; private set; }
         public Applications Applications { get; private set; }
         public AvailableNumbers AvailableNumbers { get; private set; }
+        public Bridges Bridges { get; private set; }
+        public Errors Errors { get; private set; }
     }
 }
