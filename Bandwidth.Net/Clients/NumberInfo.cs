@@ -15,7 +15,7 @@ namespace Bandwidth.Net.Clients
         public Task<Data.NumberInfo> Get(string number)
         {
             if (number == null) throw new ArgumentNullException("number");
-            return _client.MakeGetRequest<Data.NumberInfo>(_client.ConcatUserPath(NumberInfoPath), null, number);
+            return _client.MakeGetRequest<Data.NumberInfo>(NumberInfoPath, null, Uri.EscapeDataString(number));
         }
     }
 }

@@ -63,6 +63,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Clients\ApplicationsTests.cs" />
+    <Compile Include="Clients\NumberInfoTests.cs" />
     <Compile Include="Clients\MessagesTests.cs" />
     <Compile Include="Clients\MediaTests.cs" />
     <Compile Include="Clients\Errors.cs" />
