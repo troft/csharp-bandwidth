@@ -44,6 +44,7 @@ namespace Bandwidth.Net
             Conferences = new Conferences(this);
             Media = new Media(this);
             Messages = new Messages(this);
+            NumberInfo = new NumberInfo(this);
         }
 
         
@@ -199,5 +200,6 @@ namespace Bandwidth.Net
         public Conferences Conferences { get; private set; }
         public Media Media { get; private set; }
         public Messages Messages { get; private set; }
+        public NumberInfo NumberInfo { get; private set; }
     }
 }
