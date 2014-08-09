@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Clients\AccountTests.cs" />
     <Compile Include="Clients\ApplicationsTests.cs" />
+    <Compile Include="Clients\AvailableNumbersTests.cs" />
     <Compile Include="ClientTests.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HttpServer.cs" />

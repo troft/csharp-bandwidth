@@ -17,7 +17,8 @@ namespace Bandwidth.Net.Clients
         public Task<AvailableNumber[]> GetAll(AvailableNumberQuery query = null)
         {
             query = query ?? new AvailableNumberQuery();
-            return _client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersPath, query.ToDictionary());
+            var subPath = (query.Type == AvailableNumberType.Local) ? "local" : "TollFree";
+            return _client.MakeGetRequest<AvailableNumber[]>(string.Format("{0}/{1}", AvailableNumbersPath, subPath), query.ToDictionary());
         }
     }
 }

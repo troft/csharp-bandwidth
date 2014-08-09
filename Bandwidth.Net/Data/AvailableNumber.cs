@@ -24,6 +24,7 @@ namespace Bandwidth.Net.Data
         public bool? InLocalCallingArea { get; set; }
         public int? Quantity { get; set; }
         public string Pattern { get; set; }
+        public AvailableNumberType Type { get; set; }
 
         public override IDictionary<string, string> ToDictionary()
         {
@@ -62,6 +63,12 @@ namespace Bandwidth.Net.Data
             }
             return query;
         }
+    }
+
+    public enum AvailableNumberType
+    {
+        Local,
+        TollFree
     }
 
 }

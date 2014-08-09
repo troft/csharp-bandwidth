@@ -1,9 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Net.Http.Fakes;
 using System.Threading.Tasks;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -14,34 +12,30 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var numbers = new[]{
+                new AvailableNumber
+                {
+                    Number = "111"
+                },
+                new AvailableNumber
+                {
+                    Number = "222"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var recordings = new[]
-                {
-                    new AvailableNumber
-                    {
-                        Number = "111"
-                    },
-                    new AvailableNumber
-                    {
-                        Number = "222"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual("availableNumbers?quantity=2" , url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(recordings)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = "/v1/availableNumbers/local?size=2",
+                ContentToSend = Helper.CreateJsonContent(numbers)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var result = client.AvailableNumbers.GetAll(new AvailableNumberQuery{Quantity = 2}).Result;
+                    var result = client.AvailableNumbers.GetAll(new AvailableNumberQuery{ Size = 2 }).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
-                    Helper.AssertObjects(recordings[0], result[0]);
-                    Helper.AssertObjects(recordings[1], result[1]);
+                    Helper.AssertObjects(numbers[0], result[0]);
+                    Helper.AssertObjects(numbers[1], result[1]);
                 }
             }
         }
