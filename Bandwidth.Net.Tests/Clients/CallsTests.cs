@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,25 +11,27 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void CreateTest()
         {
-            using (ShimsContext.Create())
+            var call = new Call
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls", Helper.UserId), url);
-                    var call = Helper.ParseJsonContent<Call>(content).Result;
-                    Assert.AreEqual("From", call.From);
-                    Assert.AreEqual("To", call.To);
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                StartTime = DateTime.Now.AddMinutes(-10),
+                EndTime = DateTime.Now.AddMinutes(-5),
+                State = CallState.Active,
+                From = "From",
+                To = "To",
+                Direction = CallDirection.Out
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(call),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var id = client.Calls.Create(new Call
-                    {
-                        From = "From",
-                        To = "To"
-                    }).Result;
+                    var id = client.Calls.Create(call).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual("1", id);
                 }
             }
@@ -42,27 +40,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void UpdateTest()
         {
-            using (ShimsContext.Create())
+            var call = new Call
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1", Helper.UserId), url);
-                    var call = Helper.ParseJsonContent<Call>(content).Result;
-                    Assert.AreEqual(CallState.Transferring, call.State);
-                    Assert.AreEqual("Number", call.TransferTo);
-                    Assert.AreEqual("http://localhost/", call.CallbackUrl.ToString());
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                State = CallState.Completed,
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(call),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Calls.Update("1", new Call
-                    {
-                        State = CallState.Transferring,
-                        TransferTo = "Number",
-                        CallbackUrl = new Uri("http://localhost/")
-                    }).Wait();
+                    client.Calls.Update("1", call).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -70,30 +63,27 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var call = new Call
             {
-                var call = new Call
-                {
-                    Id = "1",
-                    StartTime = DateTime.Now.AddMinutes(-10),
-                    EndTime = DateTime.Now.AddMinutes(-5),
-                    State = CallState.Active,
-                    From = "From",
-                    To = "To",
-                    Direction = CallDirection.Out
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(call)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                StartTime = DateTime.Now.AddMinutes(-10),
+                EndTime = DateTime.Now.AddMinutes(-5),
+                State = CallState.Active,
+                From = "From",
+                To = "To",
+                Direction = CallDirection.Out
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(call)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Calls.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(call, result);
                 }
             }
@@ -102,64 +92,64 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var calls = new[]
-                {
-                    new Call
-                    {
-                        Id = "1",
-                        StartTime = DateTime.Now.AddMinutes(-10),
-                        EndTime = DateTime.Now.AddMinutes(-5),
-                        State = CallState.Active,
-                        From = "From",
-                        To = "To",
-                        Direction = CallDirection.Out
-                    },
-                    new Call
-                    {
-                        Id = "2",
-                        StartTime = DateTime.Now.AddMinutes(-15),
-                        EndTime = DateTime.Now.AddMinutes(-11),
-                        State = CallState.Completed,
-                        From = "From2",
-                        To = "To2",
-                        Direction = CallDirection.In
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(calls)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Calls.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(calls[0], result[0]);
                     Helper.AssertObjects(calls[1], result[1]);
                 }
             }
         }
+
         [TestMethod]
         public void SetAudioTest()
         {
-            using (ShimsContext.Create())
+            var audio = new Audio
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/audio", Helper.UserId), url);
-                    var audio = Helper.ParseJsonContent<Audio>(content).Result;
-                    Assert.AreEqual("Test", audio.Sentence);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
+                Sentence = "Sentence"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/audio", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(audio)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Calls.SetAudio("1", new Audio{Sentence = "Test"}).Wait();
+                    client.Calls.SetAudio("1", audio).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -167,18 +157,21 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void SetDtmfTest()
         {
-            using (ShimsContext.Create())
+            var dtmf = new Dtmf
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/dtmf", Helper.UserId), url);
-                    var dtmf = Helper.ParseJsonContent<Dtmf>(content).Result;
-                    Assert.AreEqual("Test", dtmf.DtmfOut);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
+                DtmfOut = "Test"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/dtmf", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(dtmf)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Calls.SetDtmf("1", new Dtmf { DtmfOut = "Test" }).Wait();
+                    client.Calls.SetDtmf("1", dtmf).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -186,18 +179,21 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void CreateGatherTest()
         {
-            using (ShimsContext.Create())
+            var gather = new CreateGather
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/gather", Helper.UserId), url);
-                    var gather = Helper.ParseJsonContent<CreateGather>(content).Result;
-                    Assert.AreEqual("00", gather.TerminatingDigits);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created));
-                };
+                TerminatingDigits = "00"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(gather)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Calls.CreateGather("1", new CreateGather { TerminatingDigits = "00" }).Wait();
+                    client.Calls.CreateGather("1", gather).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -205,18 +201,21 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void UpdateGatherTest()
         {
-            using (ShimsContext.Create())
+            var gather = new Gather
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/gather/11", Helper.UserId), url);
-                    var gather = Helper.ParseJsonContent<Gather>(content).Result;
-                    Assert.AreEqual("00", gather.Digits);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created));
-                };
+                Reason = "Reason"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather/11", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(gather)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Calls.UpdateGather("1", "11", new Gather { Digits = "00" }).Wait();
+                    client.Calls.UpdateGather("1", "11", gather).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -224,21 +223,21 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetGatherTest()
         {
-            using (ShimsContext.Create())
+            var gather = new Gather
             {
-                var gather = new Gather
-                {
-                    Id = "11",
-                    Digits = "00"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/gather/11", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created){Content = Helper.CreateJsonContent(gather)});
-                };
+                Reason = "Reason"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather/11", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(gather)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var result  = client.Calls.GetGather("1", "11").Result;
+                    var result = client.Calls.GetGather("1", "11").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(gather, result);
                 }
             }
@@ -247,21 +246,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetEventTest()
         {
-            using (ShimsContext.Create())
+            var ev = new Event
             {
-                var ev = new Event
-                {
-                    Id = "11",
-                    Data = "Test"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/events/11", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(ev) });
-                };
+                Name = "Event",
+                Id = "11"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/events/11", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(ev)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Calls.GetEvent("1", "11").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(ev, result);
                 }
             }
@@ -270,28 +270,29 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetEventsTest()
         {
-            using (ShimsContext.Create())
-            {
-                var events = new[]{
-                    new Event
-                    {
-                        Id = "11",
-                        Data = "Test"
-                    },
-                    new Event
-                    {
-                        Id = "22",
-                        Data = "Test2"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+            var events = new []{
+                new Event
                 {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/events", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(events) });
-                };
+                    Name = "Event",
+                    Id = "11"
+                },
+                new Event
+                {
+                    Name = "Event2",
+                    Id = "12"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/events", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(events)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Calls.GetEvents("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(events[0], result[0]);
                     Helper.AssertObjects(events[1], result[1]);
@@ -302,31 +303,32 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetRecordingsTest()
         {
-            using (ShimsContext.Create())
-            {
-                var recordings = new[]{
-                    new Recording
-                    {
-                        Id = "11",
-                        State = RecordingState.Complete
-                    },
-                    new Recording
-                    {
-                        Id = "22",
-                        State = RecordingState.Recording
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+            var events = new[]{
+                new Recording
                 {
-                    Assert.AreEqual(string.Format("users/{0}/calls/1/recordings", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(recordings) });
-                };
+                    Id = "11",
+                    Media = "Media"
+                },
+                new Recording
+                {
+                    Id = "12",
+                    Media = "Media2"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/recordings", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(events)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Calls.GetRecordings("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
-                    Helper.AssertObjects(recordings[0], result[0]);
-                    Helper.AssertObjects(recordings[1], result[1]);
+                    Helper.AssertObjects(events[0], result[0]);
+                    Helper.AssertObjects(events[1], result[1]);
                 }
             }
         }
