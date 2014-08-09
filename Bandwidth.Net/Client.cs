@@ -84,7 +84,7 @@ namespace Bandwidth.Net
         {
             using (var response = await MakeGetRequest(path, query, id))
             {
-                if (response.Content.Headers.ContentType.MediaType == "application/json")
+                if (response.Content.Headers.ContentType!= null && response.Content.Headers.ContentType.MediaType == "application/json")
                 {
                     var json = await response.Content.ReadAsStringAsync();
                     return json.Length > 0

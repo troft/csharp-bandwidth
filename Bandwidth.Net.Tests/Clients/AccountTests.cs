@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,25 +10,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var account = new Account
             {
-                var account = new Account
-                {
-                    AccountType = AccountType.PrePay,
-                    Balance = 100
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/account", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(account)
-                    };
-                    return Task.Run(() => response);
-                };
+                AccountType = AccountType.PrePay,
+                Balance = 100
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/account", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(account)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Account.Get().Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(account, result);
                 }
             }
@@ -42,39 +34,36 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTransactionsTest()
         {
-            using (ShimsContext.Create())
+            var transactions = new[]
             {
-                var transactions = new[]
+                new AccountTransaction
                 {
-                    new AccountTransaction
-                    {
-                        Id = "1",
-                        Type = AccountTransactionType.AutoRecharge,
-                        Amount = 10,
-                        Units = 1,
-                        Time = DateTime.Now.AddMinutes(-10)
-                    },
-                    new AccountTransaction
-                    {
-                        Id = "2",
-                        Type = AccountTransactionType.Payment,
-                        Amount = 16,
-                        Units = 2,
-                        Time = DateTime.Now.AddMinutes(-15)
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                    Id = "1",
+                    Type = AccountTransactionType.AutoRecharge,
+                    Amount = 10,
+                    Units = 1,
+                    Time = DateTime.Now.AddMinutes(-10)
+                },
+                new AccountTransaction
                 {
-                    Assert.AreEqual(string.Format("users/{0}/account/transactions", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(transactions)
-                    };
-                    return Task.Run(() => response);
-                };
+                    Id = "2",
+                    Type = AccountTransactionType.Payment,
+                    Amount = 16,
+                    Units = 2,
+                    Time = DateTime.Now.AddMinutes(-15)
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/account/transactions", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(transactions)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Account.GetTransactions().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(transactions[0], result[0]);
                     Helper.AssertObjects(transactions[1], result[1]);
