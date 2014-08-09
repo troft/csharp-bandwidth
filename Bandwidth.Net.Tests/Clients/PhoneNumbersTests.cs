@@ -1,9 +1,5 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -14,25 +10,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void CreateTest()
         {
-            using (ShimsContext.Create())
+            var phoneNumber = new PhoneNumber
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Helper.UserId), url);
-                    var phoneNumber = Helper.ParseJsonContent<PhoneNumber>(content).Result;
-                    Assert.AreEqual("Name", phoneNumber.Name);
-                    Assert.AreEqual("Number", phoneNumber.Number);
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Name = "PhoneNumber",
+                Number = "Number"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/phoneNumbers", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(phoneNumber),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var id = client.PhoneNumbers.Create(new PhoneNumber
-                    {
-                        Name = "Name",
-                        Number = "Number"
-                    }).Result;
+                    var id = client.PhoneNumbers.Create(phoneNumber).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual("1", id);
                 }
             }
@@ -41,25 +35,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void UpdateTest()
         {
-            using (ShimsContext.Create())
+            var phoneNumber = new PhoneNumber
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
-                    var phoneNumber = Helper.ParseJsonContent<PhoneNumber>(content).Result;
-                    Assert.AreEqual("Name", phoneNumber.Name);
-                    Assert.AreEqual("Number", phoneNumber.Number);
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Name = "PhoneNumber",
+                Number = "Number"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(phoneNumber),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.PhoneNumbers.Update("1", new PhoneNumber
-                    {
-                        Name = "Name",
-                        Number = "Number"
-                    }).Wait();
+                    client.PhoneNumbers.Update("1", phoneNumber).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -67,26 +59,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var phoneNumber = new PhoneNumber
             {
-                var phoneNumber = new PhoneNumber
-                {
-                    Id = "1",
-                    Name = "Name",
-                    Number = "Number"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(phoneNumber)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                Name = "PhoneNumber",
+                Number = "Number"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(phoneNumber)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.PhoneNumbers.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(phoneNumber, result);
                 }
             }
@@ -95,35 +84,31 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var phoneNumbers = new[]{
+                new PhoneNumber
+                {
+                    Id = "1",
+                    Name = "PhoneNumber",
+                    Number = "Number"
+                },
+                new PhoneNumber
+                {
+                    Id = "2",
+                    Name = "PhoneNumber2",
+                    Number = "Number2"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var phoneNumbers = new[]
-                {
-                    new PhoneNumber
-                    {
-                        Id = "1",
-                        Name = "Name",
-                        Number = "Number"
-                    },
-                    new PhoneNumber
-                    {
-                        Id = "2",
-                        Name = "Name2",
-                        Number = "Number2"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(phoneNumbers)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/phoneNumbers", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(phoneNumbers)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.PhoneNumbers.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(phoneNumbers[0], result[0]);
                     Helper.AssertObjects(phoneNumbers[1], result[1]);
@@ -133,16 +118,16 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void RemoveTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.DeleteAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
+                EstimatedMethod = "DELETE",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     client.PhoneNumbers.Remove("1").Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }

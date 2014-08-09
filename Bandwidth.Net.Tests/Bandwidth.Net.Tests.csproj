@@ -64,6 +64,7 @@
     <Compile Include="Clients\BridgesTests.cs" />
     <Compile Include="Clients\CallsTests.cs" />
     <Compile Include="Clients\Errors.cs" />
+    <Compile Include="Clients\PhoneNumbersTests.cs" />
     <Compile Include="Clients\RecordingsTests.cs" />
     <Compile Include="ClientTests.cs" />
     <Compile Include="Helper.cs" />
