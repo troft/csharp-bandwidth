@@ -63,6 +63,7 @@
     <Compile Include="Clients\AvailableNumbersTests.cs" />
     <Compile Include="Clients\BridgesTests.cs" />
     <Compile Include="Clients\CallsTests.cs" />
+    <Compile Include="Clients\ConferencesTests.cs" />
     <Compile Include="Clients\Errors.cs" />
     <Compile Include="Clients\MessagesTests.cs" />
     <Compile Include="Clients\NumberInfoTests.cs" />

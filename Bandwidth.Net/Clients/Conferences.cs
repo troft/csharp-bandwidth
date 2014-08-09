@@ -42,11 +42,7 @@ namespace Bandwidth.Net.Clients
             return _client.MakeGetRequest<Conference>(_client.ConcatUserPath(ConferencesPath), null, conferenceId);
         }
 
-        public Task<Conference[]> GetAll()
-        {
-            return _client.MakeGetRequest<Conference[]>(_client.ConcatUserPath(ConferencesPath));
-        }
-
+       
         public Task SetAudio(string conferenceId, Audio audio)
         {
             if (conferenceId == null) throw new ArgumentNullException("conferenceId");
