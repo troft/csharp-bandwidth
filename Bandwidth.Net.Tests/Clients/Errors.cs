@@ -1,10 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
-using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
+﻿using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,25 +9,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var error = new Error
             {
-                var error = new Error
-                {
-                    Id = "1",
-                    Message = "Error"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/errors/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(error)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                Message = "Message"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/errors/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(error)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Errors.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(error, result);
                 }
             }
@@ -42,33 +33,29 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var errors = new[]{
+                new Error
+                {
+                    Id = "1",
+                    Message = "Message"
+                },
+                new Error
+                {
+                    Id = "2",
+                    Message = "Message2"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var errors = new[]
-                {
-                    new Error
-                    {
-                        Id = "1",
-                        Message = "Error"
-                    },
-                    new Error
-                    {
-                        Id = "2",
-                        Message = "Error2"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/errors", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(errors)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/errors", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(errors)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Errors.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(errors[0], result[0]);
                     Helper.AssertObjects(errors[1], result[1]);
