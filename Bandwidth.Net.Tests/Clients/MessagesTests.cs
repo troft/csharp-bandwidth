@@ -18,15 +18,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/messages", Fake.UserId), url);
-                    var message = Fake.ParseJsonContent<Message>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/messages", Helper.UserId), url);
+                    var message = Helper.ParseJsonContent<Message>(content).Result;
                     Assert.AreEqual("From", message.From);
                     Assert.AreEqual("To", message.To);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/messages/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/messages/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var id = client.Messages.Send(new Message
                     {
@@ -53,17 +53,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/messages/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/messages/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(message)
+                        Content = Helper.CreateJsonContent(message)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Messages.Get("1").Result;
-                    Fake.AssertObjects(message, result);
+                    Helper.AssertObjects(message, result);
                 }
             }
         }
@@ -90,19 +90,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/messages", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/messages", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(messages)
+                        Content = Helper.CreateJsonContent(messages)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Messages.GetAll().Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(messages[0], result[0]);
-                    Fake.AssertObjects(messages[1], result[1]);
+                    Helper.AssertObjects(messages[0], result[0]);
+                    Helper.AssertObjects(messages[1], result[1]);
                 }
             }
         }

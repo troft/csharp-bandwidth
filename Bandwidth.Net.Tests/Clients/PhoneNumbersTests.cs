@@ -18,15 +18,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Fake.UserId), url);
-                    var phoneNumber = Fake.ParseJsonContent<PhoneNumber>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Helper.UserId), url);
+                    var phoneNumber = Helper.ParseJsonContent<PhoneNumber>(content).Result;
                     Assert.AreEqual("Name", phoneNumber.Name);
                     Assert.AreEqual("Number", phoneNumber.Number);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var id = client.PhoneNumbers.Create(new PhoneNumber
                     {
@@ -45,15 +45,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Fake.UserId), url);
-                    var phoneNumber = Fake.ParseJsonContent<PhoneNumber>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
+                    var phoneNumber = Helper.ParseJsonContent<PhoneNumber>(content).Result;
                     Assert.AreEqual("Name", phoneNumber.Name);
                     Assert.AreEqual("Number", phoneNumber.Number);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/phoneNumbers/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.PhoneNumbers.Update("1", new PhoneNumber
                     {
@@ -77,17 +77,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(phoneNumber)
+                        Content = Helper.CreateJsonContent(phoneNumber)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.PhoneNumbers.Get("1").Result;
-                    Fake.AssertObjects(phoneNumber, result);
+                    Helper.AssertObjects(phoneNumber, result);
                 }
             }
         }
@@ -114,19 +114,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(phoneNumbers)
+                        Content = Helper.CreateJsonContent(phoneNumbers)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.PhoneNumbers.GetAll().Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(phoneNumbers[0], result[0]);
-                    Fake.AssertObjects(phoneNumbers[1], result[1]);
+                    Helper.AssertObjects(phoneNumbers[0], result[0]);
+                    Helper.AssertObjects(phoneNumbers[1], result[1]);
                 }
             }
         }
@@ -137,10 +137,10 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.DeleteAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/phoneNumbers/1", Helper.UserId), url);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.PhoneNumbers.Remove("1").Wait();
                 }

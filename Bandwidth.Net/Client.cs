@@ -20,13 +20,14 @@ namespace Bandwidth.Net
         private readonly JsonSerializerSettings _jsonSerializerSettings;
 
   
-        public Client(string userId, string apiToken, string secret, string host = "api.catapult.inetwork.com")
+        public Client(string userId, string apiToken, string secret, string baseUrl = "https://api.catapult.inetwork.com/")
         {
             if (userId == null) throw new ArgumentNullException("userId");
             if (apiToken == null) throw new ArgumentNullException("apiToken");
             if (secret == null) throw new ArgumentNullException("secret");
             _userPath = string.Format("users/{0}", userId);
-            _client = new HttpClient {BaseAddress = new UriBuilder("https", host, 443, "/v1/").Uri};
+            var url = new UriBuilder(baseUrl) {Path = "/v1/"};
+            _client = new HttpClient {BaseAddress = url.Uri};
             _client.DefaultRequestHeaders.Authorization = 
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", apiToken, secret))));
             _jsonSerializerSettings = new JsonSerializerSettings

@@ -28,17 +28,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/recordings/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/recordings/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(recording)
+                        Content = Helper.CreateJsonContent(recording)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Recordings.Get("1").Result;
-                    Fake.AssertObjects(recording, result);
+                    Helper.AssertObjects(recording, result);
                 }
             }
         }
@@ -71,19 +71,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/recordings?page=1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/recordings?page=1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(recordings)
+                        Content = Helper.CreateJsonContent(recordings)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Recordings.GetAll(new RecordingQuery{Page = 1}).Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(recordings[0], result[0]);
-                    Fake.AssertObjects(recordings[1], result[1]);
+                    Helper.AssertObjects(recordings[0], result[0]);
+                    Helper.AssertObjects(recordings[1], result[1]);
                 }
             }
         }

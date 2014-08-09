@@ -19,15 +19,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges", Fake.UserId), url);
-                    var bridge = Fake.ParseJsonContent<Bridge>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/bridges", Helper.UserId), url);
+                    var bridge = Helper.ParseJsonContent<Bridge>(content).Result;
                     Assert.AreEqual("http://localhost/", bridge.Calls.ToString());
                     Assert.AreEqual(BridgeState.Active, bridge.State);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var id = client.Bridges.Create(new Bridge
                     {
@@ -46,15 +46,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Fake.UserId), url);
-                    var bridge = Fake.ParseJsonContent<Bridge>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Helper.UserId), url);
+                    var bridge = Helper.ParseJsonContent<Bridge>(content).Result;
                     Assert.AreEqual("http://localhost/", bridge.Calls.ToString());
                     Assert.AreEqual(BridgeState.Completed, bridge.State);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Bridges.Update("1", new Bridge
                     {
@@ -78,17 +78,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(bridge)
+                        Content = Helper.CreateJsonContent(bridge)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.Get("1").Result;
-                    Fake.AssertObjects(bridge, result);
+                    Helper.AssertObjects(bridge, result);
                 }
             }
         }
@@ -115,19 +115,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/bridges", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(bridges)
+                        Content = Helper.CreateJsonContent(bridges)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.GetAll().Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(bridges[0], result[0]);
-                    Fake.AssertObjects(bridges[1], result[1]);
+                    Helper.AssertObjects(bridges[0], result[0]);
+                    Helper.AssertObjects(bridges[1], result[1]);
                 }
             }
         }
@@ -138,12 +138,12 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1/audio", Fake.UserId), url);
-                    var audio = Fake.ParseJsonContent<Audio>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/bridges/1/audio", Helper.UserId), url);
+                    var audio = Helper.ParseJsonContent<Audio>(content).Result;
                     Assert.AreEqual("Test", audio.Sentence);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Bridges.SetAudio("1", new Audio{Sentence = "Test"}).Wait();
                 }
@@ -181,15 +181,15 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1/calls", Fake.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Fake.CreateJsonContent(calls) });
+                    Assert.AreEqual(string.Format("users/{0}/bridges/1/calls", Helper.UserId), url);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(calls) });
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.GetCalls("1").Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(calls[0], result[0]);
-                    Fake.AssertObjects(calls[1], result[1]);
+                    Helper.AssertObjects(calls[0], result[0]);
+                    Helper.AssertObjects(calls[1], result[1]);
                 }
             }
         }

@@ -26,14 +26,14 @@ namespace Bandwidth.Net.Tests.Clients
                     Assert.AreEqual("phoneNumbers/numberInfo/number", url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(info)
+                        Content = Helper.CreateJsonContent(info)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.NumberInfo.Get("number").Result;
-                    Fake.AssertObjects(info, result);
+                    Helper.AssertObjects(info, result);
                 }
             }
         }

@@ -19,15 +19,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences", Fake.UserId), url);
-                    var conference = Fake.ParseJsonContent<Conference>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences", Helper.UserId), url);
+                    var conference = Helper.ParseJsonContent<Conference>(content).Result;
                     Assert.AreEqual("http://localhost/", conference.CallbackUrl.ToString());
                     Assert.AreEqual("From", conference.From);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var id = client.Conferences.Create(new Conference
                     {
@@ -46,15 +46,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1", Fake.UserId), url);
-                    var conference = Fake.ParseJsonContent<Conference>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1", Helper.UserId), url);
+                    var conference = Helper.ParseJsonContent<Conference>(content).Result;
                     Assert.AreEqual("http://localhost/", conference.CallbackUrl.ToString());
                     Assert.AreEqual("From", conference.From);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Conferences.Update("1", new Conference
                     {
@@ -78,17 +78,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(conference)
+                        Content = Helper.CreateJsonContent(conference)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Conferences.Get("1").Result;
-                    Fake.AssertObjects(conference, result);
+                    Helper.AssertObjects(conference, result);
                 }
             }
         }
@@ -101,12 +101,12 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/audio", Fake.UserId), url);
-                    var audio = Fake.ParseJsonContent<Audio>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/audio", Helper.UserId), url);
+                    var audio = Helper.ParseJsonContent<Audio>(content).Result;
                     Assert.AreEqual("Test", audio.Sentence);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Conferences.SetAudio("1", new Audio{Sentence = "Test"}).Wait();
                 }
@@ -136,15 +136,15 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members", Fake.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Fake.CreateJsonContent(members) });
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members", Helper.UserId), url);
+                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(members) });
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Conferences.GetAllMembers("1").Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(members[0], result[0]);
-                    Fake.AssertObjects(members[1], result[1]);
+                    Helper.AssertObjects(members[0], result[0]);
+                    Helper.AssertObjects(members[1], result[1]);
                 }
             }
         }
@@ -156,15 +156,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members", Fake.UserId), url);
-                    var conference = Fake.ParseJsonContent<ConferenceMember>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members", Helper.UserId), url);
+                    var conference = Helper.ParseJsonContent<ConferenceMember>(content).Result;
                     Assert.AreEqual("http://localhost/member2", conference.Call.ToString());
                     Assert.AreEqual(MemberState.Completed, conference.State);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1/members/11", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1/members/11", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var id = client.Conferences.CreateMember("1", new ConferenceMember
                     {
@@ -183,15 +183,15 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11", Fake.UserId), url);
-                    var conference = Fake.ParseJsonContent<ConferenceMember>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11", Helper.UserId), url);
+                    var conference = Helper.ParseJsonContent<ConferenceMember>(content).Result;
                     Assert.AreEqual("http://localhost/member2", conference.Call.ToString());
                     Assert.AreEqual(MemberState.Completed, conference.State);
                     var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1/members/11", Fake.UserId));
+                    response.Headers.Add("Location", string.Format("/v1/users/{0}/conferences/1/members/11", Helper.UserId));
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Conferences.UpdateMember("1", "11", new ConferenceMember
                     {
@@ -215,17 +215,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(member)
+                        Content = Helper.CreateJsonContent(member)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Conferences.GetMember("1", "11").Result;
-                    Fake.AssertObjects(member, result);
+                    Helper.AssertObjects(member, result);
                 }
             }
         }
@@ -238,12 +238,12 @@ namespace Bandwidth.Net.Tests.Clients
             {
                 ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11/audio", Fake.UserId), url);
-                    var audio = Fake.ParseJsonContent<Audio>(content).Result;
+                    Assert.AreEqual(string.Format("users/{0}/conferences/1/members/11/audio", Helper.UserId), url);
+                    var audio = Helper.ParseJsonContent<Audio>(content).Result;
                     Assert.AreEqual("Test", audio.Sentence);
                     return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.Conferences.SetMemberAudio("1", "11", new Audio { Sentence = "Test" }).Wait();
                 }

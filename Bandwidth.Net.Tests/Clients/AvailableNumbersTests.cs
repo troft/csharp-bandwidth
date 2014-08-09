@@ -32,16 +32,16 @@ namespace Bandwidth.Net.Tests.Clients
                     Assert.AreEqual("availableNumbers?quantity=2" , url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(recordings)
+                        Content = Helper.CreateJsonContent(recordings)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.AvailableNumbers.GetAll(new AvailableNumberQuery{Quantity = 2}).Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(recordings[0], result[0]);
-                    Fake.AssertObjects(recordings[1], result[1]);
+                    Helper.AssertObjects(recordings[0], result[0]);
+                    Helper.AssertObjects(recordings[1], result[1]);
                 }
             }
         }

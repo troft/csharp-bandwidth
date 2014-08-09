@@ -24,17 +24,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/errors/1", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/errors/1", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(error)
+                        Content = Helper.CreateJsonContent(error)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Errors.Get("1").Result;
-                    Fake.AssertObjects(error, result);
+                    Helper.AssertObjects(error, result);
                 }
             }
         }
@@ -59,19 +59,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/errors", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/errors", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(errors)
+                        Content = Helper.CreateJsonContent(errors)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Errors.GetAll().Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(errors[0], result[0]);
-                    Fake.AssertObjects(errors[1], result[1]);
+                    Helper.AssertObjects(errors[0], result[0]);
+                    Helper.AssertObjects(errors[1], result[1]);
                 }
             }
         }

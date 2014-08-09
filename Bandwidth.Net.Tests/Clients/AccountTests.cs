@@ -24,17 +24,17 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/account", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/account", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(account)
+                        Content = Helper.CreateJsonContent(account)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Account.Get().Result;
-                    Fake.AssertObjects(account, result);
+                    Helper.AssertObjects(account, result);
                 }
             }
         }
@@ -65,19 +65,19 @@ namespace Bandwidth.Net.Tests.Clients
                 };
                 ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
                 {
-                    Assert.AreEqual(string.Format("users/{0}/account/transactions", Fake.UserId), url);
+                    Assert.AreEqual(string.Format("users/{0}/account/transactions", Helper.UserId), url);
                     var response = new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = Fake.CreateJsonContent(transactions)
+                        Content = Helper.CreateJsonContent(transactions)
                     };
                     return Task.Run(() => response);
                 };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.Account.GetTransactions().Result;
                     Assert.AreEqual(2, result.Length);
-                    Fake.AssertObjects(transactions[0], result[0]);
-                    Fake.AssertObjects(transactions[1], result[1]);
+                    Helper.AssertObjects(transactions[0], result[0]);
+                    Helper.AssertObjects(transactions[1], result[1]);
                 }
             }
         }

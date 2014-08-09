@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
 using System.Text;
-using System.Threading.Tasks;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests
@@ -18,17 +13,14 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void MakeGetRequestTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler { EstimatedMethod = "GET", EstimatedPathAndQuery = "/v1/test?test1=value1&test2=value2" }))
             {
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                using (var client = Helper.CreateClient())
                 {
-                    Assert.AreEqual("test?test1=value1&test2=value2", url);
-                    return Task.Run(()=> new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
-                {
-                    client.MakeGetRequest("test", 
-                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, null, true).Wait();
+                    client.MakeGetRequest("test",
+                             new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, null, true)
+                             .Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
             
@@ -37,20 +29,16 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void MakeGetRequestWithIdTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler { EstimatedMethod = "GET", EstimatedPathAndQuery = "/v1/test/id?test1=value1&test2=value2" }))
             {
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual("test/id?test1=value1&test2=value2", url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
+                using (var client = Helper.CreateClient())
                 {
                     client.MakeGetRequest("test",
-                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id", true).Wait();
+                             new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id", true)
+                             .Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
-
         }
 
         public class TestItem
@@ -61,71 +49,67 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void MakeGetRequestTTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
+                EstimatedMethod = "GET", 
+                EstimatedPathAndQuery = "/v1/test?test1=value1&test2=value2",
+                ContentToSend =  Helper.CreateJsonContent(new TestItem
                 {
-                    Assert.AreEqual("test?test1=value1&test2=value2", url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK){Content = Fake.CreateJsonContent(new TestItem
-                    {
-                        Name = "Name",
-                        Flag = true
-                    })});
-                };
-                using (var client = Fake.CreateClient())
+                    Name = "Name",
+                    Flag = true
+                })
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
                     var result = client.MakeGetRequest<TestItem>("test",
                         new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual("Name", result.Name);
                     Assert.IsTrue(result.Flag != null && result.Flag.Value);
                 }
             }
-
         }
 
         [TestMethod]
         public void MakePostRequestTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = "/v1/test",
+                EstimatedContent = "{\"test\":true}"
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
-                    Assert.AreEqual("test", url);
-                    var json = content.ReadAsStringAsync().Result;
-                    Assert.AreEqual("{\"test\":true}", json);
-                    Assert.AreEqual("application/json", content.Headers.ContentType.MediaType);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK){Content = Fake.CreateJsonContent(new TestItem
-                    {
-                        Name = "Name",
-                        Flag = true
-                    })});
-                };
-                using (var client = Fake.CreateClient())
-                {
-                    var result = client.MakePostRequest<TestItem>("test", new {Test = true}).Result;
-                    Assert.AreEqual("Name", result.Name);
-                    Assert.IsTrue(result.Flag != null && result.Flag.Value);
+                    client.MakePostRequest("test", new { Test = true }, true).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
-
         }
 
         [TestMethod]
         public void MakePostRequestTTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = "/v1/test",
+                EstimatedContent = "{\"test\":true}",
+                ContentToSend = Helper.CreateJsonContent(new TestItem
                 {
-                    Assert.AreEqual("test", url);
-                    var json = content.ReadAsStringAsync().Result;
-                    Assert.AreEqual("{\"test\":true}", json);
-                    Assert.AreEqual("application/json", content.Headers.ContentType.MediaType);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
+                    Name = "Name",
+                    Flag = true
+                })
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
-                    client.MakePostRequest("test", new { Test = true }, true).Wait();
+                    var result = client.MakePostRequest<TestItem>("test", new { Test = true }).Result;
+                    if (server.Error != null) throw server.Error;
+                    Assert.AreEqual("Name", result.Name);
+                    Assert.IsTrue(result.Flag != null && result.Flag.Value);
                 }
             }
 
@@ -134,68 +118,59 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void MakeDeleteRequestTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.DeleteAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual("test", url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
+                EstimatedMethod = "DELETE",
+                EstimatedPathAndQuery = "/v1/test"
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
                     client.MakeDeleteRequest("test").Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
-
         }
 
         [TestMethod]
         public void AuthHeaderTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                var called = false;
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual("Basic", c.DefaultRequestHeaders.Authorization.Scheme);
-                    Assert.AreEqual(string.Format("{0}:{1}", Fake.ApiKey, Fake.Secret), Encoding.UTF8.GetString(Convert.FromBase64String(c.DefaultRequestHeaders.Authorization.Parameter)));
-                    called = true;
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/calls/1", Fake.UserId));
-                    return Task.Run(() => response);
-                };
-                using (var client = Fake.CreateClient())
+                EstimatedMethod = "POST",
+                EstimatedHeaders = new Dictionary<string, string> { { "Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Helper.ApiKey, Helper.Secret)))} },
+                HeadersToSend = new Dictionary<string, string> { { "Location", "http://localhost/calls/1"} }
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
                     client.Calls.Create(new Call
                     {
                         From = "From",
                         To = "To"
                     }).Wait();
-                    Assert.IsTrue(called);
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
         [TestMethod]
         public void PutDataWithStreamTest()
         {
-            using (ShimsContext.Create())
+            var data = Encoding.UTF8.GetBytes("hello");
+            using (var server = new HttpServer(new RequestHandler
             {
-                var data = new byte[]{1, 2, 3};
-                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual("test", url);
-                    var stream = content.ReadAsStreamAsync().Result;
-                    var buffer = new byte[3];
-                    stream.Read(buffer, 0, buffer.Length);
-                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
-                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
+                EstimatedMethod = "PUT",
+                EstimatedPathAndQuery = "/v1/test",
+                EstimatedContent = "hello",
+                EstimatedHeaders = new Dictionary<string, string> {{"Content-Type", "media/type"}}
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
                     using (var stream = new MemoryStream(data))
                     {
                         client.PutData("test", stream, "media/type", true).Wait();
+                        if (server.Error != null) throw server.Error;
                     }
                 }
             }
@@ -204,20 +179,19 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void PutDataWithByteArrayTest()
         {
-            using (ShimsContext.Create())
+            var data = Encoding.UTF8.GetBytes("hello");
+            using (var server = new HttpServer(new RequestHandler
             {
-                var data = new byte[] { 1, 2, 3, 4 };
-                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual("test", url);
-                    var buffer = content.ReadAsByteArrayAsync().Result;
-                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
-                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
-                using (var client = Fake.CreateClient())
+                EstimatedMethod = "PUT",
+                EstimatedPathAndQuery = "/v1/test",
+                EstimatedContent = "hello",
+                EstimatedHeaders = new Dictionary<string, string> { { "Content-Type", "media/type" } }
+            }))
+            {
+                using (var client = Helper.CreateClient())
                 {
                     client.PutData("test", data, "media/type", true).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
 

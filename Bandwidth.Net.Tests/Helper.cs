@@ -9,16 +9,15 @@ using Newtonsoft.Json.Serialization;
 
 namespace Bandwidth.Net.Tests
 {
-    public class Fake
+    public class Helper
     {
         public const string UserId = "FakeUserId";
         public const string ApiKey = "FakeApiKey";
         public const string Secret = "FakeSecret";
-        public const string Host = "FakeHost";
-
-        public static Client CreateClient()
+        
+        public static Client CreateClient(string baseUrl = null)
         {
-            return new Client(UserId, ApiKey, Secret, Host);
+            return new Client(UserId, ApiKey, Secret, baseUrl ?? "http://localhost:3001/");
         }
 
         public static StringContent CreateJsonContent(object data)
@@ -52,5 +51,6 @@ namespace Bandwidth.Net.Tests
                 Assert.AreEqual(est, val);
             }
         }
+
     }
 }
