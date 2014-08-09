@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,25 +11,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void CreateTest()
         {
-            using (ShimsContext.Create())
+            var application = new Application
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/applications", Helper.UserId), url);
-                    var application = Helper.ParseJsonContent<Application>(content).Result;
-                    Assert.AreEqual("Name", application.Name);
-                    Assert.AreEqual("http://localhost/", application.IncomingCallUrl.ToString());
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/applications/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Name = "Application",
+                IncomingCallUrl = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(application),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/applications/1", Helper.UserId)} }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var id = client.Applications.Create(new Application
-                    {
-                        Name = "Name",
-                        IncomingCallUrl = new Uri("http://localhost/")
-                    }).Result;
+                    var id = client.Applications.Create(application).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual("1", id);
                 }
             }
@@ -42,25 +36,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void UpdateTest()
         {
-            using (ShimsContext.Create())
+            var application = new Application
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/applications/1", Helper.UserId), url);
-                    var application = Helper.ParseJsonContent<Application>(content).Result;
-                    Assert.AreEqual("Name", application.Name);
-                    Assert.AreEqual("http://localhost/", application.IncomingCallUrl.ToString());
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/applications/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Name = "Application",
+                IncomingCallUrl = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(application),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/applications/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Applications.Update("1", new Application
-                    {
-                        Name = "Name",
-                        IncomingCallUrl = new Uri("http://localhost/")
-                    }).Wait();
+                    client.Applications.Update("1", application).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -68,25 +60,23 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var application = new Application
             {
-                var application = new Application
-                {
-                    Id = "1",
-                    Name = "Name"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/applications/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(application)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                Name = "Application",
+                IncomingCallUrl = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(application)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Applications.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(application, result);
                 }
             }
@@ -95,33 +85,31 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var applications = new[]{
+                new Application
+                {
+                    Id = "1",
+                    Name = "Application",
+                    IncomingCallUrl = new Uri("http://localhost/")
+                },
+                new Application
+                {
+                    Id = "2",
+                    Name = "Application2",
+                    IncomingCallUrl = new Uri("http://localhost/2")
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var applications = new[]
-                {
-                    new Application
-                    {
-                        Id = "1",
-                        Name = "Application1"
-                    },
-                    new Application
-                    {
-                        Id = "1",
-                        Name = "Application2"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/applications", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(applications)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(applications)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Applications.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(applications[0], result[0]);
                     Helper.AssertObjects(applications[1], result[1]);
@@ -131,16 +119,16 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void RemoveTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                ShimHttpClient.AllInstances.DeleteAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/applications/1", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
+                EstimatedMethod = "DELETE",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     client.Applications.Remove("1").Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }

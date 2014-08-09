@@ -35,6 +35,7 @@ namespace Bandwidth.Net
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             _jsonSerializerSettings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
+            _jsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
             Calls = new Calls(this);
             Recordings = new Recordings(this);
             Account = new Account(this);

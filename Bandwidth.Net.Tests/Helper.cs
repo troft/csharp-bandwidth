@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -52,5 +53,15 @@ namespace Bandwidth.Net.Tests
             }
         }
 
+        public static string ToJsonString(object data)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
+            settings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
+            return JsonConvert.SerializeObject(data, Formatting.None, settings);
+        }
     }
 }
