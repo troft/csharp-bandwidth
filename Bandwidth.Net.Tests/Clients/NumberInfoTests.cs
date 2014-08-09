@@ -1,9 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
-using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
+﻿using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -14,25 +9,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var info = new NumberInfo
             {
-                var info = new NumberInfo
-                {
-                    Number = "Number",
-                    Name = "Name"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual("phoneNumbers/numberInfo/number", url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(info)
-                    };
-                    return Task.Run(() => response);
-                };
+                Name = "PhoneNumber",
+                Number = "Number"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = "/v1/phoneNumbers/numberInfo/Number",
+                ContentToSend = Helper.CreateJsonContent(info)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var result = client.NumberInfo.Get("number").Result;
+                    var result = client.NumberInfo.Get("Number").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(info, result);
                 }
             }
