@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,25 +11,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void CreateTest()
         {
-            using (ShimsContext.Create())
+            var bridge = new Bridge
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges", Helper.UserId), url);
-                    var bridge = Helper.ParseJsonContent<Bridge>(content).Result;
-                    Assert.AreEqual("http://localhost/", bridge.Calls.ToString());
-                    Assert.AreEqual(BridgeState.Active, bridge.State);
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Calls = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(bridge),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var id = client.Bridges.Create(new Bridge
-                    {
-                        Calls = new Uri("http://localhost/"),
-                        State = BridgeState.Active
-                    }).Result;
+                    var id = client.Bridges.Create(bridge).Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual("1", id);
                 }
             }
@@ -42,25 +35,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void UpdateTest()
         {
-            using (ShimsContext.Create())
+            var bridge = new Bridge
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Helper.UserId), url);
-                    var bridge = Helper.ParseJsonContent<Bridge>(content).Result;
-                    Assert.AreEqual("http://localhost/", bridge.Calls.ToString());
-                    Assert.AreEqual(BridgeState.Completed, bridge.State);
-                    var response = new HttpResponseMessage(HttpStatusCode.Created);
-                    response.Headers.Add("Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId));
-                    return Task.Run(() => response);
-                };
+                Calls = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges/1", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(bridge),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/bridges/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Bridges.Update("1", new Bridge
-                    {
-                        Calls = new Uri("http://localhost/"),
-                        State = BridgeState.Completed
-                    }).Wait();
+                    client.Bridges.Update("1", bridge).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -68,26 +58,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var bridge = new Bridge
             {
-                var bridge = new Bridge
-                {
-                    Id = "1",
-                    Calls = new Uri("http://localhost/"),
-                    State = BridgeState.Completed
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(bridge)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                Calls = new Uri("http://localhost/")
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(bridge)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(bridge, result);
                 }
             }
@@ -96,56 +82,54 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var bridges = new[]{
+                new Bridge
+                {
+                    Id = "1",
+                    Calls = new Uri("http://localhost/")
+                },
+                new Bridge
+                {
+                    Id = "2",
+                    Calls = new Uri("http://localhost/2")
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var bridges = new[]
-                {
-                    new Bridge
-                    {
-                        Id = "1",
-                        Calls = new Uri("http://localhost/"),
-                        State = BridgeState.Completed
-                    },
-                    new Bridge
-                    {
-                        Id = "2",
-                        Calls = new Uri("http://localhost2/"),
-                        State = BridgeState.Active
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(bridges)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(bridges)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(bridges[0], result[0]);
                     Helper.AssertObjects(bridges[1], result[1]);
                 }
             }
         }
+
         [TestMethod]
         public void SetAudioTest()
         {
-            using (ShimsContext.Create())
+            var audio = new Audio
             {
-                ShimHttpClient.AllInstances.PostAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1/audio", Helper.UserId), url);
-                    var audio = Helper.ParseJsonContent<Audio>(content).Result;
-                    Assert.AreEqual("Test", audio.Sentence);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.OK));
-                };
+                Sentence = "Sentence"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges/1/audio", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(audio)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    client.Bridges.SetAudio("1", new Audio{Sentence = "Test"}).Wait();
+                    client.Bridges.SetAudio("1", audio).Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -154,39 +138,39 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetCallsTest()
         {
-            using (ShimsContext.Create())
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var calls = new[]
-                {
-                    new Call
-                    {
-                        Id = "1",
-                        StartTime = DateTime.Now.AddMinutes(-10),
-                        EndTime = DateTime.Now.AddMinutes(-5),
-                        State = CallState.Active,
-                        From = "From",
-                        To = "To",
-                        Direction = CallDirection.Out
-                    },
-                    new Call
-                    {
-                        Id = "2",
-                        StartTime = DateTime.Now.AddMinutes(-15),
-                        EndTime = DateTime.Now.AddMinutes(-11),
-                        State = CallState.Completed,
-                        From = "From2",
-                        To = "To2",
-                        Direction = CallDirection.In
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/bridges/1/calls", Helper.UserId), url);
-                    return Task.Run(() => new HttpResponseMessage(HttpStatusCode.Created) { Content = Helper.CreateJsonContent(calls) });
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/bridges/1/calls", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Bridges.GetCalls("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(calls[0], result[0]);
                     Helper.AssertObjects(calls[1], result[1]);
