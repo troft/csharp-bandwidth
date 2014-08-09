@@ -1,10 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Fakes;
-using System.Threading.Tasks;
-using Bandwidth.Net.Data;
-using Microsoft.QualityTools.Testing.Fakes;
+﻿using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Clients
@@ -15,29 +9,22 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetTest()
         {
-            using (ShimsContext.Create())
+            var recording = new Recording
             {
-                var recording = new Recording
-                {
-                    Id = "1",
-                    StartTime = DateTime.Now.AddMinutes(-10),
-                    EndTime = DateTime.Now.AddMinutes(-5),
-                    State = RecordingState.Complete,
-                    Call = "call",
-                    Media = "media"
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/recordings/1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(recording)
-                    };
-                    return Task.Run(() => response);
-                };
+                Id = "1",
+                Media = "Media"
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(recording)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     var result = client.Recordings.Get("1").Result;
+                    if (server.Error != null) throw server.Error;
                     Helper.AssertObjects(recording, result);
                 }
             }
@@ -46,41 +33,29 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void GetAllTest()
         {
-            using (ShimsContext.Create())
+            var recordings = new[]{
+                new Recording
+                {
+                    Id = "1",
+                    Media = "Media"
+                },
+                new Recording
+                {
+                    Id = "2",
+                    Media = "Media2"
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
             {
-                var recordings = new[]
-                {
-                    new Recording
-                    {
-                        Id = "1",
-                        StartTime = DateTime.Now.AddMinutes(-10),
-                        EndTime = DateTime.Now.AddMinutes(-5),
-                        State = RecordingState.Complete,
-                        Call = "call",
-                        Media = "media"
-                    },
-                    new Recording
-                    {
-                        Id = "2",
-                        StartTime = DateTime.Now.AddMinutes(-15),
-                        EndTime = DateTime.Now.AddMinutes(-13),
-                        State = RecordingState.Error,
-                        Call = "call2",
-                        Media = "media2"
-                    }
-                };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/recordings?page=1", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = Helper.CreateJsonContent(recordings)
-                    };
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(recordings)
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var result = client.Recordings.GetAll(new RecordingQuery{Page = 1}).Result;
+                    var result = client.Recordings.GetAll().Result;
+                    if (server.Error != null) throw server.Error;
                     Assert.AreEqual(2, result.Length);
                     Helper.AssertObjects(recordings[0], result[0]);
                     Helper.AssertObjects(recordings[1], result[1]);
