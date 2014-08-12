@@ -7,9 +7,10 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/bandwidthcom/csharp-bandwidth</projectUrl>
+    <iconUrl>http://bandwidth.com/sites/all/themes/bandwidth/images/logo-color.png</iconUrl>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial version</releaseNotes>
     <copyright>Copyright Bandwidth 2014</copyright>
     <tags>Bandwidth Catapult</tags>
   </metadata>

@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Bandwidth.Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
@@ -86,7 +87,9 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>cd "$(ProjectDir)" &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Release (
+  cd "$(ProjectDir)" &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" push  *.nupkg
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
