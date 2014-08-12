@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Text;
 using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,25 +11,22 @@ namespace Bandwidth.Net.Tests.Clients
     [TestClass]
     public class MediaTests
     {
-        /*[TestMethod]
+        [TestMethod]
         public void SetWithByteArrayTest()
         {
-            using (ShimsContext.Create())
+            var data = Encoding.UTF8.GetBytes("Hello");
+            using (var server = new HttpServer(new RequestHandler
             {
-                var data = new byte[] { 1, 2, 3, 4 };
-                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/media/test", Helper.UserId), url);
-                    var buffer = content.ReadAsByteArrayAsync().Result;
-                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
-                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
-                    Assert.AreEqual(data.Length, content.Headers.ContentLength);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK);
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "PUT",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/test", Helper.UserId),
+                EstimatedContent = "Hello",
+                EstimatedHeaders = new Dictionary<string, string> { { "Content-Type", "media/type"} }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
                     client.Media.Set("test", data, "media/type").Wait();
+                    if (server.Error != null) throw server.Error;
                 }
             }
         }
@@ -33,61 +34,71 @@ namespace Bandwidth.Net.Tests.Clients
         [TestMethod]
         public void SetWithStreamTest()
         {
-            using (ShimsContext.Create())
+            var data = Encoding.UTF8.GetBytes("Hello");
+            using (var server = new HttpServer(new RequestHandler
             {
-                var data = new byte[] { 1, 2, 3, 4 };
-                ShimHttpClient.AllInstances.PutAsyncStringHttpContent = (c, url, content) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/media/test", Helper.UserId), url);
-                    var buffer = content.ReadAsByteArrayAsync().Result;
-                    Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
-                    Assert.AreEqual("media/type", content.Headers.ContentType.MediaType);
-                    Assert.AreEqual(data.Length, content.Headers.ContentLength);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK);
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "PUT",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/test", Helper.UserId),
+                EstimatedContent = "Hello",
+                EstimatedHeaders = new Dictionary<string, string> { { "Content-Type", "media/type" } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
-                using (var stream = new MemoryStream(data))
                 {
-                    client.Media.Set("test", stream, "media/type").Wait();
+                    using (var stream = new MemoryStream(data))
+                    {
+                        client.Media.Set("test", stream, "media/type").Wait();
+                        if (server.Error != null) throw server.Error;
+                    }
                 }
             }
         }
 
         
         [TestMethod]
-        public void GetTest()
+        public void GetByteArrayTest()
         {
-            using (ShimsContext.Create())
+            using (var server = new HttpServer(new RequestHandler
             {
-                var data = new byte[] { 1, 2, 3, 4 };
-                ShimHttpClient.AllInstances.GetAsyncString = (c, url) =>
-                {
-                    Assert.AreEqual(string.Format("users/{0}/media/test", Helper.UserId), url);
-                    var response = new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = new ByteArrayContent(data)
-                    };
-                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("media/type");
-                    return Task.Run(() => response);
-                };
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/test", Helper.UserId),
+                ContentToSend = new StringContent("Hello", Encoding.UTF8, "media/type")
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    using (var result = client.Media.Get("test").Result)
+                    using (var data = client.Media.Get("test").Result)
                     {
-                        Assert.AreEqual("media/type", result.MediaType);
-                        Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(result.Buffer));
-                    }
-                    using (var result = client.Media.Get("test", true).Result)
-                    {
-                        Assert.AreEqual("media/type", result.MediaType);
-                        var buffer = new byte[data.Length];
-                        result.Stream.Read(buffer, 0, buffer.Length);
-                        Assert.AreEqual(BitConverter.ToString(data), BitConverter.ToString(buffer));
+                        if (server.Error != null) throw server.Error;
+                        Assert.AreEqual("media/type", data.MediaType);
+                        Assert.AreEqual("Hello", Encoding.UTF8.GetString(data.Buffer));
                     }
                 }
             }
-        }*/
+        }
+
+        [TestMethod]
+        public void GetStreamTest()
+        {
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/test", Helper.UserId),
+                ContentToSend = new StringContent("Hello", Encoding.UTF8, "media/type")
+            }))
+            {
+                using (var client = Helper.CreateClient())
+                using (var data = client.Media.Get("test", true).Result)
+                {
+                    if (server.Error != null) throw server.Error;
+                    Assert.AreEqual("media/type", data.MediaType);
+                    using (var reader = new StreamReader(data.Stream, Encoding.UTF8))
+                    {
+                        Assert.AreEqual("Hello", reader.ReadToEnd());
+                    }
+                }
+            }
+        }
 
         [TestMethod]
         public void GetAllTest()
