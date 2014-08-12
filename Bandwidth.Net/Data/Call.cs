@@ -51,6 +51,7 @@ namespace Bandwidth.Net.Data
     {
         Active,
         Completed,
+        Started,
         Rejected,
         Transferring
     }
