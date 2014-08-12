@@ -32,6 +32,7 @@ namespace Bandwidth.Net.Data
         Unavailable,
         Credit,
         Limit,
+        Forbidden,
         Payment
     }
 
