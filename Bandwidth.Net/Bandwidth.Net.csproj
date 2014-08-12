@@ -88,7 +88,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (
-  cd "$(ProjectDir)" &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" push  *.nupkg
+  cd "$(ProjectDir)" &amp;&amp; del *.nupkg &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack -Properties Configuration=Release &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" push  *.nupkg
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
