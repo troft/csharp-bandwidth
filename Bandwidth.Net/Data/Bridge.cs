@@ -17,6 +17,7 @@ namespace Bandwidth.Net.Data
     public enum BridgeState
     {
         Created,
+        Updating,
         Hold,
         Completed,
         Error,

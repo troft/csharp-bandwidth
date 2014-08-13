@@ -23,6 +23,8 @@ namespace Bandwidth.Net.Data
         Charge,
         Payment,
         Credit,
+        [EnumMember(Value = "goodwill-credit")]
+        GoodwillCredit,
         [EnumMember(Value = "auto-recharge")]
         AutoRecharge
     }
@@ -33,14 +35,26 @@ namespace Bandwidth.Net.Data
         SmsIn,
         [EnumMember(Value = "sms-out")]
         SmsOut,
+        [EnumMember(Value = "mms-in")]
+        MmsIn,
+        [EnumMember(Value = "mms-out")]
+        MmsOut,
         [EnumMember(Value = "call-in")]
         CallIn,
         [EnumMember(Value = "call-out")]
         CallOut,
+        [EnumMember(Value = "call-in-toll-free")]
+        CallInTollFree,
+        [EnumMember(Value = "call-out-toll-free")]
+        CallOutTollFree,
         [EnumMember(Value = "local-number-per-month")]
         LocalNumberPerMonth,
         [EnumMember(Value = "toll-free-number-per-month")]
-        TollFreeNumberPerMonth
+        TollFreeNumberPerMonth,
+        [EnumMember(Value = "cnam-search")]
+        CNamSearch,
+        [EnumMember(Value = "sip-out")]
+        SipOut
     }
 
     public class AccountTransactionQuery : Query
