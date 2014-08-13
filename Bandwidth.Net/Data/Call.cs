@@ -53,7 +53,8 @@ namespace Bandwidth.Net.Data
         Completed,
         Started,
         Rejected,
-        Transferring
+        Transferring,
+        Error
     }
 
     public enum CallDirection
