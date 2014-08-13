@@ -44,6 +44,8 @@ namespace Bandwidth.Net.Events
 
         private string GetTypeName(string type)
         {
+            if (type == "incomingcall") type = "IncomingCall";
+            if (type == "timeout") type = "CallTimeout";
             var buffer = new StringBuilder("Bandwidth.Net.Events.");
             var useUpperCase = true;
             foreach(char c in type)
