@@ -38,7 +38,7 @@ namespace Bandwidth.Net.Events
     {
         protected override Event Create(Type objectType, JObject obj)
         {
-            var type = obj.Property("EventType").Value.ToString();
+            var type = obj.Property("eventType").Value.ToString();
             return Activator.CreateInstance(Type.GetType(GetTypeName(type))) as Event;
         }
 
@@ -74,7 +74,7 @@ namespace Bandwidth.Net.Events
 
         public override bool CanConvert(Type objectType)
         {
-            return true;
+            return objectType.Namespace == "Bandwidth.Net.Events";
         }
 
         public override object ReadJson(JsonReader reader,

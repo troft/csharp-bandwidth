@@ -71,6 +71,7 @@
     <Compile Include="Clients\PhoneNumbersTests.cs" />
     <Compile Include="Clients\RecordingsTests.cs" />
     <Compile Include="ClientTests.cs" />
+    <Compile Include="Events\EventTests.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
