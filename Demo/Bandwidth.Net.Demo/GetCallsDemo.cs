@@ -9,7 +9,7 @@ namespace Bandwidth.Net.Demo
         {
             using (var client = new Client(Config.UserId, Config.ApiToken, Config.Secret))
             {
-                Console.WriteLine("Calls:\n", string.Join("\n", from c in await client.Calls.GetAll() select string.Format("{0} -> {1} ({2})", c.From, c.To, c.State)));
+                Console.WriteLine("Calls:\n{0}\n", string.Join("\n", from c in await client.Calls.GetAll() select string.Format("{0} -> {1} ({2})", c.From, c.To, c.State)));
             }
         }
     }
