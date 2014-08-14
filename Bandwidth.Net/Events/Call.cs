@@ -3,7 +3,7 @@ using Bandwidth.Net.Data;
 
 namespace Bandwidth.Net.Events
 {
-    public class Call: Event
+    public class Call : Event
     {
         public string From { get; set; }
         public string To { get; set; }

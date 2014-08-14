@@ -22,7 +22,7 @@ namespace Bandwidth.Net.Data
         Error
     }
 
-    public class RecordingQuery: Query
+    public class RecordingQuery : Query
     {
     }
 }

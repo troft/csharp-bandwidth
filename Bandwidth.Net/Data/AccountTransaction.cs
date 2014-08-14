@@ -23,38 +23,24 @@ namespace Bandwidth.Net.Data
         Charge,
         Payment,
         Credit,
-        [EnumMember(Value = "goodwill-credit")]
-        GoodwillCredit,
-        [EnumMember(Value = "auto-recharge")]
-        AutoRecharge
+        [EnumMember(Value = "goodwill-credit")] GoodwillCredit,
+        [EnumMember(Value = "auto-recharge")] AutoRecharge
     }
 
     public enum ProductType
     {
-        [EnumMember(Value = "sms-in")]
-        SmsIn,
-        [EnumMember(Value = "sms-out")]
-        SmsOut,
-        [EnumMember(Value = "mms-in")]
-        MmsIn,
-        [EnumMember(Value = "mms-out")]
-        MmsOut,
-        [EnumMember(Value = "call-in")]
-        CallIn,
-        [EnumMember(Value = "call-out")]
-        CallOut,
-        [EnumMember(Value = "call-in-toll-free")]
-        CallInTollFree,
-        [EnumMember(Value = "call-out-toll-free")]
-        CallOutTollFree,
-        [EnumMember(Value = "local-number-per-month")]
-        LocalNumberPerMonth,
-        [EnumMember(Value = "toll-free-number-per-month")]
-        TollFreeNumberPerMonth,
-        [EnumMember(Value = "cnam-search")]
-        CNamSearch,
-        [EnumMember(Value = "sip-out")]
-        SipOut
+        [EnumMember(Value = "sms-in")] SmsIn,
+        [EnumMember(Value = "sms-out")] SmsOut,
+        [EnumMember(Value = "mms-in")] MmsIn,
+        [EnumMember(Value = "mms-out")] MmsOut,
+        [EnumMember(Value = "call-in")] CallIn,
+        [EnumMember(Value = "call-out")] CallOut,
+        [EnumMember(Value = "call-in-toll-free")] CallInTollFree,
+        [EnumMember(Value = "call-out-toll-free")] CallOutTollFree,
+        [EnumMember(Value = "local-number-per-month")] LocalNumberPerMonth,
+        [EnumMember(Value = "toll-free-number-per-month")] TollFreeNumberPerMonth,
+        [EnumMember(Value = "cnam-search")] CNamSearch,
+        [EnumMember(Value = "sip-out")] SipOut
     }
 
     public class AccountTransactionQuery : Query
@@ -66,7 +52,7 @@ namespace Bandwidth.Net.Data
 
         public override IDictionary<string, string> ToDictionary()
         {
-            var query = base.ToDictionary();
+            IDictionary<string, string> query = base.ToDictionary();
             if (MaxItems != null)
             {
                 query.Add("maxItems", MaxItems.Value.ToString(CultureInfo.InvariantCulture));

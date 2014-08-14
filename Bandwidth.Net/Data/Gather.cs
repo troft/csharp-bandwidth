@@ -19,7 +19,7 @@ namespace Bandwidth.Net.Data
         public double? InterDigitTimeout { get; set; }
         public string TerminatingDigits { get; set; }
         public bool? SuppressDtmf { get; set; }
-        public CreateGatherPromt Promt { get; set; } 
+        public CreateGatherPromt Promt { get; set; }
     }
 
     public class CreateGatherPromt

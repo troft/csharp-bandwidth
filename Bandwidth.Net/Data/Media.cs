@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Data
 {
@@ -14,7 +10,7 @@ namespace Bandwidth.Net.Data
         public Uri Content { get; set; }
     }
 
-    public sealed class MediaContent: IDisposable
+    public sealed class MediaContent : IDisposable
     {
         private readonly IDisposable _owner;
 
@@ -27,6 +23,7 @@ namespace Bandwidth.Net.Data
         public string MediaType { get; set; }
         public Stream Stream { get; set; }
         public byte[] Buffer { get; set; }
+
         public void Dispose()
         {
             _owner.Dispose();

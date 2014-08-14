@@ -11,7 +11,6 @@ namespace Bandwidth.Net.Data
         public string Message { get; set; }
         public string Code { get; set; }
         public ErrorDetail[] Details { get; set; }
-        
     }
 
     public class ErrorDetail
@@ -24,10 +23,8 @@ namespace Bandwidth.Net.Data
     {
         Authentication,
         Authorization,
-        [EnumMember(Value = "not-found")]
-        NotFound,
-        [EnumMember(Value = "bad-request")]
-        BadRequest,
+        [EnumMember(Value = "not-found")] NotFound,
+        [EnumMember(Value = "bad-request")] BadRequest,
         Conflict,
         Unavailable,
         Credit,

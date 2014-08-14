@@ -9,11 +9,10 @@ namespace Bandwidth.Net.Events
 {
     public class Event
     {
+        private static readonly JsonSerializerSettings JsonSerializerSettings = CreateJsonSettings();
         public string EventType { get; set; }
         public string ApplicationId { get; set; }
         public DateTime? Time { get; set; }
-
-        private static readonly JsonSerializerSettings JsonSerializerSettings = CreateJsonSettings();
 
         private static JsonSerializerSettings CreateJsonSettings()
         {
@@ -22,12 +21,19 @@ namespace Bandwidth.Net.Events
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 TypeNameHandling = TypeNameHandling.All
             };
-            jsonSerializerSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true, AllowIntegerValues = false });
+            jsonSerializerSettings.Converters.Add(new StringEnumConverter
+            {
+                CamelCaseText = true,
+                AllowIntegerValues = false
+            });
             jsonSerializerSettings.Converters.Add(new EventCreationConverter());
             jsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
             return jsonSerializerSettings;
         }
 
+        /// <summary>
+        ///     Parse request body text and return assotiated event object
+        /// </summary>
         public static Event ParseRequestBody(string body)
         {
             return JsonConvert.DeserializeObject<Event>(body, JsonSerializerSettings);
@@ -38,7 +44,7 @@ namespace Bandwidth.Net.Events
     {
         protected override Event Create(Type objectType, JObject obj)
         {
-            var type = obj.Property("eventType").Value.ToString();
+            string type = obj.Property("eventType").Value.ToString();
             return Activator.CreateInstance(Type.GetType(GetTypeName(type))) as Event;
         }
 
@@ -47,8 +53,8 @@ namespace Bandwidth.Net.Events
             if (type == "incomingcall") type = "IncomingCall";
             if (type == "timeout") type = "CallTimeout";
             var buffer = new StringBuilder("Bandwidth.Net.Events.");
-            var useUpperCase = true;
-            foreach(char c in type)
+            bool useUpperCase = true;
+            foreach (char c in type)
             {
                 if (useUpperCase)
                 {
@@ -71,7 +77,6 @@ namespace Bandwidth.Net.Events
 
     internal abstract class JsonCreationConverter<T> : JsonConverter
     {
-        
         protected abstract T Create(Type objectType, JObject obj);
 
         public override bool CanConvert(Type objectType)
@@ -80,9 +85,9 @@ namespace Bandwidth.Net.Events
         }
 
         public override object ReadJson(JsonReader reader,
-                                        Type objectType,
-                                         object existingValue,
-                                         JsonSerializer serializer)
+            Type objectType,
+            object existingValue,
+            JsonSerializer serializer)
         {
             var obj = JObject.Load(reader);
             var target = Create(objectType, obj);
@@ -91,8 +96,8 @@ namespace Bandwidth.Net.Events
         }
 
         public override void WriteJson(JsonWriter writer,
-                                       object value,
-                                       JsonSerializer serializer)
+            object value,
+            JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }

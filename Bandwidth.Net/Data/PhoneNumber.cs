@@ -17,7 +17,7 @@ namespace Bandwidth.Net.Data
         public PhoneNumberState? NumberState { get; set; }
     }
 
-    public class PhoneNumberQuery: Query
+    public class PhoneNumberQuery : Query
     {
     }
 

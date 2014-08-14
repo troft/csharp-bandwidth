@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Bandwidth.Net.Data
 {
-    
     public class Call
     {
         public string Id { get; set; }
@@ -72,7 +71,7 @@ namespace Bandwidth.Net.Data
 
         public override IDictionary<string, string> ToDictionary()
         {
-            var query =  base.ToDictionary();
+            IDictionary<string, string> query = base.ToDictionary();
             if (BridgeId != null)
             {
                 query.Add("bridgeId", BridgeId);

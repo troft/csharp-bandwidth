@@ -14,7 +14,6 @@ namespace Bandwidth.Net.Data
         public Uri IncomingSmsFallbackUrl { get; set; }
         public string CallbackHttpMethod { get; set; }
         public bool? AutoAnswer { get; set; }
-
     }
 
     public class ApplicationQuery : Query

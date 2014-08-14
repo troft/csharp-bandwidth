@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using Bandwidth.Net.Data;
 
 namespace Bandwidth.Net.Events
 {

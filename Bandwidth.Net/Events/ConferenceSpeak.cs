@@ -1,5 +1,4 @@
 ﻿using System;
-using Bandwidth.Net.Data;
 
 namespace Bandwidth.Net.Events
 {

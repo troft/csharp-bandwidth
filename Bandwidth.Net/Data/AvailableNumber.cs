@@ -14,7 +14,8 @@ namespace Bandwidth.Net.Data
         public string RateCenter { get; set; }
         public double Price { get; set; }
     }
-    public class AvailableNumberQuery: Query
+
+    public class AvailableNumberQuery : Query
     {
         public string City { get; set; }
         public string State { get; set; }
@@ -28,7 +29,7 @@ namespace Bandwidth.Net.Data
 
         public override IDictionary<string, string> ToDictionary()
         {
-            var query = base.ToDictionary();
+            IDictionary<string, string> query = base.ToDictionary();
             if (City != null)
             {
                 query.Add("city", City);
@@ -53,7 +54,7 @@ namespace Bandwidth.Net.Data
             {
                 query.Add("inLocalCallingArea", InLocalCallingArea.ToString());
             }
-            if (Quantity!= null)
+            if (Quantity != null)
             {
                 query.Add("quantity", Quantity.Value.ToString(CultureInfo.InvariantCulture));
             }
@@ -70,5 +71,4 @@ namespace Bandwidth.Net.Data
         Local,
         TollFree
     }
-
 }

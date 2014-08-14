@@ -8,5 +8,4 @@ namespace Bandwidth.Net.Events
         public Uri ConferenceUri { get; set; }
         public PlaybackStatus? Status { get; set; }
     }
-
 }

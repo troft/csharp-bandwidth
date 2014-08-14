@@ -9,6 +9,4 @@ namespace Bandwidth.Net.Data
         public DateTime Time { get; set; }
         public object Data { get; set; }
     }
-
-    
 }

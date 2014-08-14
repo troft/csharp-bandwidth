@@ -10,7 +10,6 @@ namespace Bandwidth.Net.Data
 
     public enum AccountType
     {
-        [EnumMember(Value = "pre-pay")]
-        PrePay
+        [EnumMember(Value = "pre-pay")] PrePay
     }
 }

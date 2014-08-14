@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using Bandwidth.Net.Data;
 
 namespace Bandwidth.Net.Events
 {
-    public class Speak: Event
+    public class Speak : Event
     {
         public string CallId { get; set; }
         public Uri CallUri { get; set; }
@@ -13,7 +11,7 @@ namespace Bandwidth.Net.Events
         public SpeakStatus? Status { get; set; }
     }
 
- 
+
     public enum SpeakStatus
     {
         Done,

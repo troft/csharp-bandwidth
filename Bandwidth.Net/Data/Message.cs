@@ -24,9 +24,10 @@ namespace Bandwidth.Net.Data
     {
         public string From { get; set; }
         public string To { get; set; }
+
         public override IDictionary<string, string> ToDictionary()
         {
-            var query = base.ToDictionary();
+            IDictionary<string, string> query = base.ToDictionary();
             if (From != null)
             {
                 query.Add("from", From);

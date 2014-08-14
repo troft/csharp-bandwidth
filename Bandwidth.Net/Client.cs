@@ -13,14 +13,15 @@ using Newtonsoft.Json.Serialization;
 
 namespace Bandwidth.Net
 {
-    public sealed class Client: IDisposable
+    public sealed class Client : IDisposable
     {
         private readonly HttpClient _client;
-        private readonly string _userPath;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
+        private readonly string _userPath;
 
-  
-        public Client(string userId, string apiToken, string secret, string baseUrl = "https://api.catapult.inetwork.com/")
+
+        public Client(string userId, string apiToken, string secret,
+            string baseUrl = "https://api.catapult.inetwork.com/")
         {
             if (userId == null) throw new ArgumentNullException("userId");
             if (apiToken == null) throw new ArgumentNullException("apiToken");
@@ -28,13 +29,18 @@ namespace Bandwidth.Net
             _userPath = string.Format("users/{0}", userId);
             var url = new UriBuilder(baseUrl) {Path = "/v1/"};
             _client = new HttpClient {BaseAddress = url.Uri};
-            _client.DefaultRequestHeaders.Authorization = 
-                new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", apiToken, secret))));
+            _client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Basic",
+                    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", apiToken, secret))));
             _jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            _jsonSerializerSettings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
+            _jsonSerializerSettings.Converters.Add(new StringEnumConverter
+            {
+                CamelCaseText = true,
+                AllowIntegerValues = false
+            });
             _jsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
             Calls = new Calls(this);
             Recordings = new Recordings(this);
@@ -50,20 +56,23 @@ namespace Bandwidth.Net
             PhoneNumbers = new PhoneNumbers(this);
         }
 
-        
         #region Base Http methods
-        internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query = null, string id = null, bool disposeResponse = false)
+
+        internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query = null,
+            string id = null, bool disposeResponse = false)
         {
-            var urlPath = FixPath(path);
-            if(id != null)
+            string urlPath = FixPath(path);
+            if (id != null)
             {
                 urlPath = urlPath + "/" + id;
             }
             if (query != null && query.Count > 0)
             {
-                urlPath = string.Format("{0}?{1}", urlPath, string.Join("&", from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(p.Value))));
+                urlPath = string.Format("{0}?{1}", urlPath,
+                    string.Join("&",
+                        from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(p.Value))));
             }
-            var response = await _client.GetAsync(urlPath);
+            HttpResponseMessage response = await _client.GetAsync(urlPath);
             try
             {
                 response.EnsureSuccessStatusCode();
@@ -76,18 +85,18 @@ namespace Bandwidth.Net
             if (!disposeResponse) return response;
             response.Dispose();
             return null;
-
         }
 
-        
+
         internal async Task<TResult> MakeGetRequest<TResult>(string path, IDictionary<string, string> query = null,
             string id = null)
         {
-            using (var response = await MakeGetRequest(path, query, id))
+            using (HttpResponseMessage response = await MakeGetRequest(path, query, id))
             {
-                if (response.Content.Headers.ContentType!= null && response.Content.Headers.ContentType.MediaType == "application/json")
+                if (response.Content.Headers.ContentType != null &&
+                    response.Content.Headers.ContentType.MediaType == "application/json")
                 {
-                    var json = await response.Content.ReadAsStringAsync();
+                    string json = await response.Content.ReadAsStringAsync();
                     return json.Length > 0
                         ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings)
                         : default(TResult);
@@ -98,8 +107,9 @@ namespace Bandwidth.Net
 
         internal async Task<HttpResponseMessage> MakePostRequest(string path, object data, bool disposeResponse = false)
         {
-            var json = JsonConvert.SerializeObject(data, Formatting.None, _jsonSerializerSettings);
-            var response = await _client.PostAsync(FixPath(path), new StringContent(json, Encoding.UTF8, "application/json"));
+            string json = JsonConvert.SerializeObject(data, Formatting.None, _jsonSerializerSettings);
+            HttpResponseMessage response =
+                await _client.PostAsync(FixPath(path), new StringContent(json, Encoding.UTF8, "application/json"));
             try
             {
                 response.EnsureSuccessStatusCode();
@@ -114,24 +124,28 @@ namespace Bandwidth.Net
             return null;
         }
 
-        internal async Task<HttpResponseMessage> PutData(string path, Stream stream, string mediaType, bool disposeResponse = false)
+        internal async Task<HttpResponseMessage> PutData(string path, Stream stream, string mediaType,
+            bool disposeResponse = false)
         {
             if (stream == null) throw new ArgumentNullException("stream");
             return await PutFileContent(path, mediaType, disposeResponse, new StreamContent(stream));
         }
-        internal async Task<HttpResponseMessage> PutData(string path, byte[] buffer, string mediaType, bool disposeResponse = false)
+
+        internal async Task<HttpResponseMessage> PutData(string path, byte[] buffer, string mediaType,
+            bool disposeResponse = false)
         {
             if (buffer == null) throw new ArgumentNullException("buffer");
             return await PutFileContent(path, mediaType, disposeResponse, new ByteArrayContent(buffer));
         }
 
-        private async Task<HttpResponseMessage> PutFileContent(string path, string mediaType, bool disposeResponse, HttpContent content)
+        private async Task<HttpResponseMessage> PutFileContent(string path, string mediaType, bool disposeResponse,
+            HttpContent content)
         {
             if (mediaType != null)
             {
                 content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
             }
-            var response = await _client.PutAsync(FixPath(path), content);
+            HttpResponseMessage response = await _client.PutAsync(FixPath(path), content);
             try
             {
                 response.EnsureSuccessStatusCode();
@@ -146,15 +160,14 @@ namespace Bandwidth.Net
             return null;
         }
 
-        
 
         internal async Task<TResult> MakePostRequest<TResult>(string path, object data)
         {
-            using (var response = await MakePostRequest(path, data))
+            using (HttpResponseMessage response = await MakePostRequest(path, data))
             {
                 if (response.Content.Headers.ContentType.MediaType == "application/json")
                 {
-                    var json = await response.Content.ReadAsStringAsync();
+                    string json = await response.Content.ReadAsStringAsync();
                     return json.Length > 0
                         ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings)
                         : default(TResult);
@@ -165,33 +178,13 @@ namespace Bandwidth.Net
 
         internal async Task MakeDeleteRequest(string path)
         {
-            using (var response = await _client.DeleteAsync(FixPath(path)))
+            using (HttpResponseMessage response = await _client.DeleteAsync(FixPath(path)))
             {
                 response.EnsureSuccessStatusCode();
             }
         }
+
         #endregion
-
-
-        internal string ConcatUserPath(string path)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");
-            if (path[0] == '/')
-            {
-                return _userPath + path;
-            }
-            return string.Format("{0}/{1}", _userPath, path);
-        }
-
-        public void Dispose()
-        {
-            _client.Dispose();
-        }
-        private static string FixPath(string path)
-        {
-            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");
-            return (path[0] == '/') ? path.Substring(1) : path;
-        }
 
         public Calls Calls { get; private set; }
         public Recordings Recordings { get; private set; }
@@ -205,5 +198,26 @@ namespace Bandwidth.Net
         public Messages Messages { get; private set; }
         public NumberInfo NumberInfo { get; private set; }
         public PhoneNumbers PhoneNumbers { get; private set; }
+
+        public void Dispose()
+        {
+            _client.Dispose();
+        }
+
+        internal string ConcatUserPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");
+            if (path[0] == '/')
+            {
+                return _userPath + path;
+            }
+            return string.Format("{0}/{1}", _userPath, path);
+        }
+
+        private static string FixPath(string path)
+        {
+            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");
+            return (path[0] == '/') ? path.Substring(1) : path;
+        }
     }
 }
