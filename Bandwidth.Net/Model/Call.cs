@@ -28,7 +28,7 @@ namespace Bandwidth.Net.Model
 #if !PCL        
         public static Task<Call> Get(string callId)
         {
-            return Get(Client.DefaultInstance, callId);
+            return Get(Client.GetInstance(), callId);
         }
 #endif
 
@@ -41,7 +41,7 @@ namespace Bandwidth.Net.Model
             return client.MakeGetRequest<Call[]>(client.ConcatUserPath(CallPath), query.ToDictionary()).ContinueWith(
                 t =>
                 {
-                    var calls = t.Result;
+                    var calls = t.Result ?? new Call[0];
                     foreach (var call in calls)
                     {
                         call._client = client;    
@@ -58,12 +58,12 @@ namespace Bandwidth.Net.Model
 #if !PCL        
         public static Task<Call[]> List(CallQuery query = null)
         {
-            return List(Client.DefaultInstance, query);
+            return List(Client.GetInstance(), query);
         }
 
         public static Task<Call[]> List(int page, int size =  25)
         {
-            return List(Client.DefaultInstance, page, size);
+            return List(Client.GetInstance(), page, size);
         }
 #endif
 
@@ -110,12 +110,12 @@ namespace Bandwidth.Net.Model
 #if !PCL        
         public static Task<Call> Create(Call call)
         {
-            return Create(Client.DefaultInstance, call);
+            return Create(Client.GetInstance(), call);
         }
 
         public static Task<Call> Create(string to, string from, string callbackUrl = "none", string tag = null)
         {
-            return Create(Client.DefaultInstance, to, from, callbackUrl, tag);
+            return Create(Client.GetInstance(), to, from, callbackUrl, tag);
         }
 #endif
 
@@ -132,7 +132,7 @@ namespace Bandwidth.Net.Model
 #if !PCL        
         public static Task Update(string callId, Call changedData)
         {
-            return Update(Client.DefaultInstance, callId, changedData);
+            return Update(Client.GetInstance(), callId, changedData);
         }
 #endif
 

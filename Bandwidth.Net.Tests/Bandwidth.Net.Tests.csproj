@@ -58,16 +58,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ClientTests.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="HttpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bandwidth.Net\Bandwidth.Net.csproj">
       <Project>{7fa8f3ba-6142-419f-8855-ee7cf52a0dac}</Project>
       <Name>Bandwidth.Net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

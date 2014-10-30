@@ -43,7 +43,7 @@ namespace Bandwidth.Net
                 Environment.GetEnvironmentVariable(BandwidthApiVersion));
         }
 
-        public static readonly Client DefaultInstance = GetInstance();
+        
 #endif
         private Client(string userId, string apiToken, string secret, string apiEndpoint, string apiVersion)
         {
