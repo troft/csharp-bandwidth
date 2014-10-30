@@ -45,6 +45,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Bandwidth.Net\BaseModel.cs">
+      <Link>BaseModel.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Client.cs">
       <Link>Client.cs</Link>
     </Compile>
@@ -53,9 +56,6 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Call.cs">
       <Link>Call.cs</Link>
-    </Compile>
-    <Compile Include="..\Bandwidth.Net\Model\Dtmf.cs">
-      <Link>Dtmf.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Event.cs">
       <Link>Event.cs</Link>
@@ -68,9 +68,6 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Properties\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Bandwidth.Net\Query.cs">
-      <Link>Query.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

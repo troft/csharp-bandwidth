@@ -41,11 +41,17 @@ namespace Bandwidth.Net.Tests
             {
                 var client = Helper.CreateClient();
                 client.MakeGetRequest("test",
-                             new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, null, true)
+                             new Dictionary<string, object> { { "test1", "value1" }, { "test2", "value2" } }, null, true)
                              .Wait();
                 if (server.Error != null) throw server.Error;
             }
             
+        }
+
+        [TestMethod]
+        public void MakeGetRequestToObjectTest()
+        {
+            throw new NotImplementedException();
         }
 
         [TestMethod]
@@ -56,7 +62,7 @@ namespace Bandwidth.Net.Tests
                 var client = Helper.CreateClient();
                 {
                     client.MakeGetRequest("test",
-                             new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }, "id", true)
+                             new Dictionary<string, object> { { "test1", "value1" }, { "test2", "value2" } }, "id", true)
                              .Wait();
                     if (server.Error != null) throw server.Error;
                 }
@@ -85,7 +91,7 @@ namespace Bandwidth.Net.Tests
                 var client = Helper.CreateClient();
                 {
                     var result = client.MakeGetRequest<TestItem>("test",
-                        new Dictionary<string, string> { { "test1", "value1" }, { "test2", "value2" } }).Result;
+                        new Dictionary<string, object> { { "test1", "value1" }, { "test2", "value2" } }).Result;
                     if (server.Error != null) throw server.Error;
                     Assert.AreEqual("Name", result.Name);
                     Assert.IsTrue(result.Flag != null && result.Flag.Value);

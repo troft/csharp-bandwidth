@@ -81,7 +81,7 @@ namespace Bandwidth.Net
 
         #region Base Http methods
 
-        internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, string> query = null,
+        internal async Task<HttpResponseMessage> MakeGetRequest(string path, IDictionary<string, object> query = null,
             string id = null, bool disposeResponse = false)
         {
             var urlPath = FixPath(path);
@@ -93,7 +93,7 @@ namespace Bandwidth.Net
             {
                 urlPath = string.Format("{0}?{1}", urlPath,
                     string.Join("&",
-                        from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(p.Value))));
+                        from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(Convert.ToString(p.Value)))));
             }
             using (var client = CreateHttpClient())
             {
@@ -114,7 +114,7 @@ namespace Bandwidth.Net
         }
 
 
-        internal async Task<TResult> MakeGetRequest<TResult>(string path, IDictionary<string, string> query = null,
+        internal async Task<TResult> MakeGetRequest<TResult>(string path, IDictionary<string, object> query = null,
             string id = null)
         {
             using (var response = await MakeGetRequest(path, query, id))
@@ -129,6 +129,23 @@ namespace Bandwidth.Net
                 }
             }
             return default(TResult);
+        }
+
+        internal async Task MakeGetRequestToObject(object targetObject, string path, IDictionary<string, object> query = null,
+            string id = null)
+        {
+            using (var response = await MakeGetRequest(path, query, id))
+            {
+                if (response.Content.Headers.ContentType != null &&
+                    response.Content.Headers.ContentType.MediaType == "application/json")
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    if (json.Length > 0)
+                    {
+                        JsonConvert.PopulateObject(json, targetObject, _jsonSerializerSettings);
+                    }
+                }
+            }
         }
 
         internal async Task<HttpResponseMessage> MakePostRequest(string path, object data, bool disposeResponse = false)

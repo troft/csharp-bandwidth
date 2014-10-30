@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Model
 {
-    public class Call
+    public class Call: BaseModel
     {
         private const string CallPath = "calls";
 
         private static readonly Regex CallIdExtractor = new Regex(@"/" + CallPath + @"/([\w\-_]+)$");
-        private Client _client;
         /// <summary>
         ///     Gets information about an active or completed call.
         /// </summary>
@@ -21,7 +20,7 @@ namespace Bandwidth.Net.Model
                 t =>
                 {
                     var call = t.Result;
-                    call._client = client;
+                    call.Client = client;
                     return call;
                 });
         }
@@ -35,16 +34,15 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Gets a list of active and historic calls user made or received.
         /// </summary>
-        public static Task<Call[]> List(Client client, CallQuery query = null)
+        public static Task<Call[]> List(Client client, IDictionary<string, object> query = null )
         {
-            query = query ?? new CallQuery{Size = 25};
-            return client.MakeGetRequest<Call[]>(client.ConcatUserPath(CallPath), query.ToDictionary()).ContinueWith(
+            return client.MakeGetRequest<Call[]>(client.ConcatUserPath(CallPath), query).ContinueWith(
                 t =>
                 {
                     var calls = t.Result ?? new Call[0];
                     foreach (var call in calls)
                     {
-                        call._client = client;    
+                        call.Client = client;    
                     }
                     return calls;
                 });
@@ -52,13 +50,14 @@ namespace Bandwidth.Net.Model
 
         public static Task<Call[]> List(Client client, int page, int size = 25)
         {
-            return List(client, new CallQuery {Page = page, Size = size});
+            var query = new Dictionary<string, object> {{"page", page}, {"size", size}};
+            return List(client, query);
         }
 
 #if !PCL        
-        public static Task<Call[]> List(CallQuery query = null)
+        public static Task<Call[]> List(IDictionary<string, object> parameters = null)
         {
-            return List(Client.GetInstance(), query);
+            return List(Client.GetInstance(), parameters);
         }
 
         public static Task<Call[]> List(int page, int size =  25)
@@ -71,9 +70,9 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Makes a phone call.
         /// </summary>
-        public static async Task<Call> Create(Client client, Call call)
+        public static async Task<Call> Create(Client client, IDictionary<string, object> parameters)
         {
-            using (var response = await client.MakePostRequest(client.ConcatUserPath(CallPath), call))
+            using (var response = await client.MakePostRequest(client.ConcatUserPath(CallPath), parameters))
             {
                 var match = (response.Headers.Location != null)
                     ? CallIdExtractor.Match(response.Headers.Location.OriginalString)
@@ -86,31 +85,21 @@ namespace Bandwidth.Net.Model
             }
         }
 
-        public static async Task<Call> Create(Client client, string to, string from, string callbackUrl = "none", string tag = null)
+        public static Task<Call> Create(Client client, string to, string from, string callbackUrl = "none", string tag = null)
         {
-            using (var response = await client.MakePostRequest(client.ConcatUserPath(CallPath), new Call
+            return Create(client, new Dictionary<string, object>
             {
-                To = to,
-                From = from,
-                CallbackUrl = callbackUrl,
-                Tag = tag
-            }))
-            {
-                var match = (response.Headers.Location != null)
-                    ? CallIdExtractor.Match(response.Headers.Location.OriginalString)
-                    : null;
-                if (match == null)
-                {
-                    throw new Exception("Missing id in response");
-                }
-                return await Get(client, match.Groups[1].Value);
-            }
+                {"to", to},
+                {"from", from},
+                {"callbackUrl", callbackUrl},
+                {"tag", tag}
+            });
         }
 
 #if !PCL        
-        public static Task<Call> Create(Call call)
+        public static Task<Call> Create(IDictionary<string, object> parameters)
         {
-            return Create(Client.GetInstance(), call);
+            return Create(Client.GetInstance(), parameters);
         }
 
         public static Task<Call> Create(string to, string from, string callbackUrl = "none", string tag = null)
@@ -120,28 +109,22 @@ namespace Bandwidth.Net.Model
 #endif
 
 
+
         /// <summary>
         ///     Changes properties of an active phone call.
         /// </summary>
-        public static Task Update(Client client, string callId, Call changedData)
+        public Task Update(IDictionary<string, object> parameters)
         {
-            if (callId == null) throw new ArgumentNullException("callId");
-            return client.MakePostRequest(client.ConcatUserPath(string.Format("{0}/{1}", CallPath, callId)),
-                changedData, true);
+            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}", CallPath, Id)),
+                parameters, true);
         }
-#if !PCL        
-        public static Task Update(string callId, Call changedData)
-        {
-            return Update(Client.GetInstance(), callId, changedData);
-        }
-#endif
 
         /// <summary>
         ///     Plays an audio file or speak a sentence in a phone call.
         /// </summary>
         public Task PlayAudio(Audio audio)
         {
-            return _client.MakePostRequest(_client.ConcatUserPath(string.Format("{0}/{1}/audio", CallPath, Id)),
+            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/audio", CallPath, Id)),
                 audio, true);
         }
 
@@ -168,36 +151,36 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Send DTMF.
         /// </summary>
-        public Task SetDtmf(Dtmf dtmf)
+        public Task SendDtmf(string dtmf)
         {
-            return _client.MakePostRequest(_client.ConcatUserPath(string.Format("{0}/{1}/dtmf", CallPath, Id)),
-                dtmf, true);
+            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/dtmf", CallPath, Id)),
+                new Dictionary<string, object> { { "dtmfOut", dtmf } }, true);
         }
 
         /// <summary>
         ///     Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When
         ///     gather finishes, an event with the results will be posted to the callback URL.
         /// </summary>
-        public Task CreateGather(CreateGather gather)
+        public Task CreateGather(IDictionary<string, object> parameters)
         {
-            return _client.MakePostRequest(_client.ConcatUserPath(string.Format("{0}/{1}/gather", CallPath, Id)),
-                gather, true);
+            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/gather", CallPath, Id)),
+                parameters, true);
         }
 
         public Task CreateGather(Client client, string promptSentence)
         {
-            return CreateGather(new CreateGather
+            return CreateGather(new Dictionary<string, object>
             {
-                Tag = Id,
-                MaxDigits = 1,
-                Promt = new CreateGatherPromt
-                {
-                    Locale = "en_US",
-                    Gender = Gender.Female,
-                    Sentence = promptSentence,
-                    Voice = "kate",
-                    Bargeable = true
-                }
+                {"tag", Id},
+                {"maxDigits", 1},
+                {"promt", new Dictionary<string, object>
+                    {
+                        {"locale", "en_US"},
+                        {"gender", "female"},
+                        {"sentence", promptSentence},
+                        {"voice", "kate"},
+                        {"bargeable", true}
+                    }}
             });
         }
 
@@ -205,12 +188,12 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Update the gather DTMF. The only update allowed is state:completed to stop the gather.
         /// </summary>
-        public Task UpdateGather(string gatherId, Gather gather)
+        public Task UpdateGather(string gatherId, IDictionary<string, object> parameters)
         {
             if (gatherId == null) throw new ArgumentNullException("gatherId");
             return
-                _client.MakePostRequest(
-                    _client.ConcatUserPath(string.Format("{0}/{1}/gather/{2}", CallPath, Id, gatherId)), gather,
+                Client.MakePostRequest(
+                    Client.ConcatUserPath(string.Format("{0}/{1}/gather/{2}", CallPath, Id, gatherId)), parameters,
                     true);
         }
 
@@ -221,17 +204,17 @@ namespace Bandwidth.Net.Model
         {
             if (gatherId == null) throw new ArgumentNullException("gatherId");
             return
-                _client.MakeGetRequest<Gather>(
-                    _client.ConcatUserPath(string.Format("{0}/{1}/gather/{2}", CallPath, Id, gatherId)));
+                Client.MakeGetRequest<Gather>(
+                    Client.ConcatUserPath(string.Format("{0}/{1}/gather/{2}", CallPath, Id, gatherId)));
         }
 
         /// <summary>
         /// </summary>
-        public Task<Event[]> GetEventsList()
+        public Task<Event[]> GetEvents()
         {
             return
-                _client.MakeGetRequest<Event[]>(
-                    _client.ConcatUserPath(string.Format("{0}/{1}/events", CallPath, Id)));
+                Client.MakeGetRequest<Event[]>(
+                    Client.ConcatUserPath(string.Format("{0}/{1}/events", CallPath, Id)));
         }
 
         /// <summary>
@@ -240,20 +223,63 @@ namespace Bandwidth.Net.Model
         {
             if (eventId == null) throw new ArgumentNullException("eventId");
             return
-                _client.MakeGetRequest<Event>(
-                    _client.ConcatUserPath(string.Format("{0}/{1}/events/{2}", CallPath, Id, eventId)));
+                Client.MakeGetRequest<Event>(
+                    Client.ConcatUserPath(string.Format("{0}/{1}/events/{2}", CallPath, Id, eventId)));
         }
 
         /// <summary>
         /// </summary>
-        public Task<Recording[]> GetRecordingsList()
+        public Task<Recording[]> GetRecordings()
         {
             return
-                _client.MakeGetRequest<Recording[]>(
-                    _client.ConcatUserPath(string.Format("{0}/{1}/recordings", CallPath, Id)));
+                Client.MakeGetRequest<Recording[]>(
+                    Client.ConcatUserPath(string.Format("{0}/{1}/recordings", CallPath, Id)));
         }
 
-        public string Id { get; set; }
+        /// <summary>
+        /// </summary>
+        public async Task HangUp()
+        {
+            await Update(new Dictionary<string, object> { { "state", "completed" } });
+            await Reload();
+        }
+
+        /// <summary>
+        /// </summary>
+        public async Task AnswerOnIncoming()
+        {
+            await Update(new Dictionary<string, object> { { "state", "active" } });
+            await Reload();
+        }
+
+        /// <summary>
+        /// </summary>
+        public async Task RejectIncoming()
+        {
+            await Update(new Dictionary<string, object> { { "state", "rejected" } });
+            await Reload();
+        }
+
+        /// <summary>
+        /// </summary>
+        public async Task RecordingOn()
+        {
+            await Update(new Dictionary<string, object> { { "recordingEnabled", "true" } });
+            await Reload();
+        }
+
+        /// <summary>
+        /// </summary>
+        public async Task RecordingOff()
+        {
+            await Update(new Dictionary<string, object> { { "recordingEnabled", "false" } });
+            await Reload();
+        }
+
+        private async Task Reload()
+        {
+            await Client.MakeGetRequestToObject(this, Client.ConcatUserPath(CallPath), null, Id);
+        }
         public CallDirection? Direction { get; set; }
         public int? CallTimeout { get; set; }
         public int? CallbackTimeout { get; set; }
@@ -279,36 +305,7 @@ namespace Bandwidth.Net.Model
         public int? Page { get; set; }
         public int? Size { get; set; }
     }
-
-    public class CallQuery : Query
-    {
-        public string BridgeId { get; set; }
-        public string ConferenceId { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
-
-        public override IDictionary<string, string> ToDictionary()
-        {
-            IDictionary<string, string> query = base.ToDictionary();
-            if (BridgeId != null)
-            {
-                query.Add("bridgeId", BridgeId);
-            }
-            if (ConferenceId != null)
-            {
-                query.Add("conferenceId", ConferenceId);
-            }
-            if (From != null)
-            {
-                query.Add("from", From);
-            }
-            if (To != null)
-            {
-                query.Add("to", To);
-            }
-            return query;
-        }
-    }
+    
     public class WhisperAudio
     {
         public Gender? Gender { get; set; }

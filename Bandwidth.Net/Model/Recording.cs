@@ -2,9 +2,8 @@
 
 namespace Bandwidth.Net.Model
 {
-    public class Recording
+    public class Recording: BaseModel
     {
-        public string Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Call { get; set; }
@@ -22,7 +21,4 @@ namespace Bandwidth.Net.Model
         Error
     }
 
-    public class RecordingQuery : Query
-    {
-    }
 }

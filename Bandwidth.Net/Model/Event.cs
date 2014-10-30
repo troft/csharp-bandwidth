@@ -2,9 +2,8 @@
 
 namespace Bandwidth.Net.Model
 {
-    public class Event
+    public class Event: BaseModel
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public DateTime Time { get; set; }
         public object Data { get; set; }
