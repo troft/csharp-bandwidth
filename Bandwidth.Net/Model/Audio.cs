@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Bandwidth.Net.Data
+﻿namespace Bandwidth.Net.Model
 {
     public class Audio
     {
-        public Uri FileUrl { get; set; }
+        public string FileUrl { get; set; }
         public string Sentence { get; set; }
         public Gender? Gender { get; set; }
         public string Locale { get; set; }

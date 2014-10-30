@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bandwidth.Net.Data
+namespace Bandwidth.Net.Model
 {
     public class Recording
     {

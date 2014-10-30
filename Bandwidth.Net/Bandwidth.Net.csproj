@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -31,59 +31,20 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Clients\Account.cs" />
-    <Compile Include="Clients\Applications.cs" />
-    <Compile Include="Clients\AvailableNumbers.cs" />
-    <Compile Include="Clients\PhoneNumbers.cs" />
-    <Compile Include="Clients\Messages.cs" />
-    <Compile Include="Clients\Media.cs" />
-    <Compile Include="Clients\Conferences.cs" />
-    <Compile Include="Clients\Bridges.cs" />
-    <Compile Include="Clients\Errors.cs" />
-    <Compile Include="Clients\NumberInfo.cs" />
-    <Compile Include="Data\Account.cs" />
-    <Compile Include="Data\AccountTransaction.cs" />
-    <Compile Include="Data\Application.cs" />
-    <Compile Include="Data\Audio.cs" />
-    <Compile Include="Data\AvailableNumber.cs" />
-    <Compile Include="Data\Bridge.cs" />
-    <Compile Include="Data\Call.cs" />
-    <Compile Include="Clients\Calls.cs" />
     <Compile Include="Client.cs" />
-    <Compile Include="Clients\Recordings.cs" />
-    <Compile Include="Data\Conference.cs" />
-    <Compile Include="Data\Dtmf.cs" />
-    <Compile Include="Data\Error.cs" />
-    <Compile Include="Data\Event.cs" />
-    <Compile Include="Data\Gather.cs" />
-    <Compile Include="Data\Media.cs" />
-    <Compile Include="Data\Message.cs" />
-    <Compile Include="Data\NumberInfo.cs" />
-    <Compile Include="Data\PhoneNumber.cs" />
-    <Compile Include="Events\Answer.cs" />
-    <Compile Include="Events\CallTimeout.cs" />
-    <Compile Include="Events\ConferenceSpeak.cs" />
-    <Compile Include="Events\ConferenceMember.cs" />
-    <Compile Include="Events\Dtmf.cs" />
-    <Compile Include="Events\Event.cs" />
-    <Compile Include="Events\Call.cs" />
-    <Compile Include="Events\Conference.cs" />
-    <Compile Include="Events\ConferencePlayback.cs" />
-    <Compile Include="Events\Hangup.cs" />
-    <Compile Include="Events\IncomingCall.cs" />
-    <Compile Include="Events\Recording.cs" />
-    <Compile Include="Events\Playback.cs" />
-    <Compile Include="Events\Reject.cs" />
-    <Compile Include="Events\Speak.cs" />
-    <Compile Include="Events\Sms.cs" />
+    <Compile Include="Model\Audio.cs" />
+    <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\Dtmf.cs" />
+    <Compile Include="Model\Event.cs" />
+    <Compile Include="Model\Gather.cs" />
+    <Compile Include="Model\Recording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query.cs" />
-    <Compile Include="Data\Recording.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -94,6 +55,7 @@
     <None Include="Bandwidth.Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
