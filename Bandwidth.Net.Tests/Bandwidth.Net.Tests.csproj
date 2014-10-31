@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BaseEventTest.cs" />
     <Compile Include="ClientTests.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HttpServer.cs" />

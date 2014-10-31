@@ -45,11 +45,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Bandwidth.Net\BaseEvent.cs">
+      <Link>BaseEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\BaseModel.cs">
       <Link>BaseModel.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Client.cs">
       <Link>Client.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\AnswerEvent.cs">
+      <Link>AnswerEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Audio.cs">
       <Link>Audio.cs</Link>
@@ -57,8 +63,17 @@
     <Compile Include="..\Bandwidth.Net\Model\Call.cs">
       <Link>Call.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\CallEvent.cs">
+      <Link>CallEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Conference.cs">
       <Link>Conference.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\DtmfEvent.cs">
+      <Link>DtmfEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\ErrorEvent.cs">
+      <Link>ErrorEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Event.cs">
       <Link>Event.cs</Link>
@@ -66,11 +81,32 @@
     <Compile Include="..\Bandwidth.Net\Model\Gather.cs">
       <Link>Gather.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\GatherEvent.cs">
+      <Link>GatherEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\IncomingCallEvent.cs">
+      <Link>IncomingCallEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Message.cs">
       <Link>Message.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Recording.cs">
       <Link>Recording.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\RecordingEvent.cs">
+      <Link>RecordingEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\RejectEvent.cs">
+      <Link>RejectEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\SmsEvent.cs">
+      <Link>SmsEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\SpeakEvent.cs">
+      <Link>SpeakEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\TimeoutEvent.cs">
+      <Link>TimeoutEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Properties\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>

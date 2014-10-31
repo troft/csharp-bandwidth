@@ -48,8 +48,22 @@
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="BaseEvent.cs" />
+    <Compile Include="Model\CallEvent.cs" />
+    <Compile Include="Model\DtmfEvent.cs" />
+    <Compile Include="Model\ErrorEvent.cs" />
+    <Compile Include="Model\TimeoutEvent.cs" />
+    <Compile Include="Model\SmsEvent.cs" />
+    <Compile Include="Model\RecordingEvent.cs" />
+    <Compile Include="Model\RejectEvent.cs" />
+    <Compile Include="Model\HangupEvent.cs" />
+    <Compile Include="Model\GatherEvent.cs" />
+    <Compile Include="Model\PlaybackEvent.cs" />
+    <Compile Include="Model\SpeakEvent.cs" />
     <Compile Include="Model\Audio.cs" />
     <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\AnswerEvent.cs" />
+    <Compile Include="Model\IncomingCallEvent.cs" />
     <Compile Include="Model\Conference.cs" />
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\Gather.cs" />

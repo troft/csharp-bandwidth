@@ -28,6 +28,7 @@ namespace Bandwidth.Net.Tests
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
+            settings.TypeNameHandling = TypeNameHandling.Objects;
             return new StringContent(JsonConvert.SerializeObject(data, Formatting.Indented, settings), Encoding.UTF8, "application/json");
         }
 
