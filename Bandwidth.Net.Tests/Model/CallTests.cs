@@ -1,5 +1,4 @@
-﻿/*
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Bandwidth.Net.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,54 +8,10 @@ namespace Bandwidth.Net.Tests.Model
     [TestClass]
     public class CallTests
     {
-        [TestMethod]
-        public void CreateTest()
+        [TestInitialize]
+        public void Setup()
         {
-            var call = new Call
-            {
-                StartTime = DateTime.Now.AddMinutes(-10),
-                EndTime = DateTime.Now.AddMinutes(-5),
-                State = CallState.Active,
-                From = "From",
-                To = "To",
-                Direction = CallDirection.Out
-            };
-            using (var server = new HttpServer(new RequestHandler
-            {
-                EstimatedMethod = "POST",
-                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
-                EstimatedContent = Helper.ToJsonString(call),
-                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
-            }))
-            {
-                var client = Helper.CreateClient();
-                var cl = Call.Create(client, call).Result;
-                if (server.Error != null) throw server.Error;
-                Assert.AreEqual("1", cl.Id);
-            }
-        }
-
-        [TestMethod]
-        public void UpdateTest()
-        {
-            var call = new Call
-            {
-                State = CallState.Completed,
-            };
-            using (var server = new HttpServer(new RequestHandler
-            {
-                EstimatedMethod = "POST",
-                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
-                EstimatedContent = Helper.ToJsonString(call),
-                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
-            }))
-            {
-                using (var client = Helper.CreateClient())
-                {
-                    client.Calls.Update("1", call).Wait();
-                    if (server.Error != null) throw server.Error;
-                }
-            }
+            Helper.SetEnvironmetVariables();
         }
 
         [TestMethod]
@@ -79,14 +34,362 @@ namespace Bandwidth.Net.Tests.Model
                 ContentToSend = Helper.CreateJsonContent(call)
             }))
             {
+                var client = Helper.CreateClient();
+                var result = Call.Get(client, "1").Result;
+                if (server.Error != null) throw server.Error;
+                Helper.AssertObjects(call, result);
+            }
+        }
+
+        [TestMethod]
+        public void GetWithDefaultClientTest()
+        {
+            var call = new Call
+            {
+                Id = "1",
+                StartTime = DateTime.Now.AddMinutes(-10),
+                EndTime = DateTime.Now.AddMinutes(-5),
+                State = CallState.Active,
+                From = "From",
+                To = "To",
+                Direction = CallDirection.Out
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(call)
+            }))
+            {
+                var result = Call.Get("1").Result;
+                if (server.Error != null) throw server.Error;
+                Helper.AssertObjects(call, result);
+            }
+        }
+
+        [TestMethod]
+        public void ListTest()
+        {
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
+                var client = Helper.CreateClient();
+                var result = Call.List(client).Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual(2, result.Length);
+                Helper.AssertObjects(calls[0], result[0]);
+                Helper.AssertObjects(calls[1], result[1]);
+            }
+        }
+
+        [TestMethod]
+        public void ListWithDefaultClientTest()
+        {
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
+                var result = Call.List().Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual(2, result.Length);
+                Helper.AssertObjects(calls[0], result[0]);
+                Helper.AssertObjects(calls[1], result[1]);
+            }
+        }
+
+        [TestMethod]
+        public void List2Test()
+        {
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls?page=1&size=25", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
+                var client = Helper.CreateClient();
+                var result = Call.List(client, 1).Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual(2, result.Length);
+                Helper.AssertObjects(calls[0], result[0]);
+                Helper.AssertObjects(calls[1], result[1]);
+            }
+        }
+
+        [TestMethod]
+        public void List2WithDefaultClientTest()
+        {
+            var calls = new[]{
+                new Call
+                {
+                    Id = "1",
+                    StartTime = DateTime.Now.AddMinutes(-10),
+                    EndTime = DateTime.Now.AddMinutes(-5),
+                    State = CallState.Active,
+                    From = "From",
+                    To = "To",
+                    Direction = CallDirection.Out
+                },
+                new Call
+                {
+                    Id = "2",
+                    StartTime = DateTime.Now.AddMinutes(-15),
+                    EndTime = DateTime.Now.AddMinutes(-11),
+                    State = CallState.Active,
+                    From = "From2",
+                    To = "To2",
+                    Direction = CallDirection.In
+                }
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls?page=3&size=10", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(calls)
+            }))
+            {
+                var result = Call.List(3, 10).Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual(2, result.Length);
+                Helper.AssertObjects(calls[0], result[0]);
+                Helper.AssertObjects(calls[1], result[1]);
+            }
+        }
+        [TestMethod]
+        public void CreateTest()
+        {
+            var call = new Dictionary<string, object>
+            {
+                {"startTime",  DateTime.Now.AddMinutes(-10)},
+                {"endTime", DateTime.Now.AddMinutes(-5)},
+                {"state", "active"},
+                {"from", "From"},
+                {"to", "To"},
+                {"direction", "out"}
+            };
+            
+            using (var server = new HttpServer(new []{
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                    EstimatedContent = Helper.ToJsonString(call),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}})
+                }
+            }))
+            {
+                var client = Helper.CreateClient();
+                var cl = Call.Create(client, call).Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("1", cl.Id);
+            }
+        }
+
+        [TestMethod]
+        public void CreateWithDefaultClientTest()
+        {
+            var call = new Dictionary<string, object>
+            {
+                {"startTime",  DateTime.Now.AddMinutes(-10)},
+                {"endTime", DateTime.Now.AddMinutes(-5)},
+                {"state", "active"},
+                {"from", "From"},
+                {"to", "To"},
+                {"direction", "out"}
+            };
+
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                    EstimatedContent = Helper.ToJsonString(call),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}})
+                }
+            }))
+            {
+                var cl = Call.Create(call).Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("1", cl.Id);
+            }
+        }
+
+        [TestMethod]
+        public void Create2Test()
+        {
+            var call = new Dictionary<string, object>
+            {
+                {"to", "To"},
+                {"from", "From"},
+                {"callbackUrl", "none"},
+                {"tag", null}
+            };
+
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                    EstimatedContent = Helper.ToJsonString(call),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}})
+                }
+            }))
+            {
+                var client = Helper.CreateClient();
+                var cl = Call.Create(client, "To", "From").Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("1", cl.Id);
+            }
+        }
+
+        [TestMethod]
+        public void Create2WithDefaultClientTest()
+        {
+            var call = new Dictionary<string, object>
+            {
+                {"to", "To"},
+                {"from", "From"},
+                {"callbackUrl", "Callback"},
+                {"tag", "Tag"}
+            };
+
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls", Helper.UserId),
+                    EstimatedContent = Helper.ToJsonString(call),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}})
+                }
+            }))
+            {
+                var cl = Call.Create("To", "From", "Callback", "Tag").Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("1", cl.Id);
+            }
+        }
+
+        /*[TestMethod]
+        public void UpdateTest()
+        {
+            var call = new Call
+            {
+                State = CallState.Completed,
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "POST",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                EstimatedContent = Helper.ToJsonString(call),
+                HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1", Helper.UserId) } }
+            }))
+            {
                 using (var client = Helper.CreateClient())
                 {
-                    var result = client.Calls.Get("1").Result;
+                    client.Calls.Update("1", call).Wait();
                     if (server.Error != null) throw server.Error;
-                    Helper.AssertObjects(call, result);
                 }
             }
         }
+
+        
 
         [TestMethod]
         public void GetAllTest()
@@ -330,8 +633,8 @@ namespace Bandwidth.Net.Tests.Model
                     Helper.AssertObjects(events[1], result[1]);
                 }
             }
-        }
+        }*/
         
     }
 }
-*/
+

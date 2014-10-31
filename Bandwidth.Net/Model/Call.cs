@@ -13,16 +13,12 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Gets information about an active or completed call.
         /// </summary>
-        public static Task<Call> Get(Client client, string callId)
+        public static async Task<Call> Get(Client client, string callId)
         {
             if (callId == null) throw new ArgumentNullException("callId");
-            return client.MakeGetRequest<Call>(client.ConcatUserPath(CallPath), null, callId).ContinueWith(
-                t =>
-                {
-                    var call = t.Result;
-                    call.Client = client;
-                    return call;
-                });
+            var call = await client.MakeGetRequest<Call>(client.ConcatUserPath(CallPath), null, callId);
+            call.Client = client;
+            return call;
         }
 #if !PCL        
         public static Task<Call> Get(string callId)
@@ -34,18 +30,14 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Gets a list of active and historic calls user made or received.
         /// </summary>
-        public static Task<Call[]> List(Client client, IDictionary<string, object> query = null )
+        public static async Task<Call[]> List(Client client, IDictionary<string, object> query = null )
         {
-            return client.MakeGetRequest<Call[]>(client.ConcatUserPath(CallPath), query).ContinueWith(
-                t =>
-                {
-                    var calls = t.Result ?? new Call[0];
-                    foreach (var call in calls)
-                    {
-                        call.Client = client;    
-                    }
-                    return calls;
-                });
+            var calls = await client.MakeGetRequest<Call[]>(client.ConcatUserPath(CallPath), query) ?? new Call[0];
+            foreach (var call in calls)
+            {
+                call.Client = client;
+            }
+            return calls;
         }
 
         public static Task<Call[]> List(Client client, int page, int size = 25)

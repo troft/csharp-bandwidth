@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace Bandwidth.Net.Tests
             {
                 var est = property.GetValue(estimated);
                 var val = property.GetValue(value);
-                Assert.AreEqual(est, val);
+                Assert.AreEqual(est, val, string.Format("Values of property {0} are mismatched", property.Name));
             }
         }
 
@@ -61,6 +62,15 @@ namespace Bandwidth.Net.Tests
             settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
             settings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
             return JsonConvert.SerializeObject(data, Formatting.None, settings);
+        }
+
+        public static void SetEnvironmetVariables(string baseUrl = null)
+        {
+            Environment.SetEnvironmentVariable(Client.BandwidthUserId, UserId);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiToken, ApiKey);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiSecret, Secret);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiEndpoint, baseUrl ?? "http://localhost:3001/");
+            Environment.SetEnvironmentVariable(Client.BandwidthApiVersion, "v1");
         }
     }
 }

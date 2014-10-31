@@ -2,7 +2,7 @@
 {
     public class BaseModel
     {
-        public string Id { get; internal set; }
+        public string Id { get; set; }
 
         protected Client Client;
     }

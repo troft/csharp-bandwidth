@@ -36,9 +36,9 @@ namespace Bandwidth.Net.Tests
             ((IDisposable)_listener).Dispose();
         }
 
-        private void StartHandleRequest()
+        private Task StartHandleRequest()
         {
-            _listener.GetContextAsync().ContinueWith(HandlerRequest);
+            return _listener.GetContextAsync().ContinueWith(HandlerRequest).ContinueWith(t => StartHandleRequest());
         }
 
         private async void HandlerRequest(Task<HttpListenerContext> obj)
@@ -96,7 +96,7 @@ namespace Bandwidth.Net.Tests
             catch(Exception ex)
             {
                 context.Response.Close();
-                Error = ex;
+                _errors.Add(ex);
             }
             RequestCount ++;
         }
@@ -110,7 +110,15 @@ namespace Bandwidth.Net.Tests
             return _handlers[RequestCount];
         }
 
-        public Exception Error { get; private set; }
+        public Exception Error
+        {
+            get
+            {
+                return _errors.Count > 0 ? _errors[_errors.Count - 1] : null;
+            }
+        }
+
+        private readonly List<Exception> _errors = new List<Exception>(); 
     }
 
     public class RequestHandler
