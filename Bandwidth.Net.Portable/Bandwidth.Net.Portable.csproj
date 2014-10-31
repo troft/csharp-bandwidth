@@ -84,11 +84,17 @@
     <Compile Include="..\Bandwidth.Net\Model\GatherEvent.cs">
       <Link>GatherEvent.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\HangupEvent.cs">
+      <Link>HangupEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\IncomingCallEvent.cs">
       <Link>IncomingCallEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Message.cs">
       <Link>Message.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\PlaybackEvent.cs">
+      <Link>PlaybackEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Recording.cs">
       <Link>Recording.cs</Link>

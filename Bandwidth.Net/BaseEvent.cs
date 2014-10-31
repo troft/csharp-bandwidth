@@ -32,7 +32,17 @@ namespace Bandwidth.Net
 
         private static readonly Dictionary<string, Type> EventTypes = new Dictionary<string, Type>
         {
-            {"incomingcall", typeof(IncomingCallEvent)}
+            {"incomingcall", typeof(IncomingCallEvent)},
+            {"answer", typeof(AnswerEvent)},
+            {"speak", typeof(SpeakEvent)},
+            {"playback", typeof(PlaybackEvent)},
+            {"gather", typeof(GatherEvent)},
+            {"hangup", typeof(HangupEvent)},
+            {"dtmf", typeof(DtmfEvent)},
+            {"reject", typeof(RejectEvent)},
+            {"recording", typeof(RecordingEvent)},
+            {"sms", typeof(SmsEvent)},
+            {"timeout", typeof(TimeoutEvent)},
             //TODO fill with another events
         };
 
