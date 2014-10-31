@@ -57,6 +57,9 @@
     <Compile Include="..\Bandwidth.Net\Model\Call.cs">
       <Link>Call.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Conference.cs">
+      <Link>Conference.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Event.cs">
       <Link>Event.cs</Link>
     </Compile>

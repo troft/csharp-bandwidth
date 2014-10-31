@@ -17,7 +17,7 @@ namespace Bandwidth.Net.Tests.Model
         [TestMethod]
         public void GetTest()
         {
-            var call = new Message
+            var message = new Message
             {
                 Id = "1",
                 From = "From",
@@ -28,20 +28,20 @@ namespace Bandwidth.Net.Tests.Model
             {
                 EstimatedMethod = "GET",
                 EstimatedPathAndQuery = string.Format("/v1/users/{0}/messages/1", Helper.UserId),
-                ContentToSend = Helper.CreateJsonContent(call)
+                ContentToSend = Helper.CreateJsonContent(message)
             }))
             {
                 var client = Helper.CreateClient();
                 var result = Message.Get(client, "1").Result;
                 if (server.Error != null) throw server.Error;
-                Helper.AssertObjects(call, result);
+                Helper.AssertObjects(message, result);
             }
         }
 
         [TestMethod]
         public void GetWithDefaultClientTest()
         {
-            var call = new Message
+            var message = new Message
             {
                 Id = "1",
                 From = "From",
@@ -52,12 +52,12 @@ namespace Bandwidth.Net.Tests.Model
             {
                 EstimatedMethod = "GET",
                 EstimatedPathAndQuery = string.Format("/v1/users/{0}/messages/1", Helper.UserId),
-                ContentToSend = Helper.CreateJsonContent(call)
+                ContentToSend = Helper.CreateJsonContent(message)
             }))
             {
                 var result = Message.Get("1").Result;
                 if (server.Error != null) throw server.Error;
-                Helper.AssertObjects(call, result);
+                Helper.AssertObjects(message, result);
             }
         }
 

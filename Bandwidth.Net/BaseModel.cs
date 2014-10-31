@@ -4,6 +4,6 @@
     {
         public string Id { get; set; }
 
-        protected Client Client;
+        internal Client Client;
     }
 }

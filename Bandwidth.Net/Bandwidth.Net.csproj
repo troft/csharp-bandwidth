@@ -50,6 +50,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="Model\Audio.cs" />
     <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\Conference.cs" />
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\Gather.cs" />
     <Compile Include="Model\Message.cs" />
