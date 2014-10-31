@@ -643,7 +643,7 @@ namespace Bandwidth.Net.Tests.Model
                     ContentToSend = Helper.CreateJsonContent(new[]
                     {
                         new Dictionary<string, object>{{"id", "10"}},
-                        new Dictionary<string, object>{{"id", "11"}},
+                        new Dictionary<string, object>{{"id", "11"}}
                     })
                 }
             }))
@@ -699,7 +699,7 @@ namespace Bandwidth.Net.Tests.Model
                     ContentToSend = Helper.CreateJsonContent(new[]
                     {
                         new Dictionary<string, object>{{"id", "10"}},
-                        new Dictionary<string, object>{{"id", "11"}},
+                        new Dictionary<string, object>{{"id", "11"}}
                     })
                 }
             }))

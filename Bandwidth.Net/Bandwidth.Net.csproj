@@ -52,6 +52,7 @@
     <Compile Include="Model\Call.cs" />
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\Gather.cs" />
+    <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Recording.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
