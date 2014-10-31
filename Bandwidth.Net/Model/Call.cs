@@ -114,29 +114,29 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Plays an audio file or speak a sentence in a phone call.
         /// </summary>
-        public Task PlayAudio(Audio audio)
+        public Task PlayAudio(Dictionary<string, object> parameters)
         {
             return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/audio", CallPath, Id)),
-                audio, true);
+                parameters, true);
         }
 
         public Task SpeakSentence(string sentence, string tag = null)
         {
-            return PlayAudio(new Audio
+            return PlayAudio(new Dictionary<string, object>
             {
-                Gender = Gender.Female,
-                Locale = "en_US",
-                Voice = "kate",
-                Sentence = sentence,
-                Tag = tag
+                {"gender", "female"},
+                {"locale", "en_US"},
+                {"voice", "kate"},
+                {"sentence", sentence},
+                {"tag", tag}
             });
         }
         public Task PlayRecording(string recordingUrl)
         {
             if (recordingUrl == null) throw new ArgumentNullException("recordingUrl");
-            return PlayAudio(new Audio
+            return PlayAudio(new Dictionary<string, object>
             {
-                FileUrl = recordingUrl
+                { "fileUrl", recordingUrl}
             });
         }
 
@@ -159,7 +159,7 @@ namespace Bandwidth.Net.Model
                 parameters, true);
         }
 
-        public Task CreateGather(Client client, string promptSentence)
+        public Task CreateGather(string promptSentence)
         {
             return CreateGather(new Dictionary<string, object>
             {
@@ -172,7 +172,8 @@ namespace Bandwidth.Net.Model
                         {"sentence", promptSentence},
                         {"voice", "kate"},
                         {"bargeable", true}
-                    }}
+                    }
+                 }
             });
         }
 
@@ -256,7 +257,7 @@ namespace Bandwidth.Net.Model
         /// </summary>
         public async Task RecordingOn()
         {
-            await Update(new Dictionary<string, object> { { "recordingEnabled", "true" } });
+            await Update(new Dictionary<string, object> { { "recordingEnabled", true } });
             await Reload();
         }
 
@@ -264,18 +265,18 @@ namespace Bandwidth.Net.Model
         /// </summary>
         public async Task RecordingOff()
         {
-            await Update(new Dictionary<string, object> { { "recordingEnabled", "false" } });
+            await Update(new Dictionary<string, object> { { "recordingEnabled", false } });
             await Reload();
         }
 
-        private async Task Reload()
+        private Task Reload()
         {
-            await Client.MakeGetRequestToObject(this, Client.ConcatUserPath(CallPath), null, Id);
+            return Client.MakeGetRequestToObject(this, Client.ConcatUserPath(CallPath), null, Id);
         }
-        public CallDirection? Direction { get; set; }
-        public int? CallTimeout { get; set; }
-        public int? CallbackTimeout { get; set; }
-        public int? ChargeableDuration { get; set; }
+        public CallDirection Direction { get; set; }
+        public int CallTimeout { get; set; }
+        public int CallbackTimeout { get; set; }
+        public int ChargeableDuration { get; set; }
         public string From { get; set; }
         public string To { get; set; }
         public string CallbackUrl { get; set; }
@@ -286,21 +287,21 @@ namespace Bandwidth.Net.Model
         public WhisperAudio WhisperAudio { get; set; }
         public string TransferCallerId { get; set; }
         public string TransferTo { get; set; }
-        public bool? RecordingEnabled { get; set; }
-        public int? RecordingMaxDuration { get; set; }
-        public CallState? State { get; set; }
-        public DateTime? StartTime { get; set; }
-        public DateTime? ActiveTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public bool RecordingEnabled { get; set; }
+        public int RecordingMaxDuration { get; set; }
+        public CallState State { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime ActiveTime { get; set; }
+        public DateTime EndTime { get; set; }
         public string Events { get; set; }
         public string Tag { get; set; }
-        public int? Page { get; set; }
-        public int? Size { get; set; }
+        public int Page { get; set; }
+        public int Size { get; set; }
     }
     
     public class WhisperAudio
     {
-        public Gender? Gender { get; set; }
+        public Gender Gender { get; set; }
         public string Voice { get; set; }
         public string Sentence { get; set; }
         public string Locale { get; set; }
