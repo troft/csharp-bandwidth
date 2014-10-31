@@ -51,7 +51,30 @@ namespace Bandwidth.Net.Tests
         [TestMethod]
         public void MakeGetRequestToObjectTest()
         {
-            throw new NotImplementedException();
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = "/v1/test?test1=value1&test2=value2",
+                ContentToSend = Helper.CreateJsonContent(new TestItem
+                {
+                    Name = "Name1",
+                    Flag = true
+                })
+            }))
+            {
+                var client = Helper.CreateClient();
+                var item = new TestItem
+                {
+                    Name = "Name",
+                    Flag = false
+                };
+                client.MakeGetRequestToObject(item, "test",
+                             new Dictionary<string, object> { { "test1", "value1" }, { "test2", "value2" } })
+                             .Wait();
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("Name1", item.Name);
+                Assert.AreEqual(true, item.Flag);
+            }
         }
 
         [TestMethod]

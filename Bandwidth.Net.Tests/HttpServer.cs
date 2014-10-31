@@ -11,16 +11,24 @@ namespace Bandwidth.Net.Tests
 {
     public sealed class HttpServer: IDisposable
     {
-        private readonly RequestHandler _handler;
+        private readonly RequestHandler[] _handlers;
         private readonly HttpListener _listener;
 
+        public int RequestCount { get; private set; }
+
         public HttpServer(RequestHandler handler, string prefix = null)
+            : this(new[] { handler }, prefix)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
-            _handler = handler;
+        }
+
+        public HttpServer(RequestHandler[] handlers, string prefix = null)
+        {
+            if (handlers == null) throw new ArgumentNullException("handlers");
+            _handlers = handlers;
             _listener = new HttpListener();
             _listener.Prefixes.Add(prefix ?? "http://localhost:3001/");
             _listener.Start();
+            RequestCount = 0;
             StartHandleRequest();
         }
         public void Dispose()
@@ -36,52 +44,53 @@ namespace Bandwidth.Net.Tests
         private async void HandlerRequest(Task<HttpListenerContext> obj)
         {
             var context = obj.Result;
+            var handler = GetRequestHandler();
             try
             {
                 if (!_listener.IsListening) return;
                 var request = context.Request;
                 var response = context.Response;
-                if (_handler.EstimatedMethod != null)
+                if (handler.EstimatedMethod != null)
                 {
-                    Assert.AreEqual(_handler.EstimatedMethod, request.HttpMethod);
+                    Assert.AreEqual(handler.EstimatedMethod, request.HttpMethod);
                 }
-                if (_handler.EstimatedPathAndQuery != null)
+                if (handler.EstimatedPathAndQuery != null)
                 {
-                    Assert.AreEqual(_handler.EstimatedPathAndQuery, request.Url.PathAndQuery);
+                    Assert.AreEqual(handler.EstimatedPathAndQuery, request.Url.PathAndQuery);
                 }
-                if (_handler.EstimatedContent != null)
+                if (handler.EstimatedContent != null)
                 {
                     using (var reader = new StreamReader(request.InputStream, Encoding.UTF8))
                     {
-                        Assert.AreEqual(_handler.EstimatedContent, reader.ReadToEnd());    
+                        Assert.AreEqual(handler.EstimatedContent, reader.ReadToEnd());    
                     }
                 }
-                if (_handler.EstimatedHeaders != null)
+                if (handler.EstimatedHeaders != null)
                 {
-                    foreach (var estimatedHeader in _handler.EstimatedHeaders)
+                    foreach (var estimatedHeader in handler.EstimatedHeaders)
                     {
                         Assert.AreEqual(estimatedHeader.Value, request.Headers[estimatedHeader.Key]);
                     }
                 }
-                if (_handler.HeadersToSend != null)
+                if (handler.HeadersToSend != null)
                 {
-                    foreach (var header in _handler.HeadersToSend)
+                    foreach (var header in handler.HeadersToSend)
                     {
                         response.AddHeader(header.Key, header.Value);
                     }
                 }
-                if (_handler.ContentToSend != null)
+                if (handler.ContentToSend != null)
                 {
-                    foreach (var header in _handler.ContentToSend.Headers)
+                    foreach (var header in handler.ContentToSend.Headers)
                     {
                         foreach (var val in header.Value)
                         {
                             response.AddHeader(header.Key, val);
                         }
                     }
-                    await _handler.ContentToSend.CopyToAsync(response.OutputStream);
+                    await handler.ContentToSend.CopyToAsync(response.OutputStream);
                 }
-                response.StatusCode = _handler.StatusCodeToSend;
+                response.StatusCode = handler.StatusCodeToSend;
                 response.Close();
             }
             catch(Exception ex)
@@ -89,6 +98,16 @@ namespace Bandwidth.Net.Tests
                 context.Response.Close();
                 Error = ex;
             }
+            RequestCount ++;
+        }
+
+        private RequestHandler GetRequestHandler()
+        {
+            if (RequestCount >= _handlers.Length)
+            {
+                return _handlers[_handlers.Length - 1];
+            }
+            return _handlers[RequestCount];
         }
 
         public Exception Error { get; private set; }
