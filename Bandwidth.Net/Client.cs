@@ -225,8 +225,12 @@ namespace Bandwidth.Net
             return default(TResult);
         }
 
-        internal async Task MakeDeleteRequest(string path)
+        internal async Task MakeDeleteRequest(string path, string id = null)
         {
+            if (id != null)
+            {
+                path = path + "/" + id;
+            }
             using (var client = CreateHttpClient())
             using (var response = await client.DeleteAsync(FixPath(path)))
             {

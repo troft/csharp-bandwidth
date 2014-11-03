@@ -15,7 +15,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void GetTest()
+        public void GetMessageTest()
         {
             var message = new Message
             {
@@ -39,7 +39,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void GetWithDefaultClientTest()
+        public void GetMessageWithDefaultClientTest()
         {
             var message = new Message
             {
@@ -62,7 +62,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void ListTest()
+        public void ListMessagesTest()
         {
             var messages = new[]{
                 new Message
@@ -97,7 +97,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void ListWithDefaultClientTest()
+        public void ListMessagesWithDefaultClientTest()
         {
             var messages = new[]{
                 new Message
@@ -130,7 +130,7 @@ namespace Bandwidth.Net.Tests.Model
             }
         }
         [TestMethod]
-        public void List2Test()
+        public void ListMessages2Test()
         {
             var messages = new[]{
                 new Message
@@ -165,7 +165,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void List2WithDefaultClientTest()
+        public void ListMessages2WithDefaultClientTest()
         {
             var messages = new[]{
                 new Message
@@ -199,7 +199,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void CreateTest()
+        public void CreateMessageTest()
         {
             var message = new Dictionary<string, object>
             {
@@ -231,7 +231,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void CreateWithDefaultClientTest()
+        public void CreateMessageWithDefaultClientTest()
         {
             var message = new Dictionary<string, object>
             {
@@ -262,7 +262,7 @@ namespace Bandwidth.Net.Tests.Model
         }
         
         [TestMethod]
-        public void Create2Test()
+        public void CreateMessage2Test()
         {
             var message = new Dictionary<string, object>
             {
@@ -294,7 +294,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void Create2WithDefaultClientTest()
+        public void CreateMessage2WithDefaultClientTest()
         {
             var message = new Dictionary<string, object>
             {

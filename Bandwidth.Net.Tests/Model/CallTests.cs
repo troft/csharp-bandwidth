@@ -15,7 +15,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void GetTest()
+        public void GetCallTest()
         {
             var call = new Call
             {
@@ -42,7 +42,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void GetWithDefaultClientTest()
+        public void GetCallWithDefaultClientTest()
         {
             var call = new Call
             {
@@ -68,7 +68,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void ListTest()
+        public void ListCallsTest()
         {
             var calls = new[]{
                 new Call
@@ -109,7 +109,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void ListWithDefaultClientTest()
+        public void ListCallsWithDefaultClientTest()
         {
             var calls = new[]{
                 new Call
@@ -149,7 +149,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void List2Test()
+        public void ListCalls2Test()
         {
             var calls = new[]{
                 new Call
@@ -190,7 +190,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void List2WithDefaultClientTest()
+        public void ListCalls2WithDefaultClientTest()
         {
             var calls = new[]{
                 new Call
@@ -229,7 +229,7 @@ namespace Bandwidth.Net.Tests.Model
             }
         }
         [TestMethod]
-        public void CreateTest()
+        public void CreateCallTest()
         {
             var call = new Dictionary<string, object>
             {
@@ -265,7 +265,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void CreateWithDefaultClientTest()
+        public void CreateCallWithDefaultClientTest()
         {
             var call = new Dictionary<string, object>
             {
@@ -300,7 +300,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void Create2Test()
+        public void CreateCall2Test()
         {
             var call = new Dictionary<string, object>
             {
@@ -334,7 +334,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void Create2WithDefaultClientTest()
+        public void CreateCall2WithDefaultClientTest()
         {
             var call = new Dictionary<string, object>
             {
@@ -367,7 +367,7 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
-        public void UpdateTest()
+        public void UpdateCallTest()
         {
             var data = new Dictionary<string, object> {{"state", "completed"}};
             using (var server = new HttpServer(new []{
