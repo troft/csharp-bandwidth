@@ -60,6 +60,9 @@
     <Compile Include="..\Bandwidth.Net\Model\Audio.cs">
       <Link>Audio.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\AvailableNumber.cs">
+      <Link>AvailableNumber.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\BaseConferenceEvent.cs">
       <Link>BaseConferenceEvent.cs</Link>
     </Compile>
