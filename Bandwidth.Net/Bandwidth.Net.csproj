@@ -50,10 +50,15 @@
     <Compile Include="Client.cs" />
     <Compile Include="BaseEvent.cs" />
     <Compile Include="Model\Application.cs" />
+    <Compile Include="Model\BaseConferenceEvent.cs" />
     <Compile Include="Model\CallEvent.cs" />
+    <Compile Include="Model\TimeoutEvent.cs" />
+    <Compile Include="Model\ConferenceEvent.cs" />
+    <Compile Include="Model\ConferenceMemberEvent.cs" />
+    <Compile Include="Model\ConferencePlaybackEvent.cs" />
+    <Compile Include="Model\ConferenceSpeakEvent.cs" />
     <Compile Include="Model\DtmfEvent.cs" />
     <Compile Include="Model\ErrorEvent.cs" />
-    <Compile Include="Model\TimeoutEvent.cs" />
     <Compile Include="Model\SmsEvent.cs" />
     <Compile Include="Model\RecordingEvent.cs" />
     <Compile Include="Model\RejectEvent.cs" />
@@ -70,6 +75,7 @@
     <Compile Include="Model\Gather.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Recording.cs" />
+    <Compile Include="Model\TranscriptionEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

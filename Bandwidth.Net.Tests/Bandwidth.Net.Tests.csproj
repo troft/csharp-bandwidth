@@ -67,6 +67,7 @@
     <Compile Include="Model\ConferenceTest.cs" />
     <Compile Include="Model\MessageTest.cs" />
     <Compile Include="Model\SmsEventTest.cs" />
+    <Compile Include="Model\CallEventTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

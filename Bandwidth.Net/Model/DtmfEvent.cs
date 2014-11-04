@@ -4,7 +4,7 @@
     {
         public string CallId { get; set; }
         public string CallUri { get; set; }
-        public string DtmfDigits { get; set; }
+        public string DtmfDigit { get; set; }
         public string DtmfDuration { get; set; }
     }
 }

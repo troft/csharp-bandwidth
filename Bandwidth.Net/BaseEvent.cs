@@ -43,7 +43,11 @@ namespace Bandwidth.Net
             {"recording", typeof(RecordingEvent)},
             {"sms", typeof(SmsEvent)},
             {"timeout", typeof(TimeoutEvent)},
-            //TODO fill with another events
+            {"transcription", typeof(TranscriptionEvent)},
+            {"conference", typeof(ConferenceEvent)},
+            {"conference-member", typeof(ConferenceMemberEvent)},
+            {"conference-playback", typeof(ConferencePlaybackEvent)},
+            {"conference-speak", typeof(ConferenceSpeakEvent)}
         };
 
         public DateTime Time { get; set; }

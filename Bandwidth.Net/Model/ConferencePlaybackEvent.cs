@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Model
 {
-    public class TimeoutEvent : CallEvent
+    public class ConferencePlaybackEvent : BaseConferenceEvent
     {
     }
 }
