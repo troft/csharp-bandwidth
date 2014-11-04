@@ -60,6 +60,9 @@
     <Compile Include="..\Bandwidth.Net\Model\Audio.cs">
       <Link>Audio.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\BaseConferenceEvent.cs">
+      <Link>BaseConferenceEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Call.cs">
       <Link>Call.cs</Link>
     </Compile>
@@ -68,6 +71,18 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Conference.cs">
       <Link>Conference.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\ConferenceEvent.cs">
+      <Link>ConferenceEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\ConferenceMemberEvent.cs">
+      <Link>ConferenceMemberEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\ConferencePlaybackEvent.cs">
+      <Link>ConferencePlaybackEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\ConferenceSpeakEvent.cs">
+      <Link>ConferenceSpeakEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\DtmfEvent.cs">
       <Link>DtmfEvent.cs</Link>
@@ -113,6 +128,9 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\TimeoutEvent.cs">
       <Link>TimeoutEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\TranscriptionEvent.cs">
+      <Link>TranscriptionEvent.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Properties\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
