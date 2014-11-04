@@ -279,7 +279,7 @@ namespace Bandwidth.Net.Tests.Model
                   "\"conferenceUri\": \"conferenceUri\"," +
                   "\"time\":\"2012-11-14T16:21:59.616Z\"," +
                   "}";
-            var ev = BaseEvent.CreateFromString(conferenceSpeakEventString) as ConferencePlaybackEvent;
+            var ev = BaseEvent.CreateFromString(conferenceSpeakEventString) as ConferenceSpeakEvent;
             Assert.IsNotNull(ev);
             Assert.AreEqual("conferenceId", ev.ConferenceId);
             Assert.AreEqual("conferenceUri", ev.ConferenceUri);
