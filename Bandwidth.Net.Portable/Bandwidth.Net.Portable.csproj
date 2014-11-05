@@ -99,6 +99,9 @@
     <Compile Include="..\Bandwidth.Net\Model\DtmfEvent.cs">
       <Link>DtmfEvent.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Error.cs">
+      <Link>Error.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\ErrorEvent.cs">
       <Link>ErrorEvent.cs</Link>
     </Compile>
