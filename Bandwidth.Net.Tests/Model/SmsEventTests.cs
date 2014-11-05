@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bandwidth.Net.Tests.Model
 {
     [TestClass]
-    public class SmsEventTest
+    public class SmsEventTests
     {
         [TestMethod]
         public void IncomingSmsEventTest()
