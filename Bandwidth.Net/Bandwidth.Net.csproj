@@ -57,6 +57,7 @@
     <Compile Include="Model\BaseConferenceEvent.cs" />
     <Compile Include="Model\Bridge.cs" />
     <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\Media.cs" />
     <Compile Include="Model\NumberInfo.cs" />
     <Compile Include="Model\PhoneNumber.cs" />
     <Compile Include="Model\CallEvent.cs" />
