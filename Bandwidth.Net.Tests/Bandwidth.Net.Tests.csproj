@@ -69,6 +69,7 @@
     <Compile Include="Model\ErrorTests.cs" />
     <Compile Include="Model\MediaTests.cs" />
     <Compile Include="Model\NumberInfoTests.cs" />
+    <Compile Include="Model\RecordingTests.cs" />
     <Compile Include="Model\PhoneNumberTests.cs" />
     <Compile Include="Model\CallTests.cs" />
     <Compile Include="Model\ConferenceTest.cs" />
