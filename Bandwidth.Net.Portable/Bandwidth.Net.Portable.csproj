@@ -54,6 +54,12 @@
     <Compile Include="..\Bandwidth.Net\Client.cs">
       <Link>Client.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Account.cs">
+      <Link>Account.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\AccountTransaction.cs">
+      <Link>AccountTransaction.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\AnswerEvent.cs">
       <Link>AnswerEvent.cs</Link>
     </Compile>
