@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -75,34 +73,22 @@ namespace Bandwidth.Net.Model
         }
 #endif
 
-        //TODO: do some actual error handling of other response codes here.
-        public static async void Update(Client client, string bridgeId, Dictionary<string, object> parameters)
+        public Task Update(Dictionary<string, object> parameters)
         {
-            using (var response = await client.MakePostRequest(client.ConcatUserPath(BridgePath + "/" + bridgeId), parameters))
-            {
-                if(!response.IsSuccessStatusCode)
-                    throw new Exception("Update Bridge Failed");
-            }           
+            return Client.MakePostRequest(Client.ConcatUserPath(BridgePath + "/" + Id), parameters, true);
         }
 
-        //TODO: do some actual error handling of other response codes here
-        public static async void PlayAudio(Client client, string bridgeId, Dictionary<string, object> parameters)
+        public Task PlayAudio(Dictionary<string, object> parameters)
         {
-            using (var response = await client.MakePostRequest(client.ConcatUserPath(BridgePath + "/" + bridgeId + "/audio"), parameters))
-            {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception("Play Bridge Audio Failed");
-                }
-            }
+            return Client.MakePostRequest(Client.ConcatUserPath(BridgePath + "/" + Id + "/audio"), parameters, true);
         }
 
-        public static async Task<Call[]> GetCalls(Client client, string bridgeId)
+        public async Task<Call[]> GetCalls()
         {
-            var calls = await client.MakeGetRequest<Call[]>(client.ConcatUserPath(BridgePath + "/" + bridgeId + "/audio"));
+            var calls = await Client.MakeGetRequest<Call[]>(Client.ConcatUserPath(BridgePath + "/" + Id + "/audio"));
             foreach (var call in calls)
             {
-                call.Client = client;
+                call.Client = Client;
             }
             return calls;
         }

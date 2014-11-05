@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Bandwidth.Net.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -104,6 +100,20 @@ namespace Bandwidth.Net.Tests.Model
             using (var server = new HttpServer(new[]
             {
                 new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
+                    
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}, 
+                        {"autoAnswer", true},
+                        {"callbackHttpMethod", "POST"},
+                        {"incomingCallUrl", "http://testCallUrl.com"},
+                        {"incomingCallUrlCallbackTimeout", 200},
+                        {"incomingSmsUrl", "http://testSmsUrl.com"},
+                        {"incomingSmsUrlCallbackTimeout", 200},
+                    })
+                },
+                new RequestHandler
                     {
                             EstimatedMethod = "DELETE",
                             EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
@@ -111,7 +121,8 @@ namespace Bandwidth.Net.Tests.Model
             }))
             {
                 var client = Helper.CreateClient();
-                Application.Delete(client, "2");
+                var application = Application.Get(client, "1").Result;
+                application.Delete().Wait();
                 if (server.Error != null) throw server.Error;
             }
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Model
@@ -11,17 +8,27 @@ namespace Bandwidth.Net.Model
         private const string AvailableNumbersTollFreePath = "availableNumbers/tollFree";
         private const string AvailableNumbersLocalPath = "availableNumbers/local";
 
-        public static async Task<AvailableNumber[]> SearchTollFree(Client client, Dictionary<string, object> query = null)
+        public static Task<AvailableNumber[]> SearchTollFree(Client client, Dictionary<string, object> query = null)
         {
-            var availableNumbers = await client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersTollFreePath, query);
-            return availableNumbers;
+            return client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersTollFreePath, query);
         }
 
-        public static async Task<AvailableNumber[]> SearchLocal(Client client, Dictionary<string, object> query = null)
+        public static Task<AvailableNumber[]> SearchLocal(Client client, Dictionary<string, object> query = null)
         {
-            var availableNumbers = await client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersLocalPath, query);
-            return availableNumbers;
+            return client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersLocalPath, query);
         }
+
+#if !PCL
+        public static Task<AvailableNumber[]> SearchTollFree(Dictionary<string, object> query = null)
+        {
+            return SearchTollFree(Client.GetInstance(), query);
+        }
+        public static Task<AvailableNumber[]> SearchLocal(Dictionary<string, object> query = null)
+        {
+            return SearchLocal(Client.GetInstance(), query);
+        }
+
+#endif
 
         public string Number { get; set; }
         public string NationalNumber { get; set; }

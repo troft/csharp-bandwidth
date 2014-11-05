@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -13,10 +11,12 @@ namespace Bandwidth.Net.Model
 
         private static readonly Regex ApplicationsIdExtractor = new Regex(@"/" + ApplicationsPath + @"/([\w\-_]+)$");
 
-        public static Task<Application> Get(Client client, string applicationId)
+        public static async Task<Application> Get(Client client, string applicationId)
         {
             if (applicationId == null) throw new ArgumentNullException("applicationId");
-            return client.MakeGetRequest<Application>(client.ConcatUserPath(ApplicationsPath), null, applicationId);
+            var instance = await client.MakeGetRequest<Application>(client.ConcatUserPath(ApplicationsPath), null, applicationId);
+            instance.Client = client;
+            return instance;
         }
 #if !PCL
         public static Task<Application> Get(string applicationId)
@@ -25,9 +25,14 @@ namespace Bandwidth.Net.Model
         }
 #endif
 
-        public static Task<Application[]> List(Client client, IDictionary<string, object> parameters = null)
+        public static async Task<Application[]> List(Client client, IDictionary<string, object> parameters = null)
         {
-            return client.MakeGetRequest<Application[]>(client.ConcatUserPath(ApplicationsPath), parameters);
+            var list = await client.MakeGetRequest<Application[]>(client.ConcatUserPath(ApplicationsPath), parameters);
+            foreach (var instance in list)
+            {
+                instance.Client = client;
+            }
+            return list;
         }
 
         public static Task<Application[]> List(Client client, int page, int size = 25)
@@ -73,9 +78,21 @@ namespace Bandwidth.Net.Model
             });
         }
 
-        public static async void Delete(Client client, string applicationId)
+#if !PCL
+        public static Task<Application> Create(IDictionary<string, object> parameters)
         {
-            await client.MakeDeleteRequest(client.ConcatUserPath(ApplicationsPath), applicationId);
+            return Create(Client.GetInstance(), parameters);
+        }
+
+        public static Task<Application> Create(string name)
+        {
+            return Create(Client.GetInstance(), name);
+        }
+#endif
+
+        public Task Delete()
+        {
+            return Client.MakeDeleteRequest(Client.ConcatUserPath(ApplicationsPath), Id);
         } 
 
         public string Name { get; set; }
