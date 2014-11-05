@@ -169,11 +169,8 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
-  mkdir "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
-  copy /y "$(TargetPath)" "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
-  copy /y "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
