@@ -19,9 +19,9 @@ namespace Bandwidth.Net.Model
             return item;
         }
 #if !PCL        
-        public static Task<PhoneNumber> Get(string callId)
+        public static Task<PhoneNumber> Get(string id)
         {
-            return Get(Client.GetInstance(), callId);
+            return Get(Client.GetInstance(), id);
         }
 #endif
 

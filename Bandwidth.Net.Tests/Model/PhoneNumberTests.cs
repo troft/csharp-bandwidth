@@ -12,7 +12,6 @@ namespace Bandwidth.Net.Tests.Model
         {
             Helper.SetEnvironmetVariables();
         }
-
         [TestMethod]
         public void GetTest()
         {
