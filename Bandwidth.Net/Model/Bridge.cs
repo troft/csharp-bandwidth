@@ -85,7 +85,7 @@ namespace Bandwidth.Net.Model
 
         public async Task<Call[]> GetCalls()
         {
-            var calls = await Client.MakeGetRequest<Call[]>(Client.ConcatUserPath(BridgePath + "/" + Id + "/audio"));
+            var calls = await Client.MakeGetRequest<Call[]>(Client.ConcatUserPath(BridgePath + "/" + Id + "/calls"));
             foreach (var call in calls)
             {
                 call.Client = Client;
