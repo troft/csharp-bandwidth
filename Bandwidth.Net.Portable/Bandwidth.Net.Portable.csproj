@@ -34,6 +34,7 @@
     <DefineConstants>TRACE;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Bandwidth.Net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -41,7 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bandwidth.Net.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +170,9 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (
-  cd "$(ProjectDir)" &amp;&amp; del *.nupkg &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack -Properties Configuration=Release &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" push  *.nupkg
+  mkdir "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
+  copy /y "$(TargetPath)" "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
+  copy /y "$(TargetDir)$(TargetName).xml" "$(SolutionDir)lib\portable-net45+wp80+win8+wpa81+aspnetcore50"
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
