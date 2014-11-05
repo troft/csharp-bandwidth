@@ -120,6 +120,9 @@
     <Compile Include="..\Bandwidth.Net\Model\Message.cs">
       <Link>Message.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\PhoneNumber.cs">
+      <Link>PhoneNumber.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\PlaybackEvent.cs">
       <Link>PlaybackEvent.cs</Link>
     </Compile>
