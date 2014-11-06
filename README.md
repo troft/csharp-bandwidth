@@ -41,7 +41,11 @@ Delete (if appropriate)
 
 These methods are static on each of the entities.  For example:
 
+	// using a client you instantiate directly
 	var call = Call.Create(client, "to", "from").Result;
+	
+	// Using the default client
+	var call = Call.Create("to", "from").Result;
 	
 The above code will create the new call and return you the call object fully populated with the call Id and other call data.  Each returned object will also have an internal Client property set, making follow-on operations such as Delete much simpler.
 
@@ -53,7 +57,139 @@ All methods use the async Task framework to return results.
 ## API Functions
 ***
 
-### Call
+## Account
+### Get account information
+[Documentation](https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account)
+
+	var account = Account.Get().Result;
+	
+### Get account transactions
+[Documentation](https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions)
+
+	var query = new Dictionary<string, object>{{"maxItems", 5}, {"fromDate", "2014-11-05"});
+	var transactions = Account.GetTransactions(query).Result;
+	
+## Applications
+### Get list of applications
+[Documentation](https://catapult.inetwork.com/docs/api-docs/applications/#GET-/v1/users/{userId}/applications)
+
+	var query = new Dictionary<string, object>{{"page", 1}, {"size", 20}});
+	var applications = Application.List(query).Result
+
+### Create an application
+[Documentation](https://catapult.inetwork.com/docs/api-docs/applications/#POST-/v1/users/{userId}/applications)
+
+	var appData = new Dictionary<string, object>
+	{
+		{"name", "New Application"},
+		{"incomingCallUrl", "https://yourcallbackurl.com/call"},
+		{"incomingSmsUrl", "https://yourcallbackurl.com/message"}, 
+		{"callbackHttpMethod", "post"},
+		{"autoAnswer", true}
+	}
+	var application = Application.Create(appData).Result;
+	
+### Get application
+[Documentation](https://catapult.inetwork.com/docs/api-docs/applications/#GET-/v1/users/{userId}/applications/{applicationId})
+
+	var application = Application.Get("applicationId").Result;
+	
+### Update application
+[Documentation](https://catapult.inetwork.com/docs/api-docs/applications/#POST-/v1/users/{userId}/applications/{applicationId})
+
+	var data = new Dictionary<string, object>{{"name", "Updated Name"}};
+	var application = Application.Get("applicationId").Result;
+	application.Update(data).Wait()
+	
+### Delete application
+[Documentation](https://catapult.inetwork.com/docs/api-docs/applications/#DELETE-/v1/users/{userId}/applications/{applicationId})
+
+	var application = Application.Get("applicationId").Result;
+	application.Delete().Wait()
+	
+## Available Numbers
+[Documentation](https://catapult.inetwork.com/docs/api-docs/available-numbers/)
+
+### Search for local numbers
+[Documentation](https://catapult.inetwork.com/docs/api-docs/available-numbers/#local-get)
+
+	var query = new Dictionary<string, object>
+	{
+		{"city", "Raleigh"},
+		{"quantity", 3}
+	};
+	
+	var availableNumbers = AvailableNumber.searchLocal(query).Result;
+
+### Search for toll-free numbers
+[Documentation](https://catapult.inetwork.com/docs/api-docs/available-numbers/#GET-/v1/availableNumbers/tollFree)
+
+	var query = new Dictionary<string, object>
+	{
+		{"quantity", 5}
+	};
+	
+	var availableNumbers = AvailableNumber.searchTollFree(query).Result;
+
+
+## Bridges
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/)
+
+### List bridges	
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#GET-/v1/users/{userId}/bridges)
+
+	var bridges = Bridge.List().Result;
+	
+### Create a bridge
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#POST-/v1/users/{userId}/bridges)
+
+	var data = new Dictionary<string, object>
+	{
+		{"callIds", ["callId1", "callId2"]},
+		{"bridgeAudio", "true"}
+	};
+	
+	var bridge = Bridge.Create(data).Result;
+	
+	//OR
+	
+	var bridge = Bridge.Create("callId1", "callId2", true).Result;
+	
+### Get bridge
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#GET-/v1/users/{userId}/bridges/{bridgeId})
+
+	var bridge = Bridge.Get("bridgeId").Result;
+	
+### Update bridge
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#POST-/v1/users/{userId}/bridges/{bridgeId})
+
+	// put bridge on hold
+	var data = new Dictionary<string, object>
+	{
+		{"bridgeAudio", "false"}
+	}
+	var bridge = Bridge.Get("bridgeId").Result;
+	bridge.Update(data).Wait();
+	
+### Play audio in bridge
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#POST-/v1/users/{userId}/bridges/{bridgeId}/audio)
+
+	var data = new Dictionary<string, object>
+	{
+		{"fileUrl", "url"}
+	}
+	var bridge = Bridge.Get("bridgeId").Result;
+	bridge.Update(data).Wait();
+
+### Get calls on bridge
+[Documentation](https://catapult.inetwork.com/docs/api-docs/bridges/#GET-/v1/users/{userId}/bridges/{bridgeId}/calls)
+
+	var bridge = Bridge.Get("bridgeId").Result;
+	var calls = Bridge.GetCalls().Result;
+	
+
+
+## Call
 #### Make a Call
 [Documentation](https://catapult.inetwork.com/docs/api-docs/calls/#POST-/v1/users/{userId}/calls)
 
@@ -143,5 +279,10 @@ All methods use the async Task framework to return results.
 	
 	var call = Call.Get("id").Result;
 	call.UpdateGather("gatherId", data).Wait();
+
+
+## Messages
+***
+
 	
 	
