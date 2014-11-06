@@ -1,8 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Bandwidth.Net.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -18,7 +18,7 @@ namespace Bandwidth.Net.Tests
         
         public static Client CreateClient(string baseUrl = null)
         {
-            return new Client(UserId, ApiKey, Secret, baseUrl ?? "http://localhost:3001/");
+            return Client.GetInstance(UserId, ApiKey, Secret, baseUrl ?? "http://localhost:3001/");
         }
 
         public static StringContent CreateJsonContent(object data)
@@ -28,6 +28,7 @@ namespace Bandwidth.Net.Tests
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
+            settings.TypeNameHandling = TypeNameHandling.Objects;
             return new StringContent(JsonConvert.SerializeObject(data, Formatting.Indented, settings), Encoding.UTF8, "application/json");
         }
 
@@ -49,7 +50,7 @@ namespace Bandwidth.Net.Tests
             {
                 var est = property.GetValue(estimated);
                 var val = property.GetValue(value);
-                Assert.AreEqual(est, val);
+                Assert.AreEqual(est, val, string.Format("Values of property {0} are mismatched", property.Name));
             }
         }
 
@@ -62,6 +63,15 @@ namespace Bandwidth.Net.Tests
             settings.Converters.Add(new StringEnumConverter{CamelCaseText = true, AllowIntegerValues = false});
             settings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
             return JsonConvert.SerializeObject(data, Formatting.None, settings);
+        }
+
+        public static void SetEnvironmetVariables(string baseUrl = null)
+        {
+            Environment.SetEnvironmentVariable(Client.BandwidthUserId, UserId);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiToken, ApiKey);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiSecret, Secret);
+            Environment.SetEnvironmentVariable(Client.BandwidthApiEndpoint, baseUrl ?? "http://localhost:3001/");
+            Environment.SetEnvironmentVariable(Client.BandwidthApiVersion, "v1");
         }
     }
 }

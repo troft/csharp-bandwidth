@@ -58,46 +58,34 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Clients\AccountTests.cs" />
-    <Compile Include="Clients\ApplicationsTests.cs" />
-    <Compile Include="Clients\AvailableNumbersTests.cs" />
-    <Compile Include="Clients\BridgesTests.cs" />
-    <Compile Include="Clients\CallsTests.cs" />
-    <Compile Include="Clients\ConferencesTests.cs" />
-    <Compile Include="Clients\Errors.cs" />
-    <Compile Include="Clients\MediaTests.cs" />
-    <Compile Include="Clients\MessagesTests.cs" />
-    <Compile Include="Clients\NumberInfoTests.cs" />
-    <Compile Include="Clients\PhoneNumbersTests.cs" />
-    <Compile Include="Clients\RecordingsTests.cs" />
+    <Compile Include="BaseEventTest.cs" />
     <Compile Include="ClientTests.cs" />
-    <Compile Include="Events\SpeakTests.cs" />
-    <Compile Include="Events\SmsTests.cs" />
-    <Compile Include="Events\RejectTests.cs" />
-    <Compile Include="Events\RecordingTests.cs" />
-    <Compile Include="Events\PlaybackTests.cs" />
-    <Compile Include="Events\HangupTests.cs" />
-    <Compile Include="Events\DtmfTests.cs" />
-    <Compile Include="Events\ConferenceSpeakTests.cs" />
-    <Compile Include="Events\ConferencePlaybackTests.cs" />
-    <Compile Include="Events\ConferenceMemberTests.cs" />
-    <Compile Include="Events\ConferenceTests.cs" />
-    <Compile Include="Events\CallTimeoutTests.cs" />
-    <Compile Include="Events\IncomingCallTests.cs" />
-    <Compile Include="Events\AnswerTests.cs" />
-    <Compile Include="Events\EventTests.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HttpServer.cs" />
+    <Compile Include="Model\ApplicationTests.cs" />
+    <Compile Include="Model\AccountTests.cs" />
+    <Compile Include="Model\AvailableNumberTests.cs" />
+    <Compile Include="Model\BridgeTests.cs" />
+    <Compile Include="Model\ErrorTests.cs" />
+    <Compile Include="Model\MediaTests.cs" />
+    <Compile Include="Model\NumberInfoTests.cs" />
+    <Compile Include="Model\RecordingTests.cs" />
+    <Compile Include="Model\PhoneNumberTests.cs" />
+    <Compile Include="Model\CallTests.cs" />
+    <Compile Include="Model\ConferenceTests.cs" />
+    <Compile Include="Model\MessageTests.cs" />
+    <Compile Include="Model\SmsEventTests.cs" />
+    <Compile Include="Model\CallEventTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bandwidth.Net\Bandwidth.Net.csproj">
       <Project>{7fa8f3ba-6142-419f-8855-ee7cf52a0dac}</Project>
       <Name>Bandwidth.Net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

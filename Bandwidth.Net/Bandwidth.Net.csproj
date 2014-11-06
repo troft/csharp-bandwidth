@@ -2,7 +2,6 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7FA8F3BA-6142-419F-8855-EE7CF52A0DAC}</ProjectGuid>
@@ -10,11 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bandwidth.Net</RootNamespace>
     <AssemblyName>Bandwidth.Net</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -34,67 +30,68 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Bandwidth.Net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Clients\Account.cs" />
-    <Compile Include="Clients\Applications.cs" />
-    <Compile Include="Clients\AvailableNumbers.cs" />
-    <Compile Include="Clients\PhoneNumbers.cs" />
-    <Compile Include="Clients\Messages.cs" />
-    <Compile Include="Clients\Media.cs" />
-    <Compile Include="Clients\Conferences.cs" />
-    <Compile Include="Clients\Bridges.cs" />
-    <Compile Include="Clients\Errors.cs" />
-    <Compile Include="Clients\NumberInfo.cs" />
-    <Compile Include="Data\Account.cs" />
-    <Compile Include="Data\AccountTransaction.cs" />
-    <Compile Include="Data\Application.cs" />
-    <Compile Include="Data\Audio.cs" />
-    <Compile Include="Data\AvailableNumber.cs" />
-    <Compile Include="Data\Bridge.cs" />
-    <Compile Include="Data\Call.cs" />
-    <Compile Include="Clients\Calls.cs" />
-    <Compile Include="Client.cs" />
-    <Compile Include="Clients\Recordings.cs" />
-    <Compile Include="Data\Conference.cs" />
-    <Compile Include="Data\Dtmf.cs" />
-    <Compile Include="Data\Error.cs" />
-    <Compile Include="Data\Event.cs" />
-    <Compile Include="Data\Gather.cs" />
-    <Compile Include="Data\Media.cs" />
-    <Compile Include="Data\Message.cs" />
-    <Compile Include="Data\NumberInfo.cs" />
-    <Compile Include="Data\PhoneNumber.cs" />
-    <Compile Include="Events\Answer.cs" />
-    <Compile Include="Events\CallTimeout.cs" />
-    <Compile Include="Events\ConferenceSpeak.cs" />
-    <Compile Include="Events\ConferenceMember.cs" />
-    <Compile Include="Events\Dtmf.cs" />
-    <Compile Include="Events\Event.cs" />
-    <Compile Include="Events\Call.cs" />
-    <Compile Include="Events\Conference.cs" />
-    <Compile Include="Events\ConferencePlayback.cs" />
-    <Compile Include="Events\Hangup.cs" />
-    <Compile Include="Events\IncomingCall.cs" />
-    <Compile Include="Events\Recording.cs" />
-    <Compile Include="Events\Playback.cs" />
-    <Compile Include="Events\Reject.cs" />
-    <Compile Include="Events\Speak.cs" />
-    <Compile Include="Events\Sms.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="Data\Recording.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bandwidth.Net.nuspec" />
+    <Compile Include="BaseModel.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="BaseEvent.cs" />
+    <Compile Include="Model\AccountTransaction.cs" />
+    <Compile Include="Model\Application.cs" />
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\AvailableNumber.cs" />
+    <Compile Include="Model\BaseConferenceEvent.cs" />
+    <Compile Include="Model\Bridge.cs" />
+    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\Media.cs" />
+    <Compile Include="Model\NumberInfo.cs" />
+    <Compile Include="Model\PhoneNumber.cs" />
+    <Compile Include="Model\CallEvent.cs" />
+    <Compile Include="Model\TimeoutEvent.cs" />
+    <Compile Include="Model\ConferenceEvent.cs" />
+    <Compile Include="Model\ConferenceMemberEvent.cs" />
+    <Compile Include="Model\ConferencePlaybackEvent.cs" />
+    <Compile Include="Model\ConferenceSpeakEvent.cs" />
+    <Compile Include="Model\DtmfEvent.cs" />
+    <Compile Include="Model\ErrorEvent.cs" />
+    <Compile Include="Model\SmsEvent.cs" />
+    <Compile Include="Model\RecordingEvent.cs" />
+    <Compile Include="Model\RejectEvent.cs" />
+    <Compile Include="Model\HangupEvent.cs" />
+    <Compile Include="Model\GatherEvent.cs" />
+    <Compile Include="Model\PlaybackEvent.cs" />
+    <Compile Include="Model\SpeakEvent.cs" />
+    <Compile Include="Model\Audio.cs" />
+    <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\AnswerEvent.cs" />
+    <Compile Include="Model\IncomingCallEvent.cs" />
+    <Compile Include="Model\Conference.cs" />
+    <Compile Include="Model\Event.cs" />
+    <Compile Include="Model\Gather.cs" />
+    <Compile Include="Model\Message.cs" />
+    <Compile Include="Model\Recording.cs" />
+    <Compile Include="Model\TranscriptionEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -103,9 +100,8 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
-  cd "$(ProjectDir)" &amp;&amp; del *.nupkg &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" pack -Properties Configuration=Release &amp;&amp; "$(SolutionDir).nuget\NuGet.exe" push  *.nupkg
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
