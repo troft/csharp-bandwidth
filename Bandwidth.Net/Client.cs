@@ -265,10 +265,11 @@ namespace Bandwidth.Net
                 try
                 {
                     var json = await response.Content.ReadAsStringAsync();
-                    var msg = JsonConvert.DeserializeAnonymousType(json, new {Message = ""}, _jsonSerializerSettings);
-                    if (!string.IsNullOrEmpty(msg.Message))
+                    var msg = JsonConvert.DeserializeAnonymousType(json, new {Message = "", Code=""}, _jsonSerializerSettings);
+                    var message = msg.Message ?? msg.Code;
+                    if (!string.IsNullOrEmpty(message))
                     {
-                        throw new BandwidthException(msg.Message, response.StatusCode);
+                        throw new BandwidthException(message, response.StatusCode);
                     }
                 }
                 catch(Exception ex)
