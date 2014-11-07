@@ -10,6 +10,7 @@ namespace Bandwidth.Net.Model
         private const string CallPath = "calls";
 
         private static readonly Regex CallIdExtractor = new Regex(@"/" + CallPath + @"/([\w\-_]+)$");
+        private static readonly Regex GatherIdExtractor = new Regex(@"/gather/([\w\-_]+)$");
         /// <summary>
         ///     Gets information about an active or completed call.
         /// </summary>
@@ -153,17 +154,27 @@ namespace Bandwidth.Net.Model
         ///     Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When
         ///     gather finishes, an event with the results will be posted to the callback URL.
         /// </summary>
-        public Task CreateGather(IDictionary<string, object> parameters)
+        public async Task<Gather> CreateGather(IDictionary<string, object> parameters)
         {
-            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/gather", CallPath, Id)),
-                parameters, true);
+            using (var response = await Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/gather", CallPath, Id)),
+                parameters))
+            {
+                var match = (response.Headers.Location != null)
+                    ? GatherIdExtractor.Match(response.Headers.Location.OriginalString)
+                    : null;
+                if (match == null)
+                {
+                    throw new Exception("Missing id in response");
+                }
+                return await GetGather(match.Groups[1].Value);
+            }
         }
 
         /// <summary>
         ///     Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When
         ///     gather finishes, an event with the results will be posted to the callback URL.
         /// </summary>
-        public Task CreateGather(string promptSentence)
+        public Task<Gather> CreateGather(string promptSentence)
         {
             return CreateGather(new Dictionary<string, object>
             {
@@ -197,12 +208,14 @@ namespace Bandwidth.Net.Model
 
         /// <summary>
         /// </summary>
-        public Task<Gather> GetGather(string gatherId)
+        public async Task<Gather> GetGather(string gatherId)
         {
             if (gatherId == null) throw new ArgumentNullException("gatherId");
-            return
-                Client.MakeGetRequest<Gather>(
+            var item = 
+                await Client.MakeGetRequest<Gather>(
                     Client.ConcatUserPath(string.Format("{0}/{1}/gather/{2}", CallPath, Id, gatherId)));
+            item.Client = Client;
+            return item;
         }
 
         /// <summary>

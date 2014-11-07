@@ -524,7 +524,14 @@ namespace Bandwidth.Net.Tests.Model
                 {
                     EstimatedMethod = "POST",
                     EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather", Helper.UserId),
-                    EstimatedContent = Helper.ToJsonString(data)
+                    EstimatedContent = Helper.ToJsonString(data),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1/gather/10", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather/10", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "10"}})
                 }
             }))
             {
@@ -563,7 +570,14 @@ namespace Bandwidth.Net.Tests.Model
                 {
                     EstimatedMethod = "POST",
                     EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather", Helper.UserId),
-                    EstimatedContent = Helper.ToJsonString(data)
+                    EstimatedContent = Helper.ToJsonString(data),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/calls/1/gather/10", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/gather/10", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "10"}})
                 }
             }))
             {
