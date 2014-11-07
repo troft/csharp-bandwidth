@@ -137,6 +137,15 @@ namespace Bandwidth.Net.Model
         }
 #endif
 
+        /// <summary>
+        ///     Changes properties of an application.
+        /// </summary>
+        public Task Update(IDictionary<string, object> parameters)
+        {
+            return Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}", ApplicationsPath, Id)),
+                parameters, true);
+        }
+
         public Task Delete()
         {
             return Client.MakeDeleteRequest(Client.ConcatUserPath(ApplicationsPath), Id);

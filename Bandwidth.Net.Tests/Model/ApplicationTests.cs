@@ -95,6 +95,43 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
+        public void UpdateApplicationTest()
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"incomingSmsUrl", "http://testSmsUrl1.com"}
+            };
+            using (var server = new HttpServer(new[]
+            {
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
+                    
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}, 
+                        {"autoAnswer", true},
+                        {"callbackHttpMethod", "POST"},
+                        {"incomingCallUrl", "http://testCallUrl.com"},
+                        {"incomingCallUrlCallbackTimeout", 200},
+                        {"incomingSmsUrl", "http://testSmsUrl.com"},
+                        {"incomingSmsUrlCallbackTimeout", 200},
+                    })
+                },
+                new RequestHandler
+                    {
+                        EstimatedMethod = "POST",
+                        EstimatedPathAndQuery = string.Format("/v1/users/{0}/applications/1", Helper.UserId),
+                        EstimatedContent = Helper.ToJsonString(data)
+                    },
+            }))
+            {
+                var client = Helper.CreateClient();
+                var application = Application.Get(client, "1").Result;
+                application.Update(data).Wait();
+                if (server.Error != null) throw server.Error;
+            }
+        }
+        [TestMethod]
         public void DeleteApplicationTest()
         {
             using (var server = new HttpServer(new[]

@@ -159,6 +159,10 @@ namespace Bandwidth.Net.Model
                 parameters, true);
         }
 
+        /// <summary>
+        ///     Collects a series of DTMF digits from a phone call with an optional prompt. This request returns immediately. When
+        ///     gather finishes, an event with the results will be posted to the callback URL.
+        /// </summary>
         public Task CreateGather(string promptSentence)
         {
             return CreateGather(new Dictionary<string, object>
