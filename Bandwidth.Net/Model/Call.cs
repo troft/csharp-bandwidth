@@ -180,7 +180,7 @@ namespace Bandwidth.Net.Model
             {
                 {"tag", Id},
                 {"maxDigits", 1},
-                {"promt", new Dictionary<string, object>
+                {"prompt", new Dictionary<string, object>
                     {
                         {"locale", "en_US"},
                         {"gender", "female"},

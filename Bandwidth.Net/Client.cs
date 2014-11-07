@@ -274,7 +274,7 @@ namespace Bandwidth.Net
                 catch(Exception ex)
                 {
                     if (ex is BandwidthException) throw;
-                    Trace.Fail(ex.Message);
+                    Debug.WriteLine(ex.Message);
                 }
                 throw new BandwidthException(string.Format("Http code {0}", response.StatusCode), response.StatusCode);
             }
