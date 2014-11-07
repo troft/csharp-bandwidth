@@ -22,7 +22,7 @@ namespace Bandwidth.Net.Tests.Model
                 Id = "1",
                 StartTime = DateTime.Now.AddMinutes(-10),
                 EndTime = DateTime.Now.AddMinutes(-5),
-                State = CallState.Active,
+                State = "Active",
                 From = "From",
                 To = "To",
                 Direction = CallDirection.Out
@@ -49,7 +49,7 @@ namespace Bandwidth.Net.Tests.Model
                 Id = "1",
                 StartTime = DateTime.Now.AddMinutes(-10),
                 EndTime = DateTime.Now.AddMinutes(-5),
-                State = CallState.Active,
+                State = "Active",
                 From = "From",
                 To = "To",
                 Direction = CallDirection.Out
@@ -76,7 +76,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "1",
                     StartTime = DateTime.Now.AddMinutes(-10),
                     EndTime = DateTime.Now.AddMinutes(-5),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From",
                     To = "To",
                     Direction = CallDirection.Out
@@ -86,7 +86,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "2",
                     StartTime = DateTime.Now.AddMinutes(-15),
                     EndTime = DateTime.Now.AddMinutes(-11),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From2",
                     To = "To2",
                     Direction = CallDirection.In
@@ -117,7 +117,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "1",
                     StartTime = DateTime.Now.AddMinutes(-10),
                     EndTime = DateTime.Now.AddMinutes(-5),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From",
                     To = "To",
                     Direction = CallDirection.Out
@@ -127,7 +127,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "2",
                     StartTime = DateTime.Now.AddMinutes(-15),
                     EndTime = DateTime.Now.AddMinutes(-11),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From2",
                     To = "To2",
                     Direction = CallDirection.In
@@ -157,7 +157,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "1",
                     StartTime = DateTime.Now.AddMinutes(-10),
                     EndTime = DateTime.Now.AddMinutes(-5),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From",
                     To = "To",
                     Direction = CallDirection.Out
@@ -167,7 +167,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "2",
                     StartTime = DateTime.Now.AddMinutes(-15),
                     EndTime = DateTime.Now.AddMinutes(-11),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From2",
                     To = "To2",
                     Direction = CallDirection.In
@@ -198,7 +198,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "1",
                     StartTime = DateTime.Now.AddMinutes(-10),
                     EndTime = DateTime.Now.AddMinutes(-5),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From",
                     To = "To",
                     Direction = CallDirection.Out
@@ -208,7 +208,7 @@ namespace Bandwidth.Net.Tests.Model
                     Id = "2",
                     StartTime = DateTime.Now.AddMinutes(-15),
                     EndTime = DateTime.Now.AddMinutes(-11),
-                    State = CallState.Active,
+                    State = "Active",
                     From = "From2",
                     To = "To2",
                     Direction = CallDirection.In
@@ -756,7 +756,7 @@ namespace Bandwidth.Net.Tests.Model
                 var call = Call.Get("1").Result;
                 call.HangUp().Wait();
                 if (server.Error != null) throw server.Error;
-                Assert.AreEqual(CallState.Completed, call.State);
+                Assert.AreEqual("completed", call.State);
             }
         }
         [TestMethod]
@@ -788,7 +788,7 @@ namespace Bandwidth.Net.Tests.Model
                 var call = Call.Get("1").Result;
                 call.AnswerOnIncoming().Wait();
                 if (server.Error != null) throw server.Error;
-                Assert.AreEqual(CallState.Active, call.State);
+                Assert.AreEqual("active", call.State);
             }
         }
 
@@ -821,7 +821,7 @@ namespace Bandwidth.Net.Tests.Model
                 var call = Call.Get("1").Result;
                 call.RejectIncoming().Wait();
                 if (server.Error != null) throw server.Error;
-                Assert.AreEqual(CallState.Rejected, call.State);
+                Assert.AreEqual("rejected", call.State);
             }
         }
 

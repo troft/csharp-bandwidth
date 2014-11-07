@@ -6,7 +6,7 @@
         public string From { get; set; }
         public string To { get; set; }
         public string CallUri { get; set; }
-        public CallState CallState { get; set; }
+        public string CallState { get; set; }
     }
 
 }

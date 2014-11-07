@@ -306,7 +306,7 @@ namespace Bandwidth.Net.Model
         public string TransferTo { get; set; }
         public bool RecordingEnabled { get; set; }
         public int RecordingMaxDuration { get; set; }
-        public CallState State { get; set; }
+        public string State { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime ActiveTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -330,15 +330,7 @@ namespace Bandwidth.Net.Model
         Female
     }
 
-    public enum CallState
-    {
-        Active,
-        Completed,
-        Started,
-        Rejected,
-        Transferring,
-        Error
-    }
+
 
     public enum CallDirection
     {

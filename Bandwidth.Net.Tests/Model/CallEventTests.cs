@@ -1,5 +1,4 @@
-﻿using System;
-using Bandwidth.Net.Model;
+﻿using Bandwidth.Net.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Model
@@ -27,7 +26,7 @@ namespace Bandwidth.Net.Tests.Model
             Assert.AreEqual("to", ev.To);
             Assert.AreEqual("callId", ev.CallId);
             Assert.AreEqual("callUri", ev.CallUri);
-            Assert.AreEqual(CallState.Active, ev.CallState);
+            Assert.AreEqual("active", ev.CallState);
             Assert.AreEqual("applicationId", ev.ApplicationId);
         }
 
@@ -50,7 +49,7 @@ namespace Bandwidth.Net.Tests.Model
             Assert.AreEqual("to", ev.To);
             Assert.AreEqual("callId", ev.CallId);
             Assert.AreEqual("callUri", ev.CallUri);
-            Assert.AreEqual(CallState.Active, ev.CallState);
+            Assert.AreEqual("active", ev.CallState);
             Assert.AreEqual("a tag", ev.Tag);
         }
 
@@ -73,7 +72,7 @@ namespace Bandwidth.Net.Tests.Model
             Assert.AreEqual("to", ev.To);
             Assert.AreEqual("callId", ev.CallId);
             Assert.AreEqual("callUri", ev.CallUri);
-            Assert.AreEqual(CallState.Completed, ev.CallState);
+            Assert.AreEqual("completed", ev.CallState);
             Assert.AreEqual("CALL_REJECTED", ev.Cause);
         }
 
@@ -96,7 +95,7 @@ namespace Bandwidth.Net.Tests.Model
             Assert.AreEqual("to", ev.To);
             Assert.AreEqual("callId", ev.CallId);
             Assert.AreEqual("callUri", ev.CallUri);
-            Assert.AreEqual(CallState.Completed, ev.CallState);
+            Assert.AreEqual("completed", ev.CallState);
             Assert.AreEqual("NORMAL_CLEARING", ev.Cause);
         }
 

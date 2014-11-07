@@ -33,7 +33,7 @@ namespace Bandwidth.Net.Tests
             Assert.AreEqual("+13865245000", e.To);
             Assert.AreEqual("c-oexifypjlh5ygjr7qi4nesq", e.CallId);
             Assert.AreEqual("https://api.catapult.inetwork.com/v1/users/u-ndh7ecxejswersdu5g8zngvca/calls/c-oexifypjlh5ygjr7qi4nesq", e.CallUri);
-            Assert.AreEqual(CallState.Active, e.CallState);
+            Assert.AreEqual("active", e.CallState);
             Assert.AreEqual("a-25nh2lj6qrxznkfu4b732jy", e.ApplicationId);
             Assert.AreEqual("11/14/2012 16:21:59", e.Time.ToString(CultureInfo.InvariantCulture));
            
