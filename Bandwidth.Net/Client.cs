@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -100,7 +101,7 @@ namespace Bandwidth.Net
                 var response = await client.GetAsync(urlPath);
                 try
                 {
-                    response.EnsureSuccessStatusCode();
+                    await CheckResponse(response);
                 }
                 catch
                 {
@@ -157,7 +158,7 @@ namespace Bandwidth.Net
                     await client.PostAsync(FixPath(path), new StringContent(json, Encoding.UTF8, "application/json"));
                 try
                 {
-                    response.EnsureSuccessStatusCode();
+                    await CheckResponse(response);
                 }
                 catch
                 {
@@ -196,7 +197,7 @@ namespace Bandwidth.Net
                 var response = await client.PutAsync(FixPath(path), content);
                 try
                 {
-                    response.EnsureSuccessStatusCode();
+                    await CheckResponse(response);
                 }
                 catch
                 {
@@ -234,7 +235,7 @@ namespace Bandwidth.Net
             using (var client = CreateHttpClient())
             using (var response = await client.DeleteAsync(FixPath(path)))
             {
-                response.EnsureSuccessStatusCode();
+                await CheckResponse(response);
             }
         }
 
@@ -255,6 +256,28 @@ namespace Bandwidth.Net
         {
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path");
             return (path[0] == '/') ? path.Substring(1) : path;
+        }
+
+        private async Task CheckResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var msg = JsonConvert.DeserializeAnonymousType(json, new {Message = ""}, _jsonSerializerSettings);
+                    if (!string.IsNullOrEmpty(msg.Message))
+                    {
+                        throw new BandwidthException(msg.Message, response.StatusCode);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    if (ex is BandwidthException) throw;
+                    Trace.Fail(ex.Message);
+                }
+                throw new BandwidthException(string.Format("Http code {0}", response.StatusCode), response.StatusCode);
+            }
         }
     }
 }

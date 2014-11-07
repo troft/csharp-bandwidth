@@ -45,6 +45,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Bandwidth.Net\BandwidthException.cs">
+      <Link>BandwidthException.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\BaseEvent.cs">
       <Link>BaseEvent.cs</Link>
     </Compile>
