@@ -77,7 +77,6 @@
     <Compile Include="Model\GatherEvent.cs" />
     <Compile Include="Model\PlaybackEvent.cs" />
     <Compile Include="Model\SpeakEvent.cs" />
-    <Compile Include="Model\Audio.cs" />
     <Compile Include="Model\Call.cs" />
     <Compile Include="Model\AnswerEvent.cs" />
     <Compile Include="Model\IncomingCallEvent.cs" />

@@ -66,9 +66,6 @@
     <Compile Include="..\Bandwidth.Net\Model\AnswerEvent.cs">
       <Link>AnswerEvent.cs</Link>
     </Compile>
-    <Compile Include="..\Bandwidth.Net\Model\Audio.cs">
-      <Link>Audio.cs</Link>
-    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\AvailableNumber.cs">
       <Link>AvailableNumber.cs</Link>
     </Compile>
