@@ -4,19 +4,25 @@ using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Model
 {
+    /// <summary>
+    /// Account API allows you to retrieve your current balance, transaction list, account type and all elements related to your platform account.
+    /// </summary>
+    /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/"/>
     public class Account
     {
         private const string AccountPath = "account";
         
         /// <summary>
         /// Get User Account Info.  
-        /// <a href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account">Documentation</a>
         /// </summary>
-        /// <param name="client"></param>
-        /// <returns>Account</returns>
+        /// <param name="client">Client instance</param>
+        /// <returns>Account data</returns>
+        /// <example>
         /// <code>
-        /// var account = Account.Get(client).Result
+        /// var account = await Account.Get(client);
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account"/>
         public static Task<Account> Get(Client client)
         {
             return client.MakeGetRequest<Account>(client.ConcatUserPath(AccountPath));
@@ -24,14 +30,16 @@ namespace Bandwidth.Net.Model
 
         /// <summary>
         /// List transactions for user acccount
-        /// <a href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions">Documentation</a>
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="query"></param>
-        /// <returns>AccountTransaction[]</returns>
+        /// <param name="client">Client instance</param>
+        /// <param name="query">Query dictionary with optional keys maxItems, toDate, fromDate, type, page, size</param>
+        /// <returns>Array of AccountTransaction</returns>
+        /// <example>
         /// <code>
-        /// var transactions = Account.GetTransactions(client, new Dictionary<string, object>{{"maxItems", 5}}).Result;
+        /// var transactions = await Account.GetTransactions(client, new Dictionary&lt;string, object&gt;{{"maxItems", 5}});
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions"/>
         public static Task<AccountTransaction[]> GetTransactions(Client client, Dictionary<string, object> query = null)
         {
             return client.MakeGetRequest<AccountTransaction[]>(client.ConcatUserPath(string.Format("{0}/transactions", AccountPath)), query);
@@ -39,15 +47,17 @@ namespace Bandwidth.Net.Model
 
         /// <summary>
         /// List transactions for user account
-        /// <a href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions">Documentation</a>
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="page"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <param name="client">Client instance</param>
+        /// <param name="page">Page number</param>
+        /// <param name="size">Optional size of each page (default 25)</param>
+        /// <returns>Array of AccountTransaction</returns>
+        /// <example>
         /// <code>
-        /// var transactions = Account.GetTransactions(client, 1, 20).Result
+        /// var transactions = await Account.GetTransactions(client, 1, 20);
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions"/>
         public static Task<AccountTransaction[]> GetTransactions(Client client, int page, int size = 25)
         {
             return GetTransactions(client, new Dictionary<string, object> {{"page", page}, {"size", size}});
@@ -55,51 +65,73 @@ namespace Bandwidth.Net.Model
 
 #if !PCL
         /// <summary>
-        /// Non Portable Get Account Method
+        /// Get User Account Info.  
         /// </summary>
-        /// <returns>Account for the credentialed client</returns>
+        /// <returns>Account data</returns>
+        /// <example>
         /// <code>
-        /// var account = Account.Get().Result
+        /// var account = await Account.Get();
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account"/>
         public static Task<Account> Get()
         {
             return Get(Client.GetInstance());
         }
 
         /// <summary>
-        /// Non portable Get Transactions
+        /// List transactions for user acccount
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <param name="query">Query dictionary with optional keys maxItems, toDate, fromDate, type, page, size</param>
+        /// <returns>Array of AccountTransaction</returns>
+        /// <example>
         /// <code>
-        /// var transactions = Account.GetTransactions(new Dictionary<string, object>{{"maxItems", 5}}).Result
+        /// var transactions = await Account.GetTransactions(client, new Dictionary&lt;string, object&gt;{{"maxItems", 5}});
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions"/>
         public static Task<AccountTransaction[]> GetTransactions(Dictionary<string, object> query = null)
         {
             return GetTransactions(Client.GetInstance(), query);
         }
 
         /// <summary>
-        /// Non portable Get Transactions
+        /// List transactions for user account
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <param name="page">Page number</param>
+        /// <param name="size">Optional size of each page (default 25)</param>
+        /// <returns>Array of AccountTransaction</returns>
+        /// <example>
         /// <code>
-        /// var transactions = Account.GetTransactions(1, 20).Result
+        /// var transactions = await Account.GetTransactions(client, 1, 20);
         /// </code>
+        /// </example>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/account/#GET-/v1/users/{userId}/account/transactions"/>
         public static Task<AccountTransaction[]> GetTransactions(int page, int size = 25)
         {
             return GetTransactions(Client.GetInstance(), page, size);
         }
 
 #endif
+        /// <summary>
+        /// Balance value
+        /// </summary>
         public decimal Balance { get; set; }
+        
+        /// <summary>
+        /// Account type
+        /// </summary>
         public AccountType AccountType { get; set; }
     }
 
+    /// <summary>
+    /// Account types
+    /// </summary>
     public enum AccountType
     {
+        /// <summary>
+        ///  The type of account where you increase your available balance with credit card payments
+        /// </summary>
         [EnumMember(Value = "pre-pay")]
         PrePay
     }
