@@ -194,6 +194,11 @@ namespace Bandwidth.Net.Model
         /// Changes properties of an application.
         /// </summary>
         /// <param name="parameters">Dictionary of changed properties</param>
+        /// <example>
+        /// <code>
+        /// await application.Update(new Dictionary&lt;string, object&gt;{{"incomingCallUrl", "http://host/path"}});
+        /// </code>
+        /// </example>
         /// <seealso href="https://catapult.inetwork.com/docs/api-docs/applications/#POST-/v1/users/{userId}/applications/{applicationId}"/>
         public Task Update(IDictionary<string, object> parameters)
         {
@@ -204,6 +209,11 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Permanently deletes an application.
         /// </summary>
+        /// <example>
+        /// <code>
+        /// await application.Delete();
+        /// </code>
+        /// </example>
         /// <seealso href="https://catapult.inetwork.com/docs/api-docs/applications/#DELETE-/v1/users/{userId}/applications/{applicationId}"/>
         public Task Delete()
         {
