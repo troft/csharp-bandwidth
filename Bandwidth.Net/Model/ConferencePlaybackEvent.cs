@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bandwidth.Net.Model
+﻿namespace Bandwidth.Net.Model
 {
+    /// <summary>
+    /// Bandwidth API sends this message to the application when audio playback is started or ended / stopped in a conference.
+    /// </summary>
     public class ConferencePlaybackEvent : BaseConferenceEvent
     {
     }
