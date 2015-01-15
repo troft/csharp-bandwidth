@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Bandwidth.Net.Model
 {
@@ -268,7 +269,7 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Deprecated member IncomingSmsUrl
         /// </summary>
-        [Obsolete]
+        [Obsolete, JsonIgnore]
         public string IncomingSmsUrl {
             get { return IncomingMessageUrl; }
             set { IncomingMessageUrl = value; }
@@ -277,7 +278,7 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Deprecated member IncomingSmsUrlCallbackTimeout
         /// </summary>
-        [Obsolete]
+        [Obsolete, JsonIgnore]
         public int IncomingSmsUrlCallbackTimeout
         {
             get { return IncomingMessageUrlCallbackTimeout; }
@@ -287,7 +288,7 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Deprecated member IncomingSmsFallbackUrl
         /// </summary>
-        [Obsolete]
+        [Obsolete, JsonIgnore]
         public string IncomingSmsFallbackUrl
         {
             get { return IncomingMessageFallbackUrl; }

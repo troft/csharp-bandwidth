@@ -53,8 +53,8 @@ namespace Bandwidth.Net.Tests.Model
                 {"callbackHttpMethod", "POST"},
                 {"incomingCallUrl", "http://testCallUrl.com"},
                 {"incomingCallUrlCallbackTimeout", 200},
-                {"incomingSmsUrl", "http://testSmsUrl.com"},
-                {"incomingSmsUrlCallbackTimeout", 200},
+                {"incomingMessageUrl", "http://testSmsUrl.com"},
+                {"incomingMessageUrlCallbackTimeout", 200},
             };
 
             using (var server = new HttpServer(new[]{
@@ -75,8 +75,8 @@ namespace Bandwidth.Net.Tests.Model
                         {"callbackHttpMethod", "POST"},
                         {"incomingCallUrl", "http://testCallUrl.com"},
                         {"incomingCallUrlCallbackTimeout", 200},
-                        {"incomingSmsUrl", "http://testSmsUrl.com"},
-                        {"incomingSmsUrlCallbackTimeout", 200},
+                        {"incomingMessageUrl", "http://testSmsUrl.com"},
+                        {"incomingMessageUrlCallbackTimeout", 200},
                     })
                 }
             }))
@@ -99,7 +99,7 @@ namespace Bandwidth.Net.Tests.Model
         {
             var data = new Dictionary<string, object>
             {
-                {"incomingSmsUrl", "http://testSmsUrl1.com"}
+                {"incomingMessageUrl", "http://testSmsUrl1.com"}
             };
             using (var server = new HttpServer(new[]
             {
@@ -113,8 +113,8 @@ namespace Bandwidth.Net.Tests.Model
                         {"callbackHttpMethod", "POST"},
                         {"incomingCallUrl", "http://testCallUrl.com"},
                         {"incomingCallUrlCallbackTimeout", 200},
-                        {"incomingSmsUrl", "http://testSmsUrl.com"},
-                        {"incomingSmsUrlCallbackTimeout", 200},
+                        {"incomingMessageUrl", "http://testSmsUrl.com"},
+                        {"incomingMessageUrlCallbackTimeout", 200},
                     })
                 },
                 new RequestHandler
@@ -146,8 +146,8 @@ namespace Bandwidth.Net.Tests.Model
                         {"callbackHttpMethod", "POST"},
                         {"incomingCallUrl", "http://testCallUrl.com"},
                         {"incomingCallUrlCallbackTimeout", 200},
-                        {"incomingSmsUrl", "http://testSmsUrl.com"},
-                        {"incomingSmsUrlCallbackTimeout", 200},
+                        {"incomingMessageUrl", "http://testSmsUrl.com"},
+                        {"incomingMessageUrlCallbackTimeout", 200},
                     })
                 },
                 new RequestHandler
