@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Bandwidth.Net.Xml.Verbs
@@ -48,10 +47,6 @@ namespace Bandwidth.Net.Xml.Verbs
         /// </summary>
         public string Text { get; set; }
 
-        /// <summary>
-        /// Optional attached media
-        /// </summary>
-        public Media Media { get; set; }
 
         System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema()
         {
@@ -79,27 +74,8 @@ namespace Bandwidth.Net.Xml.Verbs
             {
                 writer.WriteAttributeString("statusCallbackUrl", StatusCallbackUrl);
             }
-            if (Media != null)
-            {
-                var serializer = new XmlSerializer(typeof(Media), "");
-                var ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                serializer.Serialize(writer, Media, ns);
-            }
             writer.WriteString(Text);
         }
     }
 
-    /// <summary>
-    /// Media is a noun that is exclusively placed within SendMessage to provide the messages with attached media (MMS) capability
-    /// </summary>
-    /// <seealso href="http://ap.bandwidth.com/docs/xml/xml-media/"/>
-    public class Media
-    {
-        /// <summary>
-        /// Urls of media resourses to send
-        /// </summary>
-        [XmlElement("Url")]
-        public string[] Urls { get; set; }
-    }
 }

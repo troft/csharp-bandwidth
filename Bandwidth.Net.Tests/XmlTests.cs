@@ -99,13 +99,6 @@ namespace Bandwidth.Net.Tests
             response.Add(new SendMessage { From = "from", To = "to", RequestUrl = "url", Text = "Hello", RequestUrlTimeout = 10});
             Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <SendMessage from=\"from\" to=\"to\" requestUrl=\"url\" requestUrlTimeout=\"10\">Hello</SendMessage>\n</Response>", response.ToXml());
             
-            response = new Response();
-            response.Add(new SendMessage
-            {
-                From = "from", To = "to", RequestUrl = "url", Text = "Hello", RequestUrlTimeout = 10,
-                Media = new Media { Urls = new []{"http://url1", "http://url2"}}
-            });
-            Assert.AreEqual("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <SendMessage from=\"from\" to=\"to\" requestUrl=\"url\" requestUrlTimeout=\"10\">\n    <Media>\n      <Url>http://url1</Url>\n      <Url>http://url2</Url>\n    </Media>Hello</SendMessage>\n</Response>", response.ToXml());
         }
 
         [TestMethod]
