@@ -87,6 +87,18 @@
     <Compile Include="Model\Recording.cs" />
     <Compile Include="Model\TranscriptionEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xml\IVerb.cs" />
+    <Compile Include="Xml\Verbs\Transfer.cs" />
+    <Compile Include="Xml\Verbs\SpeakSentence.cs" />
+    <Compile Include="Xml\Verbs\SendMessage.cs" />
+    <Compile Include="Xml\Verbs\Reject.cs" />
+    <Compile Include="Xml\Verbs\Redirect.cs" />
+    <Compile Include="Xml\Verbs\Record.cs" />
+    <Compile Include="Xml\Verbs\Gather.cs" />
+    <Compile Include="Xml\Verbs\PlayAudio.cs" />
+    <Compile Include="Xml\Verbs\Pause.cs" />
+    <Compile Include="Xml\Verbs\Hangup.cs" />
+    <Compile Include="Xml\Response.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

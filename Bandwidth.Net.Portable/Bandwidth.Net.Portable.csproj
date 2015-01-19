@@ -156,6 +156,42 @@
     <Compile Include="..\Bandwidth.Net\Properties\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\IVerb.cs">
+      <Link>IVerb.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Response.cs">
+      <Link>Response.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Gather.cs">
+      <Link>Xml\Gather.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Hangup.cs">
+      <Link>Xml\Hangup.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Pause.cs">
+      <Link>Xml\Pause.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\PlayAudio.cs">
+      <Link>Xml\PlayAudio.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Record.cs">
+      <Link>Xml\Record.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Redirect.cs">
+      <Link>Xml\Redirect.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Reject.cs">
+      <Link>Xml\Reject.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\SendMessage.cs">
+      <Link>Xml\SendMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\SpeakSentence.cs">
+      <Link>Xml\SpeakSentence.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Xml\Verbs\Transfer.cs">
+      <Link>Xml\Transfer.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
