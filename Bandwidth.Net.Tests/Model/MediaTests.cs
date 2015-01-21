@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
 using System.Text;
 using Bandwidth.Net.Model;
@@ -269,9 +268,8 @@ namespace Bandwidth.Net.Tests.Model
             }))
             {
                 var client = Helper.CreateClient();
-                var result = Media.Upload(client, "file1", Encoding.UTF8.GetBytes(data)).Result;
+                Media.Upload(client, "file1", Encoding.UTF8.GetBytes(data));
                 if (server.Error != null) throw server.Error;
-                Helper.AssertObjects(items[0], result);
             }
         }
         [TestMethod]
@@ -308,9 +306,8 @@ namespace Bandwidth.Net.Tests.Model
                 }
             }))
             {
-                var result = Media.Upload("file1", Encoding.UTF8.GetBytes(data)).Result;
+                Media.Upload("file1", Encoding.UTF8.GetBytes(data));
                 if (server.Error != null) throw server.Error;
-                Helper.AssertObjects(items[0], result);
             }
         }
         [TestMethod]
