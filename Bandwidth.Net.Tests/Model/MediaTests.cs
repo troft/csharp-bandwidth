@@ -185,9 +185,8 @@ namespace Bandwidth.Net.Tests.Model
                 var client = Helper.CreateClient();
                 using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
                 {
-                    var result = Media.Upload(client, "file1", stream).Result;
+                    Media.Upload(client, "file1", stream).Wait();
                     if (server.Error != null) throw server.Error;
-                    Helper.AssertObjects(items[0], result);
                 }
             }
         }
@@ -227,9 +226,8 @@ namespace Bandwidth.Net.Tests.Model
             {
                 using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(data)))
                 {
-                    var result = Media.Upload("file1", stream).Result;
+                    Media.Upload("file1", stream).Wait();
                     if (server.Error != null) throw server.Error;
-                    Helper.AssertObjects(items[0], result);
                 }
             }
         }
@@ -268,7 +266,7 @@ namespace Bandwidth.Net.Tests.Model
             }))
             {
                 var client = Helper.CreateClient();
-                Media.Upload(client, "file1", Encoding.UTF8.GetBytes(data));
+                Media.Upload(client, "file1", Encoding.UTF8.GetBytes(data)).Wait();
                 if (server.Error != null) throw server.Error;
             }
         }
@@ -306,7 +304,7 @@ namespace Bandwidth.Net.Tests.Model
                 }
             }))
             {
-                Media.Upload("file1", Encoding.UTF8.GetBytes(data));
+                Media.Upload("file1", Encoding.UTF8.GetBytes(data)).Wait();
                 if (server.Error != null) throw server.Error;
             }
         }

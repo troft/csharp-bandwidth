@@ -33,21 +33,14 @@ namespace Bandwidth.Net.Model
         /// <summary>
         ///     Uploads a media file to the name you choose (via Stream)
         /// </summary>
-        public static async Task<Media> Upload(Client client, string mediaName, Stream stream, string mediaType = null)
+        public static Task Upload(Client client, string mediaName, Stream stream, string mediaType = null)
         {
             if (string.IsNullOrEmpty(mediaName)) throw new ArgumentNullException("mediaName");
             if (stream == null) throw new ArgumentNullException("stream");
             mediaType = mediaType ?? "application/octet-stream";
-            await client.PutData(
+            return client.PutData(
                     client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName))), stream,
                     mediaType, true);
-            return await GetUploadedMedia(client, mediaName);
-        }
-
-        private static async Task<Media> GetUploadedMedia(Client client, string mediaName)
-        {
-            var list = await List(client, 0, 5);
-            return (from i in list where i.MediaName == mediaName select i).FirstOrDefault();
         }
 
         /// <summary>
@@ -93,7 +86,7 @@ namespace Bandwidth.Net.Model
             return Download(Client.GetInstance(), mediaName, asStream);
         }
 
-        public static Task<Media> Upload(string mediaName, Stream stream, string mediaType = null)
+        public static Task Upload(string mediaName, Stream stream, string mediaType = null)
         {
             return Upload(Client.GetInstance(), mediaName, stream, mediaType);
         }
