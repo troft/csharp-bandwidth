@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bandwidth.Net.Model
+﻿namespace Bandwidth.Net.Model
 {
+    /// <summary>
+    /// Timeout event
+    /// </summary>
     public class TimeoutEvent : CallEvent
     {
     }
