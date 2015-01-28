@@ -58,6 +58,8 @@
     <Compile Include="Model\AvailableNumber.cs" />
     <Compile Include="Model\BaseConferenceEvent.cs" />
     <Compile Include="Model\Bridge.cs" />
+    <Compile Include="Model\Domain.cs" />
+    <Compile Include="Model\EndPoint.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Media.cs" />
     <Compile Include="Model\NumberInfo.cs" />

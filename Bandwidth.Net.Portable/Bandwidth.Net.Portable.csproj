@@ -96,8 +96,14 @@
     <Compile Include="..\Bandwidth.Net\Model\ConferenceSpeakEvent.cs">
       <Link>ConferenceSpeakEvent.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Domain.cs">
+      <Link>Domain.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\DtmfEvent.cs">
       <Link>DtmfEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\EndPoint.cs">
+      <Link>EndPoint.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Error.cs">
       <Link>Error.cs</Link>
