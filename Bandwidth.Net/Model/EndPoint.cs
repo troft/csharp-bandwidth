@@ -27,13 +27,11 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Id of domain
         /// </summary>
-        [JsonProperty("domain_id")]
         public string DomainId { get; set; }
 
         /// <summary>
         /// Id of application
         /// </summary>
-        [JsonProperty("application_id")]
         public string ApplicationId { get; set; }
 
         /// <summary>
