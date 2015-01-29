@@ -157,7 +157,7 @@ namespace Bandwidth.Net.Model
         /// <returns>Endpoint instance</returns>
         /// <example>
         /// <code>
-        /// var endPoint = await domain.CreateEndPoint(new Dictionary&lt;string, object&gt;{{"name", "name"}, {"application_id", "id"}, {"enabled", false}});
+        /// var endPoint = await domain.CreateEndPoint(new Dictionary&lt;string, object&gt;{{"name", "name"}, {"applicationId", "id"}, {"enabled", false}});
         /// </code>
         /// </example>
         /// <seealso href="http://ap.bandwidth.com/docs/rest-api/endpoints-2/#resource750"/>

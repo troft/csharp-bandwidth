@@ -163,7 +163,7 @@ namespace Bandwidth.Net.Tests.Model
             var data = new Dictionary<string, object>
             {
                 {"name", "point1"},
-                {"application_id", "id"}
+                {"applicationId", "id"}
             };
             using (var server = new HttpServer(new[]{
                 new RequestHandler
