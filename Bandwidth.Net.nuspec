@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Bandwidth.Net</id>
-        <version>2.0.4</version>
+        <version>2.3</version>
         <title>.NET SDK for use with the Catapult API</title>
         <authors>Bandwidth</authors>
         <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
@@ -12,7 +12,7 @@
         <description>.NET SDK for use with the Catapult API</description>
         <copyright>Bandwidth</copyright>
         <dependencies>
-            <dependency id="Newtonsoft.Json" version="6.0.6" />
+            <dependency id="Newtonsoft.Json" version="6.0.8" />
         </dependencies>
     </metadata>
     <files>
