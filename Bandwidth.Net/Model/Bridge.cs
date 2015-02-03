@@ -34,7 +34,6 @@ namespace Bandwidth.Net.Model
             bridge.Client = client;
             return bridge;
         }
-#if !PCL
         /// <summary>
         /// Gets information about a specific bridge
         /// </summary>
@@ -50,7 +49,7 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), bridgeId);
         }
-#endif
+
         /// <summary>
         /// Get list of bridges for a given user
         /// </summary>
@@ -71,7 +70,6 @@ namespace Bandwidth.Net.Model
             return bridges;
         }
 
-#if !PCL
         /// <summary>
         /// Get list of bridges for a given user
         /// </summary>
@@ -85,7 +83,7 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance());
         }   
-#endif
+
         /// <summary>
         /// Create a bridge.
         /// </summary>
@@ -135,7 +133,6 @@ namespace Bandwidth.Net.Model
                 });
         }
 
-#if !PCL
         /// <summary>
         /// Create a bridge.
         /// </summary>
@@ -151,7 +148,7 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), parameters);
         }
-#endif
+
         /// <summary>
         /// Change calls in a bridge and bridge/unbridge the audio
         /// </summary>

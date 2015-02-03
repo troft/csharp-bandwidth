@@ -35,7 +35,6 @@ namespace Bandwidth.Net.Model
             instance.Client = client;
             return instance;
         }
-#if !PCL
         /// <summary>
         /// Get the specified application by ID
         /// </summary>
@@ -51,7 +50,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), applicationId);
         }
-#endif
 
         /// <summary>
         /// List applications
@@ -93,7 +91,7 @@ namespace Bandwidth.Net.Model
             var query = new Dictionary<string, object> { { "page", page }, { "size", size } };
             return List(client, query);
         }
-#if !PCL
+
         /// <summary>
         /// List applications
         /// </summary>
@@ -126,7 +124,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
 
         /// <summary>
         /// Create a new application
@@ -166,7 +163,6 @@ namespace Bandwidth.Net.Model
             });
         }
 
-#if !PCL
         /// <summary>
         /// Create a new application
         /// </summary>
@@ -189,7 +185,6 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), name);
         }
-#endif
 
         /// <summary>
         /// Changes properties of an application.

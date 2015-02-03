@@ -25,7 +25,7 @@ namespace Bandwidth.Net.Model
             item.Client = client;
             return item;
         }
-#if !PCL
+
         /// <summary>
         /// Get recording by id
         /// </summary>
@@ -36,7 +36,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), id);
         }
-#endif
 
         /// <summary>
         /// Get recordings of user
@@ -69,7 +68,6 @@ namespace Bandwidth.Net.Model
             return List(client, query);
         }
 
-#if !PCL
         /// <summary>
         /// Get recordings of user
         /// </summary>
@@ -92,7 +90,7 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
+
         /// <summary>
         /// Date when the recording started
         /// </summary>

@@ -35,7 +35,7 @@ namespace Bandwidth.Net.Model
             conference.Client = client;
             return conference;
         }
-#if !PCL
+
         /// <summary>
         /// Retrieve the conference information.
         /// </summary>
@@ -51,7 +51,7 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), conferenceId);
         }
-#endif
+
         /// <summary>
         /// Creates a conference with no members
         /// </summary>
@@ -81,7 +81,6 @@ namespace Bandwidth.Net.Model
             }
         }
 
-#if !PCL
         /// <summary>
         /// Creates a conference with no members
         /// </summary>
@@ -97,7 +96,7 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), parameters);
         }
-#endif
+
         /// <summary>
         /// Change the conference properties/status.
         /// </summary>

@@ -16,15 +16,15 @@ namespace Bandwidth.Net
     public sealed class Client
     {
         private readonly string _apiToken;
-        private readonly string _secret;
+        private readonly string _apiSecret;
         private readonly string _apiEndpoint;
         private readonly string _apiVersion;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
         private readonly string _userPath;
 
-        public static Client GetInstance(string userId, string apiToken, string secret, string apiEndpoint = "https://api.catapult.inetwork.com", string apiVersion = "v1")
+        public static Client GetInstance(string userId = null, string apiToken = null, string apiSecret = null, string apiEndpoint = null, string apiVersion = null)
         {
-            return new Client(userId, apiToken, secret, apiEndpoint, apiVersion);
+            return new Client(userId, apiToken, apiSecret, apiEndpoint, apiVersion);
         }
 
         
@@ -34,29 +34,28 @@ namespace Bandwidth.Net
         public const string BandwidthApiSecret = "BANDWIDTH_API_SECRET";
         public const string BandwidthApiEndpoint = "BANDWIDTH_API_ENDPOINT";
         public const string BandwidthApiVersion = "BANDWIDTH_API_VERSION";
-
-        public static Client GetInstance()
-        {
-            return GetInstance(Environment.GetEnvironmentVariable(BandwidthUserId),
-                Environment.GetEnvironmentVariable(BandwidthApiToken),
-                Environment.GetEnvironmentVariable(BandwidthApiSecret),
-                Environment.GetEnvironmentVariable(BandwidthApiEndpoint),
-                Environment.GetEnvironmentVariable(BandwidthApiVersion));
-        }
-
-        
+       
 #endif
-        private Client(string userId, string apiToken, string secret, string apiEndpoint, string apiVersion)
+        public static ClientOptions GlobalOptions { get; set; }
+        private Client(string userId, string apiToken, string apiSecret, string apiEndpoint, string apiVersion)
         {
-            if (userId == null) throw new ArgumentNullException("userId");
-            if (apiToken == null) throw new ArgumentNullException("apiToken");
-            if (secret == null) throw new ArgumentNullException("secret");
-            if (apiEndpoint == null) throw new ArgumentNullException("apiEndpoint");
-            if (apiVersion == null) throw new ArgumentNullException("apiVersion");
-            _apiToken = apiToken;
-            _secret = secret;
-            _apiEndpoint = apiEndpoint;
-            _apiVersion = apiVersion;
+            if (GlobalOptions == null)
+            {
+                GlobalOptions = new ClientOptions();
+#if !PCL
+                GlobalOptions.UserId = Environment.GetEnvironmentVariable(BandwidthUserId);
+                GlobalOptions.ApiToken = Environment.GetEnvironmentVariable(BandwidthApiToken);
+                GlobalOptions.ApiSecret = Environment.GetEnvironmentVariable(BandwidthApiSecret);
+                GlobalOptions.ApiEndpoint = Environment.GetEnvironmentVariable(BandwidthApiEndpoint);
+                GlobalOptions.ApiVersion = Environment.GetEnvironmentVariable(BandwidthApiVersion);
+#endif
+
+            }
+            userId = userId ?? GlobalOptions.UserId;
+            _apiToken = apiToken ?? GlobalOptions.ApiToken;
+            _apiSecret = apiSecret ?? GlobalOptions.ApiSecret;
+            _apiEndpoint = apiEndpoint ?? GlobalOptions.ApiEndpoint ?? "https://api.catapult.inetwork.com";
+            _apiVersion = apiVersion ?? GlobalOptions.ApiVersion ?? "v1";
             _userPath = string.Format("users/{0}", userId);
             _jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -76,7 +75,7 @@ namespace Bandwidth.Net
             var client = new HttpClient { BaseAddress = url.Uri };
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _secret))));
+                    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
             return client;
         }
 
@@ -280,5 +279,14 @@ namespace Bandwidth.Net
                 throw new BandwidthException(string.Format("Http code {0}", response.StatusCode), response.StatusCode);
             }
         }
+    }
+
+    public class ClientOptions
+    {
+        public string UserId { get; set; }
+        public string ApiToken { get; set; }
+        public string ApiSecret { get; set; }
+        public string ApiVersion { get; set; }
+        public string ApiEndpoint { get; set; }
     }
 }

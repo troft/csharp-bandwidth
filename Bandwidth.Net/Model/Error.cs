@@ -28,7 +28,6 @@ namespace Bandwidth.Net.Model
             item.Client = client;
             return item;
         }
-#if !PCL        
         /// <summary>
         /// Gets information about one user error.
         /// </summary>
@@ -39,7 +38,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), id);
         }
-#endif
 
         /// <summary>
         /// Gets the most recent user errors for the user. 
@@ -72,7 +70,6 @@ namespace Bandwidth.Net.Model
             return List(client, query);
         }
 
-#if !PCL        
         /// <summary>
         /// Gets the most recent user errors for the user. 
         /// </summary>
@@ -95,7 +92,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
 
         /// <summary>
         /// Error time

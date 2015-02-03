@@ -46,7 +46,6 @@ namespace Bandwidth.Net.Model
             return client.MakeGetRequest<AvailableNumber[]>(AvailableNumbersLocalPath, query);
         }
 
-#if !PCL
         /// <summary>
         /// Search for available toll free numbers
         /// </summary>
@@ -79,7 +78,6 @@ namespace Bandwidth.Net.Model
             return SearchLocal(Client.GetInstance(), query);
         }
 
-#endif
         /// <summary>
         /// The telephone number in E.164 format
         /// </summary>

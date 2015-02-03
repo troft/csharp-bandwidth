@@ -23,16 +23,6 @@ namespace Bandwidth.Net.Tests
             Client.GetInstance("userId", "token", "secret");
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void GetInstanceTest2()
-        {
-            Environment.SetEnvironmentVariable(Client.BandwidthUserId, null);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiToken, null);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiSecret, null);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiEndpoint, null);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiVersion, null);
-            Client.GetInstance();
-        }
         
         [TestMethod]
         public void MakeGetRequestTest()

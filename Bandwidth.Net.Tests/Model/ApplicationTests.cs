@@ -25,9 +25,9 @@ namespace Bandwidth.Net.Tests.Model
                 IncomingCallFallbackUrl = "http://testCallFallbackUrl.com",
                 IncomingCallUrl = "http://testCallUrl.com",
                 IncomingCallUrlCallbackTimeout = 200,
-                IncomingSmsFallbackUrl = "http://testSmsFallbackUrl.com",
-                IncomingSmsUrl = "http://testSmsUrl.com",
-                IncomingSmsUrlCallbackTimeout = 200
+                IncomingMessageFallbackUrl = "http://testSmsFallbackUrl.com",
+                IncomingMessageUrl = "http://testSmsUrl.com",
+                IncomingMessageUrlCallbackTimeout = 200
             };
             using (var server = new HttpServer(new RequestHandler
             {

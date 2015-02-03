@@ -9,12 +9,10 @@
         {
             get
             {
-#if !PCL
                 if (_client == null)
                 {
                     _client = Client.GetInstance();
                 }
-#endif
                 return _client;
             }
             set { _client = value; }

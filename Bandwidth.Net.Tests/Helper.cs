@@ -18,7 +18,7 @@ namespace Bandwidth.Net.Tests
         
         public static Client CreateClient(string baseUrl = null)
         {
-            return Client.GetInstance(UserId, ApiKey, Secret, baseUrl ?? "http://localhost:3001/");
+            return Client.GetInstance(UserId, ApiKey, Secret, baseUrl ?? "http://localhost:3001/", "v1");
         }
 
         public static StringContent CreateJsonContent(object data)
@@ -67,11 +67,14 @@ namespace Bandwidth.Net.Tests
 
         public static void SetEnvironmetVariables(string baseUrl = null)
         {
-            Environment.SetEnvironmentVariable(Client.BandwidthUserId, UserId);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiToken, ApiKey);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiSecret, Secret);
-            Environment.SetEnvironmentVariable(Client.BandwidthApiEndpoint, baseUrl ?? "http://localhost:3001/");
-            Environment.SetEnvironmentVariable(Client.BandwidthApiVersion, "v1");
+            Client.GlobalOptions = new ClientOptions
+            {
+                UserId = UserId,
+                ApiToken = ApiKey,
+                ApiSecret = Secret,
+                ApiEndpoint = baseUrl ?? "http://localhost:3001/",
+                ApiVersion = "v1"
+            };
         }
     }
 }

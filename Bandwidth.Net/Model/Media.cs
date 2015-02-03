@@ -134,7 +134,7 @@ namespace Bandwidth.Net.Model
                 client.MakeDeleteRequest(
                    client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName))));
         }
-#if !PCL
+
         /// <summary>
         /// Downloads a media file
         /// </summary>
@@ -224,7 +224,6 @@ namespace Bandwidth.Net.Model
         {
             return Delete(Client.GetInstance(), mediaName);
         } 
-#endif
 
         /// <summary>
         /// Size of file

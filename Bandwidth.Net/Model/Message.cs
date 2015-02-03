@@ -26,7 +26,6 @@ namespace Bandwidth.Net.Model
             if (messageId == null) throw new ArgumentNullException("messageId");
             return client.MakeGetRequest<Message>(client.ConcatUserPath(MessagePath), null, messageId);
         }
-#if !PCL
         /// <summary>
         /// Get a message that was sent or received
         /// </summary>
@@ -37,7 +36,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), messageId);
         }
-#endif
 
         /// <summary>
         /// Get a list of previous messages that were sent or received
@@ -64,7 +62,6 @@ namespace Bandwidth.Net.Model
             var query = new Dictionary<string, object> { { "page", page }, { "size", size } };
             return List(client, query);
         }
-#if !PCL
         /// <summary>
         /// Get a list of previous messages that were sent or received
         /// </summary>
@@ -87,7 +84,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
 
         ///<summary>
         /// Send a text message
@@ -129,7 +125,7 @@ namespace Bandwidth.Net.Model
                 {"text", text}
             });
         }
-#if !PCL
+
         ///<summary>
         /// Send a text message
         /// </summary>
@@ -153,7 +149,7 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), to, from, text);
         }
-#endif
+
         /// <summary>
         /// The message direction (IN or OUT), used to filter.
         /// </summary>

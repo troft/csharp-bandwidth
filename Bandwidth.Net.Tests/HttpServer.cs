@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -38,11 +40,30 @@ namespace Bandwidth.Net.Tests
 
         private Task StartHandleRequest()
         {
-            return _listener.GetContextAsync().ContinueWith(HandlerRequest).ContinueWith(t => StartHandleRequest());
+            try
+            {
+                return _listener.GetContextAsync()
+                    .ContinueWith(HandlerRequest)
+                    .ContinueWith(t => StartHandleRequest(),
+                        TaskContinuationOptions.NotOnFaulted | TaskContinuationOptions.NotOnCanceled);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                //Debug.WriteLine(ex.Message);
+                return Task.Run(() => { });
+            }
         }
 
         private async void HandlerRequest(Task<HttpListenerContext> obj)
         {
+            if (obj.IsFaulted)
+            {
+                if(obj.Exception.InnerExceptions.All(e=>e is ObjectDisposedException))
+                {
+                    return;
+                }
+
+            }
             var context = obj.Result;
             var handler = GetRequestHandler();
             try

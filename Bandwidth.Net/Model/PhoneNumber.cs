@@ -28,7 +28,7 @@ namespace Bandwidth.Net.Model
             item.Client = client;
             return item;
         }
-#if !PCL        
+
         /// <summary>
         /// Gets information about one of your numbers using the number's ID.
         /// </summary>
@@ -39,7 +39,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), id);
         }
-#endif
 
         /// <summary>
         /// Gets a list of your numbers. 
@@ -72,7 +71,6 @@ namespace Bandwidth.Net.Model
             return List(client, query);
         }
 
-#if !PCL        
         /// <summary>
         /// Gets a list of your numbers. 
         /// </summary>
@@ -95,7 +93,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
 
         /// <summary>
         /// Allocates a number so you can use it to make and receive calls and send and receive messages.
@@ -120,7 +117,6 @@ namespace Bandwidth.Net.Model
         }
 
 
-#if !PCL        
         /// <summary>
         /// Allocates a number so you can use it to make and receive calls and send and receive messages.
         /// </summary>
@@ -132,7 +128,6 @@ namespace Bandwidth.Net.Model
             return Create(Client.GetInstance(), parameters);
         }
 
-#endif
 
 
         /// <summary>

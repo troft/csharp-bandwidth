@@ -35,7 +35,7 @@ namespace Bandwidth.Net.Model
             call.Client = client;
             return call;
         }
-#if !PCL        
+
         /// <summary>
         /// Gets information about an active or completed call
         /// </summary>
@@ -51,7 +51,6 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), callId);
         }
-#endif
 
         /// <summary>
         ///  Gets a list of active and historic calls user made or received. 
@@ -94,7 +93,6 @@ namespace Bandwidth.Net.Model
             return List(client, query);
         }
 
-#if !PCL        
         /// <summary>
         ///  Gets a list of active and historic calls user made or received. 
         /// </summary>
@@ -127,7 +125,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance(), page, size);
         }
-#endif
 
 
         /// <summary>
@@ -183,7 +180,6 @@ namespace Bandwidth.Net.Model
             });
         }
 
-#if !PCL        
         /// <summary>
         /// Makes a phone call.
         /// </summary>
@@ -218,7 +214,6 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), to, from, callbackUrl, tag);
         }
-#endif
 
         /// <summary>
         /// Changes properties of an active phone call.

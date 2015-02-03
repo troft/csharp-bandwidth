@@ -63,7 +63,6 @@ namespace Bandwidth.Net.Model
             return GetTransactions(client, new Dictionary<string, object> {{"page", page}, {"size", size}});
         }
 
-#if !PCL
         /// <summary>
         /// Get User Account Info.  
         /// </summary>
@@ -112,7 +111,6 @@ namespace Bandwidth.Net.Model
             return GetTransactions(Client.GetInstance(), page, size);
         }
 
-#endif
         /// <summary>
         /// Balance value
         /// </summary>

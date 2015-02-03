@@ -22,7 +22,7 @@ namespace Bandwidth.Net.Model
             if (number == null) throw new ArgumentNullException("number");
             return client.MakeGetRequest<NumberInfo>(NumberInfoPath, null, Uri.EscapeDataString(number));
         }
-#if !PCL        
+
         /// <summary>
         /// Get the CNAM info of a number
         /// </summary>
@@ -33,7 +33,7 @@ namespace Bandwidth.Net.Model
         {
             return Get(Client.GetInstance(), number);
         }
-#endif
+
         /// <summary>
         /// The Caller ID name information
         /// </summary>

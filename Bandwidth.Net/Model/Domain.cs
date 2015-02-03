@@ -33,7 +33,6 @@ namespace Bandwidth.Net.Model
             return domains;
         }
 
-#if !PCL
         /// <summary>
         ///  Gets a list of created domains. 
         /// </summary>
@@ -48,8 +47,6 @@ namespace Bandwidth.Net.Model
         {
             return List(Client.GetInstance());
         }
-
-#endif
 
 
         /// <summary>
@@ -79,7 +76,6 @@ namespace Bandwidth.Net.Model
             }
         }
 
-#if !PCL
         /// <summary>
         /// Create a domain.
         /// </summary>
@@ -96,7 +92,6 @@ namespace Bandwidth.Net.Model
             return Create(Client.GetInstance(), parameters);
         }
 
-#endif
         /// <summary>
         /// Remove a domain
         /// </summary>
