@@ -37,14 +37,6 @@
     <DocumentationFile>bin\Release\Bandwidth.Net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\Bandwidth.Net\BandwidthException.cs">
       <Link>BandwidthException.cs</Link>
     </Compile>
@@ -65,6 +57,9 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\AnswerEvent.cs">
       <Link>AnswerEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Application.cs">
+      <Link>Application.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\AvailableNumber.cs">
       <Link>AvailableNumber.cs</Link>
@@ -131,6 +126,9 @@
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Message.cs">
       <Link>Message.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\NumberInfo.cs">
+      <Link>NumberInfo.cs</Link>
     </Compile>
     <Compile Include="..\Bandwidth.Net\Model\PhoneNumber.cs">
       <Link>PhoneNumber.cs</Link>
@@ -201,6 +199,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
