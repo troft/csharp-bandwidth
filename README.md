@@ -107,6 +107,21 @@ Reject incoming call
   await call.RejectIncoming();
 ```
 
+Play audio to a call
+
+```csharp
+  await call.PlayRecording("http://url/to/recording");
+```
+
+Create a gather
+```csharp
+    var gather = await call.CreateGather(new Dictionary<string,object>{{"maxDigits", 3}, {"interDigitTimeout", 5}, {"prompt": new Dictionary<string,object>{{"sentence": "Please enter 3 digits"}}}});
+```
+
+Start a conference
+```csharp
+  var conference = await Conference.Create(new Dictionary<string,object>{{"from", "+19195551212"}});
+```
 Connect 2 calls to a bridge
 
 ```csharp
