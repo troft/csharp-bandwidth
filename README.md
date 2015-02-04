@@ -58,12 +58,12 @@ All static functions support 2 ways to be called: with client instance as first 
 ```
 //Using client directly
 var client = Client.GetInstance("userId", "apiToken", "apiSecret");
-var call = await Call.List(client, new Dictionary&lt;string, object&gt;{{"page", 1}});
+var call = await Call.List(client, new Dictionary<string, object>{{"page", 1}});
 
 //Or you can use default client instance.
 //You should set up its global options before using of api functions.
 
-var call = await Call.List(new Dictionary&lt;string, object&gt;{{"page", 1}});
+var call = await Call.List(new Dictionary<string, object>{{"page", 1}});
 
 ```
 Read [Catapult Api documentation](https://catapult.inetwork.com/docs/api-docs/) for more details
@@ -74,19 +74,19 @@ Read [Catapult Api documentation](https://catapult.inetwork.com/docs/api-docs/) 
 List all calls from special number
 
 ```csharp
-  var list = await Call.List(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}});
+  var list = await Call.List(new Dictionary<string, object>{{"from", "+19195551212"}});
 ```
 
 List all received messages
 
 ```csharp
-  var messages = await Message.List(new Dictionary&lt;string, object&gt;{{"state", "received"}});
+  var messages = await Message.List(new Dictionary<string, object>{{"state", "received"}});
 ```
 
 Send SMS
 
 ```csharp
-  var message = await Message.Create(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}, {"to", "+191955512142"}, {"text", "Test"}});
+  var message = await Message.Create(new Dictionary<string, object>{{"from", "+19195551212"}, {"to", "+191955512142"}, {"text", "Test"}});
 ```
 
 Upload file 
@@ -98,7 +98,7 @@ Upload file
 Make a call
 
 ```csharp
-  var call = await Call.Create(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}, {"to", "+191955512142"}});
+  var call = await Call.Create(new Dictionary<string, object>{{"from", "+19195551212"}, {"to", "+191955512142"}});
 ```
 
 Reject incoming call
@@ -110,13 +110,13 @@ Reject incoming call
 Connect 2 calls to a bridge
 
 ```csharp
-  var bridge = await Bridge.Create(new Dictionary&lt;string, object&gt;{{"callIds", new[]{callId1, callId2}}});
+  var bridge = await Bridge.Create(new Dictionary<string, object>{{"callIds", new[]{callId1, callId2}}});
 ```
 
 Search available local numbers to buy
 
 ```csharp
-  var numbers = await AvailableNumber.SearchLocal(new Dictionary&lt;string, object&gt;{{"state", "NC"}, {"city", "Cary"}});
+  var numbers = await AvailableNumber.SearchLocal(new Dictionary<string, object>{{"state", "NC"}, {"city", "Cary"}});
 ```
 Get CNAM info for a number
 
@@ -127,7 +127,7 @@ Get CNAM info for a number
 Buy a phone number
 
 ```csharp
-  var number = await PhoneNumber.Create(new Dictionary&lt;string, object&gt;{{"number", "+19195551212"}});
+  var number = await PhoneNumber.Create(new Dictionary<string, object>{{"number", "+19195551212"}});
 ```
 
 List recordings
