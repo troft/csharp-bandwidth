@@ -73,62 +73,94 @@ Read [Catapult Api documentation](https://catapult.inetwork.com/docs/api-docs/) 
 
 List all calls from special number
 
-```
+```csharp
   var list = await Call.List(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}});
 ```
 
 List all received messages
 
-```
+```csharp
   var messages = await Message.List(new Dictionary&lt;string, object&gt;{{"state", "received"}});
 ```
 
 Send SMS
 
-```
+```csharp
   var message = await Message.Create(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}, {"to", "+191955512142"}, {"text", "Test"}});
 ```
 
 Upload file 
 
-```
+```csharp
   await Media.Upload("avatar.png", fileStream, "image/png");
 ```
 
 Make a call
 
-```
+```csharp
   var call = await Call.Create(new Dictionary&lt;string, object&gt;{{"from", "+19195551212"}, {"to", "+191955512142"}});
 ```
 
 Reject incoming call
 
-```
+```csharp
   await call.RejectIncoming();
 ```
 
 Connect 2 calls to a bridge
 
-```
+```csharp
   var bridge = await Bridge.Create(new Dictionary&lt;string, object&gt;{{"callIds", new[]{callId1, callId2}}});
 ```
 
 Search available local numbers to buy
 
-```
+```csharp
   var numbers = await AvailableNumber.SearchLocal(new Dictionary&lt;string, object&gt;{{"state", "NC"}, {"city", "Cary"}});
 ```
 Get CNAM info for a number
 
-```
+```csharp
   var info = await NumberInfo.Get("+19195551212");
 ```
 
 Buy a phone number
 
-```
+```csharp
   var number = await PhoneNumber.Create(new Dictionary&lt;string, object&gt;{{"number", "+19195551212"}});
 ```
+
+Generate Bandwidth XML
+
+```csharp
+    var response = new Response();
+    var speakSentence = new SpeakSentence{Sentence = "Transferring your call, please wait.", Voice = "paul", Gender = "male", Locale = "en_US"};
+    var transfer = new Transfer
+    {
+        TransferTo = "+13032288879", 
+        TransferCallerId = "private",
+        SpeakSentence = new SpeakSentence
+        {
+            Sentence = "Inner speak sentence.",
+            Voice = "paul",
+            Gender = "male",
+            Locale = "en_US"
+        }
+    };
+    var hangup = new Hangup();
+
+    response.Add(speakSentence);
+    response.Add(transfer);
+    response.Add(hangup);
+
+    //as alternative we can pass list of verbs to constructor of Response
+    //response = new Response(speakSentence, transfer, hangup);
+
+    Console.WriteLine(response.ToXml());
+
+```
+
+
 
 See directory `Samples` for more examples.
 See [csharp-bandwidth-example](https://github.com/bandwidthcom/csharp-bandwidth-example) for more complex examples of using this module.
