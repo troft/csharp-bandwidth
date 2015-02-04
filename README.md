@@ -130,6 +130,13 @@ Buy a phone number
   var number = await PhoneNumber.Create(new Dictionary&lt;string, object&gt;{{"number", "+19195551212"}});
 ```
 
+List recordings
+
+```csharp
+  var list = await Recording.List();
+```
+
+
 Generate Bandwidth XML
 
 ```csharp
