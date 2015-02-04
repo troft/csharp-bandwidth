@@ -154,6 +154,9 @@
     <Compile Include="..\Bandwidth.Net\Model\TimeoutEvent.cs">
       <Link>TimeoutEvent.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\Transcription.cs">
+      <Link>Transcription.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\TranscriptionEvent.cs">
       <Link>TranscriptionEvent.cs</Link>
     </Compile>
