@@ -94,22 +94,18 @@ namespace Bandwidth.Net.Model
         }
 
         /// <summary>
-        /// Collects a series of DTMF digits from a phone call with an optional prompt
+        /// Request the transcription process to be started for the given recording id
         /// </summary>
-        /// <param name="parameters">Dictionary with optional keys: maxDigits, interDigitTimeout, terminatingDigits, tag, prompt</param>
-        /// <returns>Created Gather instance</returns>
+        /// <returns>Transcription instance</returns>
         /// <example>
         /// <code>
-        /// var gather = await call.CreateGather(new Dictionary&lt;string,object&gt;{{"maxDigits", 3}, {"interDigitTimeout", 5}, {"prompt": new Dictionary&lt;string,object&gt;{
-        ///     {"sentence": "Please enter 3 digits"}
-        /// }});
+        /// var transcription = await recording.CreateTranscription();
         /// </code>
         /// </example>
-        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/calls/#POST-/v1/users/{userId}/calls/{callId}/gather"/>
-        public async Task<Transcription> CreateTranscription(IDictionary<string, object> parameters)
+        /// <seealso href="http://ap.bandwidth.com/docs/rest-api/recordingsidtranscriptions/#resource456"/>
+        public async Task<Transcription> CreateTranscription()
         {
-            using (var response = await Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/transcriptions", RecordingPath, Id)),
-                parameters))
+            using (var response = await Client.MakePostRequest(Client.ConcatUserPath(string.Format("{0}/{1}/transcriptions", RecordingPath, Id)), new object()))
             {
                 var match = (response.Headers.Location != null)
                     ? TranscriptionIdExtractor.Match(response.Headers.Location.OriginalString)
@@ -123,16 +119,16 @@ namespace Bandwidth.Net.Model
         }
 
         /// <summary>
-        /// Get the gather DTMF parameters and results
+        /// Get information about the transcription, regardless its state.
         /// </summary>
-        /// <param name="gatherId">Id og the gather</param>
-        /// <returns>Gather instance</returns>
+        /// <param name="transcriptionId">Id of the transcription</param>
+        /// <returns>Transcription instance</returns>
         /// <example>
         /// <code>
-        /// var gather = await call.GetGather("gatherId");
+        /// var transcription = await call.GetTranscription("transcriptionId");
         /// </code>
         /// </example>
-        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/calls/#GET-/v1/users/{userId}/calls/{callId}/gather/{gatherId}"/>
+        /// <seealso href="http://ap.bandwidth.com/docs/rest-api/recordingsidtranscriptions/#resource455"/>
         public async Task<Transcription> GetTranscription(string transcriptionId)
         {
             if (transcriptionId == null) throw new ArgumentNullException("transcriptionId");
@@ -143,19 +139,18 @@ namespace Bandwidth.Net.Model
         }
 
         /// <summary>
-        /// Get the gather DTMF parameters and results
+        /// Get all the transcriptions that were made for the given recodingId
         /// </summary>
-        /// <param name="gatherId">Id og the gather</param>
-        /// <returns>Gather instance</returns>
+        /// <returns>List of transcriptions</returns>
         /// <example>
         /// <code>
-        /// var gather = await call.GetGather("gatherId");
+        /// var transcription = await recording.GetTranscription("transcriptionId");
         /// </code>
         /// </example>
-        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/calls/#GET-/v1/users/{userId}/calls/{callId}/gather/{gatherId}"/>
+        /// <seealso href="http://ap.bandwidth.com/docs/rest-api/recordingsidtranscriptions/#resource457"/>
         public Task<Transcription[]> GetTranscriptions()
         {
-            return Client.MakeGetRequest<Transcription[]>(Client.ConcatUserPath(string.Format("{0}/{1}/transcriptions}", RecordingPath, Id)));
+            return Client.MakeGetRequest<Transcription[]>(Client.ConcatUserPath(string.Format("{0}/{1}/transcriptions", RecordingPath, Id)));
         }
 
         /// <summary>

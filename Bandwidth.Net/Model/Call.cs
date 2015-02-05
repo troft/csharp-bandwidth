@@ -384,7 +384,7 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Get the gather DTMF parameters and results
         /// </summary>
-        /// <param name="gatherId">Id og the gather</param>
+        /// <param name="gatherId">Id of the gather</param>
         /// <returns>Gather instance</returns>
         /// <example>
         /// <code>

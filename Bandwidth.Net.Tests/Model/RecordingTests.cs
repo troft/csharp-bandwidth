@@ -1,4 +1,5 @@
-﻿using Bandwidth.Net.Model;
+﻿using System.Collections.Generic;
+using Bandwidth.Net.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bandwidth.Net.Tests.Model
@@ -187,6 +188,82 @@ namespace Bandwidth.Net.Tests.Model
                 Assert.AreEqual(2, result.Length);
                 Helper.AssertObjects(items[0], result[0]);
                 Helper.AssertObjects(items[1], result[1]);
+            }
+        }
+
+        [TestMethod]
+        public void CreateTranscriptionTest()
+        {
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings/1/transcriptions", Helper.UserId),
+                    HeadersToSend = new Dictionary<string, string> { { "Location", string.Format("/v1/users/{0}/recordings/1/transcriptions/10", Helper.UserId) } }
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings/1/transcriptions/10", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "10"}})
+                }
+            }))
+            {
+                var recording = new Recording
+                {
+                    Client = Helper.CreateClient(),
+                    Id = "1"
+                };
+                var t = recording.CreateTranscription().Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("10", t.Id);
+            }
+        }
+
+        [TestMethod]
+        public void GetTranscriptionTest()
+        {
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings/1/transcriptions/10", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "10"}})
+                }
+            }))
+            {
+                var recording = new Recording
+                {
+                    Client = Helper.CreateClient(),
+                    Id = "1"
+                };
+                var t = recording.GetTranscription("10").Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("10", t.Id);
+            }
+        }
+
+        [TestMethod]
+        public void GetTranscriptionsTest()
+        {
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/recordings/1/transcriptions", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new[]{new Dictionary<string, object>{{"id", "10"}}})
+                }
+            }))
+            {
+                var recording = new Recording
+                {
+                    Client = Helper.CreateClient(),
+                    Id = "1"
+                };
+                var list = recording.GetTranscriptions().Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual(1, list.Length);
+                Assert.AreEqual("10", list[0].Id);
             }
         }
     }
