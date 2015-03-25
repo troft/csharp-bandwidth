@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Bandwidth.Net.Model
 {
@@ -108,6 +110,43 @@ namespace Bandwidth.Net.Model
         }
 
         ///<summary>
+        /// Send some text messages
+        /// </summary>
+        /// <param name="client">Client instance</param>
+        /// <param name="messages">Messages to send</param>
+        /// <returns>Result of sending of each message</returns>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/messages/#POST-/v1/users/{userId}/messages"/>
+        public static async Task<MessageResult[]> Create(Client client, params IDictionary<string, object>[] messages)
+        {
+            using (var response = await client.MakePostRequest(client.ConcatUserPath(MessagePath), messages))
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeAnonymousType(json, new[]{new {Result = "", Location = "", Error = new{Message = ""}}}, client.JsonSerializerSettings);
+                return result.Select(i =>
+                {
+                    var m = new MessageResult();
+                    if (i.Result == "error")
+                    {
+                        m.Exception = new Exception(i.Error.Message);
+                    }
+                    else
+                    {
+                        var match = (i.Location != null)? MessageIdExtractor.Match(i.Location): null;
+                        if (match == null)
+                        {
+                            m.Exception = new Exception("Missing id in location");
+                        }
+                        else
+                        {
+                            m.MessageId = match.Groups[1].Value;
+                        }
+                    }
+                    return m;
+                }).ToArray();
+            }
+        }
+
+        ///<summary>
         /// Send a text message
         /// </summary>
         /// <param name="client">Client instance</param>
@@ -135,6 +174,17 @@ namespace Bandwidth.Net.Model
         public static Task<Message> Create(IDictionary<string, object> parameters)
         {
             return Create(Client.GetInstance(), parameters);
+        }
+
+        ///<summary>
+        /// Send some text messages
+        /// </summary>
+        /// <param name="messages">Messages to send</param>
+        /// <returns>Result of sending of each message</returns>
+        /// <seealso href="https://catapult.inetwork.com/docs/api-docs/messages/#POST-/v1/users/{userId}/messages"/>
+        public static Task<MessageResult[]> Create(params IDictionary<string, object>[] messages)
+        {
+            return Create(Client.GetInstance(), messages);
         }
         
         ///<summary>
@@ -251,5 +301,21 @@ namespace Bandwidth.Net.Model
         Sending,
         Sent,
         Error
+    }
+
+    /// <summary>
+    /// Result of message sending 
+    /// </summary>
+    public class MessageResult
+    {
+        /// <summary>
+        /// MessageId (or null on error)
+        /// </summary>
+        public string MessageId { get; set; }
+        
+        /// <summary>
+        /// Error information (or null on success)
+        /// </summary>
+        public Exception Exception { get; set; }
     }
 }

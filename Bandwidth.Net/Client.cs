@@ -19,7 +19,7 @@ namespace Bandwidth.Net
         private readonly string _apiSecret;
         private readonly string _apiEndpoint;
         private readonly string _apiVersion;
-        private readonly JsonSerializerSettings _jsonSerializerSettings;
+        internal readonly JsonSerializerSettings JsonSerializerSettings;
         private readonly string _userPath;
 
         public static Client GetInstance(string userId = null, string apiToken = null, string apiSecret = null, string apiEndpoint = null, string apiVersion = null)
@@ -57,16 +57,16 @@ namespace Bandwidth.Net
             _apiEndpoint = apiEndpoint ?? GlobalOptions.ApiEndpoint ?? "https://api.catapult.inetwork.com";
             _apiVersion = apiVersion ?? GlobalOptions.ApiVersion ?? "v1";
             _userPath = string.Format("users/{0}", userId);
-            _jsonSerializerSettings = new JsonSerializerSettings
+            JsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            _jsonSerializerSettings.Converters.Add(new StringEnumConverter
+            JsonSerializerSettings.Converters.Add(new StringEnumConverter
             {
                 CamelCaseText = true,
                 AllowIntegerValues = false
             });
-            _jsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
+            JsonSerializerSettings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
         }
 
         private HttpClient CreateHttpClient()
@@ -124,7 +124,7 @@ namespace Bandwidth.Net
                 {
                     string json = await response.Content.ReadAsStringAsync();
                     return json.Length > 0
-                        ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings)
+                        ? JsonConvert.DeserializeObject<TResult>(json, JsonSerializerSettings)
                         : default(TResult);
                 }
             }
@@ -142,7 +142,7 @@ namespace Bandwidth.Net
                     var json = await response.Content.ReadAsStringAsync();
                     if (json.Length > 0)
                     {
-                        JsonConvert.PopulateObject(json, targetObject, _jsonSerializerSettings);
+                        JsonConvert.PopulateObject(json, targetObject, JsonSerializerSettings);
                     }
                 }
             }
@@ -150,7 +150,7 @@ namespace Bandwidth.Net
 
         internal async Task<HttpResponseMessage> MakePostRequest(string path, object data, bool disposeResponse = false)
         {
-            var json = JsonConvert.SerializeObject(data, Formatting.None, _jsonSerializerSettings);
+            var json = JsonConvert.SerializeObject(data, Formatting.None, JsonSerializerSettings);
             using (var client = CreateHttpClient())
             {
                 var response =
@@ -218,7 +218,7 @@ namespace Bandwidth.Net
                 {
                     var json = await response.Content.ReadAsStringAsync();
                     return json.Length > 0
-                        ? JsonConvert.DeserializeObject<TResult>(json, _jsonSerializerSettings)
+                        ? JsonConvert.DeserializeObject<TResult>(json, JsonSerializerSettings)
                         : default(TResult);
                 }
             }
@@ -261,10 +261,10 @@ namespace Bandwidth.Net
         {
             if (!response.IsSuccessStatusCode)
             {
+                var json = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var msg = JsonConvert.DeserializeAnonymousType(json, new {Message = "", Code=""}, _jsonSerializerSettings);
+                    var msg = JsonConvert.DeserializeAnonymousType(json, new {Message = "", Code=""}, JsonSerializerSettings);
                     var message = msg.Message ?? msg.Code;
                     if (!string.IsNullOrEmpty(message))
                     {
@@ -276,7 +276,7 @@ namespace Bandwidth.Net
                     if (ex is BandwidthException) throw;
                     Debug.WriteLine(ex.Message);
                 }
-                throw new BandwidthException(string.Format("Http code {0}", response.StatusCode), response.StatusCode);
+                throw new BandwidthException(json, response.StatusCode);
             }
         }
     }
