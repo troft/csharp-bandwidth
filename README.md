@@ -89,6 +89,28 @@ Send SMS
   var message = await Message.Create(new Dictionary<string, object>{{"from", "+19195551212"}, {"to", "+191955512142"}, {"text", "Test"}});
 ```
 
+Send some SMSes
+
+```csharp
+  var messages = new[]
+  {
+   new Dictionary<string, object>
+   {
+     {"to", "+19195551214"},
+     {"from", "+19195551212"},
+     {"text", "Test1"}
+   },
+   new Dictionary<string, object>
+   {
+     {"to", "+19195551215"},
+     {"from", "+19195551213"},
+     {"text", "Test2"}
+   }
+  };
+  var results =  await Message.Create(client, messages);
+```
+
+
 Upload file 
 
 ```csharp
