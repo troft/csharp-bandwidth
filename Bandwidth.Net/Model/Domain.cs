@@ -72,7 +72,18 @@ namespace Bandwidth.Net.Model
                 {
                     throw new Exception("Missing id in response");
                 }
-                return new Domain { Id = match.Groups[1].Value, Name = parameters["name"] as string, Description = parameters["description"] as string, Client = client};
+                var domain = new Domain
+                {
+                    Id = match.Groups[1].Value, 
+                    Name = parameters["name"] as string, 
+                    Client = client
+                };
+                object description;
+                if (parameters.TryGetValue("description", out description))
+                {
+                    domain.Description = description.ToString();
+                }
+                return domain;
             }
         }
 
