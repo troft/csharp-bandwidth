@@ -223,6 +223,34 @@ namespace Bandwidth.Net.Model
         public static Task Delete(string mediaName)
         {
             return Delete(Client.GetInstance(), mediaName);
+        }
+
+        /// <summary>
+        /// Get information about a media file
+        /// </summary>
+        /// <param name="client">>Client instance</param>
+        /// <param name="mediaName">File name</param>
+        /// <returns>File information</returns>
+        public static async Task<MediaInfo> GetInfo(Client client, string mediaName)
+        {
+            using (var response = await client.MakeHeadRequest(client.ConcatUserPath(string.Format("{0}/{1}", MediaPath, Uri.EscapeDataString(mediaName)))))
+            {
+                return new MediaInfo
+                {
+                    ContentLength = response.Content.Headers.ContentLength ?? 0L,
+                    ContentType = (response.Content.Headers.ContentType == null)? "application/octet-stream": response.Content.Headers.ContentType.MediaType
+                };                
+            }
+        }
+
+        /// <summary>
+        /// Get information about a media file
+        /// </summary>
+        /// <param name="mediaName">File name</param>
+        /// <returns>File information</returns>
+        public static Task<MediaInfo> GetInfo(string mediaName)
+        {
+            return GetInfo(Client.GetInstance(), mediaName);
         } 
 
         /// <summary>
@@ -274,5 +302,21 @@ namespace Bandwidth.Net.Model
         {
             _owner.Dispose();
         }
+    }
+
+    /// <summary>
+    /// Info about media item
+    /// </summary>
+    public class MediaInfo
+    {
+        /// <summary>
+        /// Size of file
+        /// </summary>
+        public long ContentLength { get; set; }
+
+        /// <summary>
+        /// Content type of file
+        /// </summary>
+        public string ContentType { get; set; }
     }
 }

@@ -252,17 +252,19 @@ namespace Bandwidth.Net.Model
         /// </summary>
         /// <param name="sentence">Sentennce to speak</param>
         /// <param name="tag">Optional tag value which will be available in events</param>
+        /// <param name="gender">Optional gender of voice</param>
+        /// <param name="voice">Optional voice name</param>
         /// <example>
         /// await call.SpeakSentence("Hello");
         /// </example>
         /// <seealso href="https://catapult.inetwork.com/docs/api-docs/calls/#POST-/v1/users/{userId}/calls/{callId}/audio"/>
-        public Task SpeakSentence(string sentence, string tag = null)
+        public Task SpeakSentence(string sentence, string tag = null, string gender = null, string voice = null)
         {
             return PlayAudio(new Dictionary<string, object>
             {
-                {"gender", "female"},
+                {"gender", gender ?? "female"},
                 {"locale", "en_US"},
-                {"voice", "kate"},
+                {"voice", voice ?? "kate"},
                 {"sentence", sentence},
                 {"tag", tag}
             });

@@ -450,6 +450,38 @@ namespace Bandwidth.Net.Tests.Model
         }
 
         [TestMethod]
+        public void SpeakSentenceTest2()
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"gender", "male"},
+                {"locale", "en_US"},
+                {"voice", "tom"},
+                {"sentence", "test"},
+                {"tag", "tag"}
+            };
+            using (var server = new HttpServer(new[]{
+                new RequestHandler
+                {
+                    EstimatedMethod = "GET",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1", Helper.UserId),
+                    ContentToSend = Helper.CreateJsonContent(new Dictionary<string, object>{{"id", "1"}})
+                },
+                new RequestHandler
+                {
+                    EstimatedMethod = "POST",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/calls/1/audio", Helper.UserId),
+                    EstimatedContent = Helper.ToJsonString(data)
+                }
+            }))
+            {
+                var call = Call.Get("1").Result;
+                call.SpeakSentence("test", "tag", "male", "tom").Wait();
+                if (server.Error != null) throw server.Error;
+            }
+        }
+
+        [TestMethod]
         public void PlayRecordingTest()
         {
             var data = new Dictionary<string, object>

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using Bandwidth.Net.Model;
@@ -308,6 +309,46 @@ namespace Bandwidth.Net.Tests.Model
                 if (server.Error != null) throw server.Error;
             }
         }
+
+
+        [TestMethod]
+        public void GetInfoTest()
+        {
+            using (var server = new HttpServer(
+                new RequestHandler
+                {
+                    EstimatedMethod = "HEAD",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/file1", Helper.UserId),
+                    HeadersToSend = new Dictionary<string, string>{{"Content-Type", "text/html"}},
+                    ContentToSend = new ByteArrayContent(new byte[0])
+                }))
+            {
+                var client = Helper.CreateClient();
+                var result = Media.GetInfo(client, "file1").Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("text/html", result.ContentType);
+                Assert.AreEqual(0L, result.ContentLength);
+            }
+        }
+
+        [TestMethod]
+        public void GetInfoWithDefaultClientTest()
+        {
+            using (var server = new HttpServer(
+                new RequestHandler
+                {
+                    EstimatedMethod = "HEAD",
+                    EstimatedPathAndQuery = string.Format("/v1/users/{0}/media/file1", Helper.UserId),
+                    ContentToSend = new ByteArrayContent(new byte[0])
+                }))
+            {
+                var result = Media.GetInfo("file1").Result;
+                if (server.Error != null) throw server.Error;
+                Assert.AreEqual("application/octet-stream", result.ContentType);
+                Assert.AreEqual(0L, result.ContentLength);
+            }
+        }
+
         [TestMethod]
         public void DownloadTest()
         {

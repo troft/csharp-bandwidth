@@ -113,6 +113,43 @@ namespace Bandwidth.Net
             }
         }
 
+        internal async Task<HttpResponseMessage> MakeHeadRequest(string path, IDictionary<string, object> query = null,
+            string id = null, bool disposeResponse = false)
+        {
+            var urlPath = FixPath(path);
+            if (id != null)
+            {
+                urlPath = urlPath + "/" + id;
+            }
+            if (query != null && query.Count > 0)
+            {
+                urlPath = string.Format("{0}?{1}", urlPath,
+                    string.Join("&",
+                        from p in query select string.Format("{0}={1}", p.Key, Uri.EscapeDataString(Convert.ToString(p.Value)))));
+            }
+            using (var client = CreateHttpClient())
+            {
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Head,
+                    RequestUri = new Uri(client.BaseAddress + urlPath)
+                };
+                var response = await client.SendAsync(request);
+                try
+                {
+                    await CheckResponse(response);
+                }
+                catch
+                {
+                    response.Dispose();
+                    throw;
+                }
+                if (!disposeResponse) return response;
+                response.Dispose();
+                return null;
+            }
+        }
+
 
         internal async Task<TResult> MakeGetRequest<TResult>(string path, IDictionary<string, object> query = null,
             string id = null)
