@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Bandwidth.Net.Model
 {
@@ -22,6 +20,32 @@ namespace Bandwidth.Net.Model
         public Task Delete()
         {
             return Client.MakeDeleteRequest(Client.ConcatUserPath(string.Format("{0}/{1}/{3}/{2}", Domain.DomainPath, DomainId, Id, EndPointPath)));
+        }
+
+        /// <summary>
+        /// Create auth token
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var token = await endPoint.CreateAuthToken();
+        /// </code>
+        /// </example>
+        public Task<EndPointTokenData> CreateAuthToken()
+        {
+            return Client.MakePostRequest<EndPointTokenData>(Client.ConcatUserPath(string.Format("{0}/{1}/{3}/{2}/tokens", Domain.DomainPath, DomainId, Id, EndPointPath)), new Dictionary<string,object>());
+        }
+
+        /// <summary>
+        /// Delete auth token
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// await endPoint.DeleteAuthToken("token");
+        /// </code>
+        /// </example>
+        public Task DeleteAuthToken(string token)
+        {
+            return Client.MakeDeleteRequest(Client.ConcatUserPath(string.Format("{0}/{1}/{3}/{2}/tokens/{4}", Domain.DomainPath, DomainId, Id, EndPointPath, token)));
         }
 
         /// <summary>
@@ -60,5 +84,22 @@ namespace Bandwidth.Net.Model
         /// Credentials parameters
         /// </summary>
         public Dictionary<string, string> Credentials { get; set; }
+    }
+
+
+    /// <summary>
+    /// Result of token creation
+    /// </summary>
+    public class EndPointTokenData
+    {
+        /// <summary>
+        /// Expires
+        /// </summary>
+        public int Expires { get; set; }
+        
+        /// <summary>
+        /// Token value
+        /// </summary>
+        public string Token { get; set; }
     }
 }
