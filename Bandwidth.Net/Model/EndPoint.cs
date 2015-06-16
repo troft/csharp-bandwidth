@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Bandwidth.Net.Model
@@ -30,9 +31,9 @@ namespace Bandwidth.Net.Model
         /// var token = await endPoint.CreateAuthToken();
         /// </code>
         /// </example>
-        public Task<EndPointTokenData> CreateAuthToken()
+        public Task<EndPointTokenData> CreateAuthToken(int expires = 86400)
         {
-            return Client.MakePostRequest<EndPointTokenData>(Client.ConcatUserPath(string.Format("{0}/{1}/{3}/{2}/tokens", Domain.DomainPath, DomainId, Id, EndPointPath)), new Dictionary<string,object>());
+            return Client.MakePostRequest<EndPointTokenData>(Client.ConcatUserPath(string.Format("{0}/{1}/{3}/{2}/tokens", Domain.DomainPath, DomainId, Id, EndPointPath)), new Dictionary<string,object>(){{"expires", expires}});
         }
 
         /// <summary>
@@ -95,6 +96,7 @@ namespace Bandwidth.Net.Model
         /// <summary>
         /// Expires
         /// </summary>
+        [DefaultValue(0)]
         public int Expires { get; set; }
         
         /// <summary>
