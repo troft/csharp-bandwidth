@@ -49,6 +49,9 @@
     <Compile Include="..\Bandwidth.Net\Client.cs">
       <Link>Client.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\MissingCredentialsException.cs">
+      <Link>MissingCredentialsException.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\Account.cs">
       <Link>Account.cs</Link>
     </Compile>

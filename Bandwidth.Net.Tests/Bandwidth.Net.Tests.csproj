@@ -83,6 +83,10 @@
     <Compile Include="XmlTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bandwidth.Net.Portable\Bandwidth.Net.Portable.csproj">
+      <Project>{760EA33E-04EE-4B57-BFFF-433AF92A096D}</Project>
+      <Name>Bandwidth.Net.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Bandwidth.Net\Bandwidth.Net.csproj">
       <Project>{7fa8f3ba-6142-419f-8855-ee7cf52a0dac}</Project>
       <Name>Bandwidth.Net</Name>

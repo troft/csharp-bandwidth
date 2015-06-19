@@ -1,4 +1,5 @@
 ﻿using System;
+using Bandwidth.Net;
 using Bandwidth.Net.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -32,6 +33,34 @@ namespace Bandwidth.Net.Tests.Model
                 var result = Account.Get(client).Result;
                 if (server.Error != null) throw server.Error;
                 Helper.AssertObjects(account, result);
+            }
+        }
+
+        [TestMethod]
+        public void GetWithMissingCredentialsTest()
+        {
+            var account = new Account
+            {
+                AccountType = AccountType.PrePay,
+                Balance = 100
+            };
+            using (var server = new HttpServer(new RequestHandler
+            {
+                EstimatedMethod = "GET",
+                EstimatedPathAndQuery = string.Format("/v1/users/{0}/account", Helper.UserId),
+                ContentToSend = Helper.CreateJsonContent(account)
+            }))
+            {
+                try
+                {
+                    var client = Client.GetInstance("", "", "");
+                    Account.Get(client).Wait();
+                    throw new Exception("An exception is estimated");
+                }
+                catch (MissingCredentialsException)
+                {
+                    return;
+                }
             }
         }
 

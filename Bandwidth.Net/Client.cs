@@ -57,6 +57,10 @@ namespace Bandwidth.Net
             _apiEndpoint = apiEndpoint ?? GlobalOptions.ApiEndpoint ?? "https://api.catapult.inetwork.com";
             _apiVersion = apiVersion ?? GlobalOptions.ApiVersion ?? "v1";
             _userPath = string.Format("users/{0}", userId);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(_apiToken) || string.IsNullOrEmpty(_apiSecret))
+            {
+                throw new MissingCredentialsException();
+            }
             JsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
