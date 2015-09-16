@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Bandwidth.Net.Xml.Verbs
 {
@@ -29,7 +30,7 @@ namespace Bandwidth.Net.Xml.Verbs
         /// <summary>
         /// Timeout (milliseconds) to request new BaML.
         /// </summary>
-        [XmlAttribute("requestUrlTimeout")]
+        [XmlAttribute("requestUrlTimeout"), DefaultValue(0)]
         public int RequestUrlTimeout { get; set; }
 
 
@@ -42,7 +43,7 @@ namespace Bandwidth.Net.Xml.Verbs
         /// <summary>
         /// This is the timeout (seconds) for the callee to answer the call.
         /// </summary>
-        [XmlAttribute("callTimeout")]
+        [XmlAttribute("callTimeout"), DefaultValue(0)]
         public int CallTimeout { get; set; }
 
         /// <summary>
