@@ -1,7 +1,7 @@
 # Bandwidth.Net
 [![Build](https://ci.appveyor.com/api/projects/status/bhv8hs3fx9k6c33i?svg=true)](https://ci.appveyor.com/project/avbel/csharp-bandwidth)
 
-.NET library for [Bandwidth's App Platform](ap.bandwidth.com/?utm_medium=social&utm_source=github&utm_campaign=dtolb&utm_content=)
+.NET library for [Bandwidth's App Platform](http://ap.bandwidth.com/?utm_medium=social&utm_source=github&utm_campaign=dtolb&utm_content=)
 
 
 With Bandwidth.Net  you have access to the entire set of API methods including:
