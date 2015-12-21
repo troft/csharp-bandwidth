@@ -66,6 +66,8 @@
     <Compile Include="Model\NumberInfo.cs" />
     <Compile Include="Model\PhoneNumber.cs" />
     <Compile Include="Model\CallEvent.cs" />
+    <Compile Include="Model\MessageEvent.cs" />
+    <Compile Include="Model\MmsEvent.cs" />
     <Compile Include="Model\TimeoutEvent.cs" />
     <Compile Include="Model\ConferenceEvent.cs" />
     <Compile Include="Model\ConferenceMemberEvent.cs" />

@@ -1,0 +1,15 @@
+﻿{
+   "eventType":"mms",
+   "to":"+12534483100",
+   "from":"+15035555555",
+   "time":"2015-08-04T21:50:12Z",
+   "text":"Hello MMS!",
+   "direction":"in",
+   "applicationId":"a-rj7jf3fz7teaqupveqpug3i",
+   "state":"received",
+   "messageId":"m-dr4mcch2wfb6frcls677glq",
+   "media":[
+      "https://api.catapult.inetwork.com/v1/users/{user-id}/media/net_test.png"
+      ],
+    "messageUri":"https://api.catapult.inetwork.com/v1/users/{user-id}/messages/m-dr4mcch2wfb6frcls677glq"
+}

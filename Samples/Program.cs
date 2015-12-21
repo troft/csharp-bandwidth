@@ -24,6 +24,7 @@ namespace Samples
             await MakeCall.Run();
             await SendMms.Run();
             await SendSms.Run();
+            await ReceiveMms.Run();
             ShowResources.Run();
         }
     }

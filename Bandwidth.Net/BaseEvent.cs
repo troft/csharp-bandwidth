@@ -42,6 +42,7 @@ namespace Bandwidth.Net
             {"reject", typeof(RejectEvent)},
             {"recording", typeof(RecordingEvent)},
             {"sms", typeof(SmsEvent)},
+            {"mms", typeof(MmsEvent)},
             {"timeout", typeof(TimeoutEvent)},
             {"transcription", typeof(TranscriptionEvent)},
             {"conference", typeof(ConferenceEvent)},

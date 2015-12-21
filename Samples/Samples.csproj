@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReceiveMms.cs" />
     <Compile Include="ShowResources.cs" />
     <Compile Include="SendMms.cs" />
     <Compile Include="SendSms.cs" />
@@ -57,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EmbeddedResource Include="mms.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

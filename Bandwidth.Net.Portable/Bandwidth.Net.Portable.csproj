@@ -130,6 +130,12 @@
     <Compile Include="..\Bandwidth.Net\Model\Message.cs">
       <Link>Message.cs</Link>
     </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\MessageEvent.cs">
+      <Link>MessageEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Bandwidth.Net\Model\MmsEvent.cs">
+      <Link>MmsEvent.cs</Link>
+    </Compile>
     <Compile Include="..\Bandwidth.Net\Model\NumberInfo.cs">
       <Link>NumberInfo.cs</Link>
     </Compile>
