@@ -13,7 +13,7 @@ namespace Bandwidth.Net.Model
     public class Message: BaseModel
     {
         private const string MessagePath = "messages";
-        
+
         private static readonly Regex MessageIdExtractor = new Regex(@"/" + MessagePath + @"/([\w\-_]+)$");
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Bandwidth.Net.Model
         {
             return Create(Client.GetInstance(), messages);
         }
-        
+
         ///<summary>
         /// Send a text message
         /// </summary>
@@ -204,7 +204,7 @@ namespace Bandwidth.Net.Model
         /// The message direction (IN or OUT), used to filter.
         /// </summary>
         public MessageDirection Direction { get; set; }
-        
+
         /// <summary>
         /// URL where the events related to the outgoing message will be posted to
         /// </summary>
@@ -234,7 +234,7 @@ namespace Bandwidth.Net.Model
         /// Message state
         /// </summary>
         public MessageState State { get; set; }
-        
+
         /// <summary>
         /// The time the message resource was created
         /// </summary>
@@ -244,12 +244,12 @@ namespace Bandwidth.Net.Model
         /// The message contents
         /// </summary>
         public string Text { get; set; }
-        
+
         /// <summary>
         /// Page number
         /// </summary>
         public int Page { get; set; }
-        
+
         /// <summary>
         /// Page Size
         /// </summary>
@@ -280,10 +280,15 @@ namespace Bandwidth.Net.Model
         /// </summary>
         public string DeliveryDescription { get; set; }
 
+        /// <summary>
+        ///  Array containing list of media urls to be sent as content for an mms.
+        /// </summary>
+        public string[] Media { get; set; }
+
     }
 
     /// <summary>
-    /// Message directions
+    /// Messagset;e directions
     /// </summary>
     public enum MessageDirection
     {
@@ -304,7 +309,7 @@ namespace Bandwidth.Net.Model
     }
 
     /// <summary>
-    /// Result of message sending 
+    /// Result of message sending
     /// </summary>
     public class MessageResult
     {
@@ -312,7 +317,7 @@ namespace Bandwidth.Net.Model
         /// MessageId (or null on error)
         /// </summary>
         public string MessageId { get; set; }
-        
+
         /// <summary>
         /// Error information (or null on success)
         /// </summary>
