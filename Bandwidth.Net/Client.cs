@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace Bandwidth.Net
 {
@@ -77,10 +78,13 @@ namespace Bandwidth.Net
         {
             var url = new UriBuilder(_apiEndpoint) { Path = string.Format("/{0}/", _apiVersion) };
             var client = new HttpClient { BaseAddress = url.Uri };
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("csharp-bandwidth", "v2.14"));
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
+            var assembly = typeof(Client).GetTypeInfo().Assembly;
+            // In some PCL profiles the above line is: var assembly = typeof(Client).Assembly;
+            var assemblyName = new AssemblyName(assembly.FullName);
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("csharp-bandwidth", string.Format("v{0}.{1}", assemblyName.Version.Major, assemblyName.Version.Minor)));
+                  client.DefaultRequestHeaders.Authorization =
+                      new AuthenticationHeaderValue("Basic",
+                          Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
             return client;
         }
 
