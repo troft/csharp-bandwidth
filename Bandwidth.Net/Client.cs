@@ -27,14 +27,14 @@ namespace Bandwidth.Net
             return new Client(userId, apiToken, apiSecret, apiEndpoint, apiVersion);
         }
 
-        
+
 #if !PCL
         public const string BandwidthUserId = "BANDWIDTH_USER_ID";
         public const string BandwidthApiToken = "BANDWIDTH_API_TOKEN";
         public const string BandwidthApiSecret = "BANDWIDTH_API_SECRET";
         public const string BandwidthApiEndpoint = "BANDWIDTH_API_ENDPOINT";
         public const string BandwidthApiVersion = "BANDWIDTH_API_VERSION";
-       
+
 #endif
         public static ClientOptions GlobalOptions { get; set; }
         private Client(string userId, string apiToken, string apiSecret, string apiEndpoint, string apiVersion)
@@ -77,6 +77,7 @@ namespace Bandwidth.Net
         {
             var url = new UriBuilder(_apiEndpoint) { Path = string.Format("/{0}/", _apiVersion) };
             var client = new HttpClient { BaseAddress = url.Uri };
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("csharp-bandwidth", "v2.14"));
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic",
                     Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
