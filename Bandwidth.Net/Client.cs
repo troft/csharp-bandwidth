@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace Bandwidth.Net
 {
@@ -27,14 +28,14 @@ namespace Bandwidth.Net
             return new Client(userId, apiToken, apiSecret, apiEndpoint, apiVersion);
         }
 
-        
+
 #if !PCL
         public const string BandwidthUserId = "BANDWIDTH_USER_ID";
         public const string BandwidthApiToken = "BANDWIDTH_API_TOKEN";
         public const string BandwidthApiSecret = "BANDWIDTH_API_SECRET";
         public const string BandwidthApiEndpoint = "BANDWIDTH_API_ENDPOINT";
         public const string BandwidthApiVersion = "BANDWIDTH_API_VERSION";
-       
+
 #endif
         public static ClientOptions GlobalOptions { get; set; }
         private Client(string userId, string apiToken, string apiSecret, string apiEndpoint, string apiVersion)
@@ -77,9 +78,13 @@ namespace Bandwidth.Net
         {
             var url = new UriBuilder(_apiEndpoint) { Path = string.Format("/{0}/", _apiVersion) };
             var client = new HttpClient { BaseAddress = url.Uri };
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
+            var assembly = typeof(Client).GetTypeInfo().Assembly;
+            // In some PCL profiles the above line is: var assembly = typeof(Client).Assembly;
+            var assemblyName = new AssemblyName(assembly.FullName);
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("csharp-bandwidth", string.Format("v{0}.{1}", assemblyName.Version.Major, assemblyName.Version.Minor)));
+                  client.DefaultRequestHeaders.Authorization =
+                      new AuthenticationHeaderValue("Basic",
+                          Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _apiToken, _apiSecret))));
             return client;
         }
 
