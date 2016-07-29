@@ -3,38 +3,33 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Bandwidth.Net
 {
-    public class Client: IClient
+    public class Client
     {
         private readonly string _userId;
-        private readonly string _apiToken;
-        private readonly string _apiSecret;
+        private readonly IHttp _http;
         private static readonly ProductInfoHeaderValue _userAgent = BuildUserAgent();
+        private readonly AuthenticationHeaderValue _authentication;
+        private const string _baseUrl = "https://api.catapult.inetwork.com";
+        private const string _version = "v1";
         
-        public Client(string userId, string apiToken, string apiSecret)
+        public Client(string userId, string apiToken, string apiSecret, IHttp http = null)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(apiToken) || string.IsNullOrEmpty(apiSecret))
             {
                 throw new MissingCredentialsException();
             }
             _userId = userId;
-            _apiToken = apiToken;
-            _apiSecret = apiSecret;
-        }
-
-        private HttpClient CreateHttpClient()
-        {
-            var url = new UriBuilder("https://api.catapult.inetwork.com") { Path = "/v1/" };
-            var client = new HttpClient { BaseAddress = url.Uri };
-            var assembly = typeof(Client).GetTypeInfo().Assembly;
-            var assemblyName = new AssemblyName(assembly.FullName);
-            client.DefaultRequestHeaders.UserAgent.Add(_userAgent);
-            client.DefaultRequestHeaders.Authorization =
+            _http = http ?? new Http();
+            _authentication =
                 new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_apiToken}:{_apiSecret}")));
-            return client;
+                    Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiToken}:{apiSecret}")));
         }
 
         private static ProductInfoHeaderValue BuildUserAgent()
@@ -44,9 +39,33 @@ namespace Bandwidth.Net
             return new ProductInfoHeaderValue("csharp-bandwidth", $"v{assemblyName.Version.Major}.{assemblyName.Version.Minor}");
         }
 
-    }
+        private static string BuildQueryString(object query)
+        {
+            if(query == null)
+            {
+                return "";
+            }
+            var type = query.GetType();
+            return (from p in type.GetProperties()
+            select $"{p.Name}={Uri.EscapeDataString(Convert.ToString(p.GetValue(query)))}").Join("&");
+        }
 
-    public interface IClient 
-    {
+        internal HttpRequestMessage CreateRequest(HttpMethod method, string path, object query = null)
+        {
+            var url = new UriBuilder(_baseUrl);
+            url.Path = $"/{_version}{path}";
+            url.Query = BuildQueryString(query);
+            var message = new HttpRequestMessage(method, url.Uri);
+            message.Headers.UserAgent.Add(_userAgent);
+            message.Headers.Authorization = _authentication;
+            return message;
+        }
+
+        internal async Task<HttpResponseMessage> MakeRequest(HttpRequestMessage request,  HttpCompletionOption completionOption, CancellationToken cancellationToken)
+        {
+            var response = await _http.SendAsync(request, completionOption, cancellationToken);
+            response.CheckResponse();
+            return response;
+        }
     }
 }
