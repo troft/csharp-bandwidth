@@ -6,9 +6,10 @@ namespace Bandwidth.Net.Test
 {
     public class ClientTests
     {
-        public void ConstructorTest()
+        [Fact]
+        public void TestConstructor()
         {
-            //var api = new Client();
+            var api = new Client();
         }
     }
 }
