@@ -11,6 +11,16 @@
       "dependencies": {
         "NETStandard.Library": "1.6.0"
       }
+    },
+    "net45": {
+      "dependencies": {
+        "System.Net.Http": "4.*"
+      }
+    },
+    "net46": {
+      "dependencies": {
+        "System.Net.Http": "4.*"
+      }
     }
   }
 }

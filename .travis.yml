@@ -1,5 +1,5 @@
 language: csharp
-
+solution: Bandwidth.Net.sln
 runtime:
   - name: netcore
     version: 1.0
