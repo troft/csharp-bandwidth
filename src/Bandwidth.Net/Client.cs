@@ -49,7 +49,21 @@ namespace Bandwidth.Net
             }
             var type = query.GetType().GetTypeInfo();
             return string.Join("&", from p in type.GetProperties()
-            select $"{p.Name}={Uri.EscapeDataString(Convert.ToString(p.GetValue(query)))}");
+            select $"{TransformQueryParameterName(p.Name)}={Uri.EscapeDataString(TransformQueryParameterValue(p.GetValue(query)))}");
+        }
+
+        private static string TransformQueryParameterName(string name)
+        {
+            return $"{name[0].ToLowerCase()}{name.Substring(1)}";
+        }
+
+        private static string TransformQueryParameterValue(object value)
+        {
+            if(value is DateTime)
+            {
+                return ((DateTime)value).ToString("o");
+            }
+            return Convert.ToString(value);
         }
 
         internal HttpRequestMessage CreateRequest(HttpMethod method, string path, object query = null)
