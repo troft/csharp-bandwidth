@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Bandwidth.Net
 {
-  internal static class JsonHelper
+  internal static class JsonHelpers
   {
     public static JsonSerializerSettings GetSerializerSettings()
     {
