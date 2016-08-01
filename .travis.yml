@@ -1,5 +1,11 @@
 language: csharp
-solution: Bandwidth.Net.sln
-runtime:
-  - name: netcore
-    version: 1.0
+
+before_install:
+  - sudo apt-get install curl libunwind8 gettext
+  - curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=809130
+  - sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
+  - sudo ln -s /opt/dotnet/dotnet /usr/local/bin
+install:
+  - cd ./test/Bandwidth.Net.Test && dotnet restore    
+script:
+  - dotnet test    
