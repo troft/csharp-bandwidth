@@ -3,12 +3,13 @@
   "buildOptions": {
     "debugType": "portable"
   },
-  "dependencies": {},
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
+  },
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "Newtonsoft.Json": "9.0.1"
+        "NETStandard.Library": "1.6.0"
       }
     }
   }

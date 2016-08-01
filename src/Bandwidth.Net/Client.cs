@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -46,9 +47,9 @@ namespace Bandwidth.Net
             {
                 return "";
             }
-            var type = query.GetType();
-            return (from p in type.GetProperties()
-            select $"{p.Name}={Uri.EscapeDataString(Convert.ToString(p.GetValue(query)))}").Join("&");
+            var type = query.GetType().GetTypeInfo();
+            return string.Join("&", from p in type.GetProperties()
+            select $"{p.Name}={Uri.EscapeDataString(Convert.ToString(p.GetValue(query)))}");
         }
 
         internal HttpRequestMessage CreateRequest(HttpMethod method, string path, object query = null)
@@ -65,7 +66,7 @@ namespace Bandwidth.Net
         internal async Task<HttpResponseMessage> MakeRequest(HttpRequestMessage request,  HttpCompletionOption completionOption, CancellationToken cancellationToken)
         {
             var response = await _http.SendAsync(request, completionOption, cancellationToken);
-            response.CheckResponse();
+            await response.CheckResponse();
             return response;
         }
     }

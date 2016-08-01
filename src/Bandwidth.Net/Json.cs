@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Bandwidth.Net
 {
@@ -32,7 +34,7 @@ namespace Bandwidth.Net
             message.Content = new StringContent(json, Encoding.UTF8, "application/json");
         }
 
-        public static void CheckResponse(this HttpResponseMessage response)
+        public static async Task CheckResponse(this HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
