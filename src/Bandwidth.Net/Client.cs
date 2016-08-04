@@ -11,7 +11,7 @@ namespace Bandwidth.Net
 {
   public class Client
   {
-    private readonly string _userId;
+    internal readonly string UserId;
     private readonly IHttp _http;
     private static readonly ProductInfoHeaderValue _userAgent = BuildUserAgent();
     private readonly AuthenticationHeaderValue _authentication;
@@ -24,8 +24,8 @@ namespace Bandwidth.Net
       {
         throw new MissingCredentialsException();
       }
-      _userId = userId;
-      _http = http ?? new Http();
+      UserId = userId;
+      _http = http ?? new Http<HttpClientHandler>();
       _authentication =
           new AuthenticationHeaderValue("Basic",
               Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiToken}:{apiSecret}")));

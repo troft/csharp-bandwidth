@@ -183,3 +183,6 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 *.lock.json
+coverage.xml
+.vs
+.vscode
