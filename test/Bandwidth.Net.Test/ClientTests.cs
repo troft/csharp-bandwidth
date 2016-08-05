@@ -13,11 +13,25 @@ namespace Bandwidth.Net.Test
   {
     
     [Fact]
-    public void TestConstructorWithEmptyParams()
+    public void TestConstructorWithBaseUrl()
     {
-      Assert.Throws<MissingCredentialsException>(() => new Client("", "apiToken", "apiSecret"));
+        var api = new Client("userId", "apiToken", "apiSecret", "http://host");
+        Assert.Equal("http://host/v1/", api.CreateRequest(HttpMethod.Get, "/").RequestUri.ToString());
     }
 
+    [Fact]
+    public void TestConstructorWithEmptyCredentialParams()
+    {
+        Assert.Throws<MissingCredentialsException>(() => new Client("", "apiToken", "apiSecret"));
+    }
+
+    [Fact]
+    public void TestConstructorWithEmptyBaseUrl()
+    {
+        Assert.Throws<InvalidBaseUrlException>(() => new Client("userId", "apiToken", "apiSecret", ""));
+    }
+        
+         
     [Fact]
     public void TestCreateRequest()
     {
