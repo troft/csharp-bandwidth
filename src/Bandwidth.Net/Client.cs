@@ -83,14 +83,21 @@ namespace Bandwidth.Net
 
     internal async Task<T> MakeJsonRequest<T>(HttpMethod method, string path, CancellationToken? cancellationToken = null, object query = null, object body = null)
     {
+      using (var response = await MakeJsonRequest(method, path, cancellationToken, query, body))
+      {
+        return await response.ReadAsJsonAsync<T>();
+      }
+    }
+
+    internal async Task<HttpResponseMessage> MakeJsonRequest(HttpMethod method, string path, CancellationToken? cancellationToken = null, object query = null, object body = null)
+    {
       var request = CreateRequest(method, path, query);
       request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
       if (body != null)
       {
         request.SetJsonContent(body);
       }
-      var response = await MakeRequest(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
-      return await response.ReadAsJsonAsync<T>();
+      return await MakeRequest(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
     }
   }
 }
