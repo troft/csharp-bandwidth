@@ -90,6 +90,14 @@ namespace Bandwidth.Net
       return message;
     }
 
+    internal HttpRequestMessage CreateGetRequest(string url)
+    {
+      var message = new HttpRequestMessage(HttpMethod.Get, url);
+      message.Headers.UserAgent.Add(_userAgent);
+      message.Headers.Authorization = _authentication;
+      return message;
+    }
+
     internal async Task<HttpResponseMessage> MakeRequest(HttpRequestMessage request, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead, CancellationToken? cancellationToken = null)
     {
       var response = await _http.SendAsync(request, completionOption, cancellationToken ?? CancellationToken.None);
