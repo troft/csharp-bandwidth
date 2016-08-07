@@ -47,7 +47,7 @@ namespace Bandwidth.Net.Test
     public void TestCreateRequestWithQuery()
     {
       var api = new Client("userId", "apiToken", "apiSecret");
-      var request = api.CreateRequest(HttpMethod.Get, "/test", new { Field1 = 1, Field2 = "text value", Field3 = new DateTime(2016, 8, 1, 0, 0, 0, DateTimeKind.Utc) });
+      var request = api.CreateRequest(HttpMethod.Get, "/test", new { Field1 = 1, Field2 = "text value", Field3 = new DateTime(2016, 8, 1, 0, 0, 0, DateTimeKind.Utc), EmptyField = (string)null, EmptyField2="" });
       Assert.Equal(HttpMethod.Get, request.Method);
       Assert.Equal("https://api.catapult.inetwork.com/v1/test?field1=1&field2=text value&field3=2016-08-01T00:00:00.0000000Z", request.RequestUri.ToString());
       var hash = Convert.ToBase64String(Encoding.UTF8.GetBytes("apiToken:apiSecret"));

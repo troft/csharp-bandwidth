@@ -12,7 +12,7 @@ namespace Bandwidth.Net
   /// <summary>
   /// Catapult API client
   /// </summary>
-  public class Client
+  public partial class Client
   {
     internal readonly string UserId;
     private readonly IHttp _http;
@@ -45,6 +45,7 @@ namespace Bandwidth.Net
       _authentication =
           new AuthenticationHeaderValue("Basic",
               Convert.ToBase64String(Encoding.UTF8.GetBytes($"{apiToken}:{apiSecret}")));
+      SetupApis();
     }
 
     private static ProductInfoHeaderValue BuildUserAgent()
@@ -62,7 +63,11 @@ namespace Bandwidth.Net
       }
       var type = query.GetType().GetTypeInfo();
       return string.Join("&", from p in type.GetProperties()
-                              select $"{TransformQueryParameterName(p.Name)}={Uri.EscapeDataString(TransformQueryParameterValue(p.GetValue(query)))}");
+                              let v = p.GetValue(query)
+                              where v != null
+                              let tv = TransformQueryParameterValue(v)
+                              where !string.IsNullOrEmpty(tv)
+                              select $"{TransformQueryParameterName(p.Name)}={Uri.EscapeDataString(tv)}");
     }
 
     private static string TransformQueryParameterName(string name)
