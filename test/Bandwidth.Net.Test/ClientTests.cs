@@ -42,7 +42,7 @@ namespace Bandwidth.Net.Test
       var hash = Convert.ToBase64String(Encoding.UTF8.GetBytes("apiToken:apiSecret"));
       Assert.Equal($"Basic {hash}", request.Headers.Authorization.ToString());
     }
-
+    
     [Fact]
     public void TestCreateRequestWithQuery()
     {
@@ -53,6 +53,18 @@ namespace Bandwidth.Net.Test
       var hash = Convert.ToBase64String(Encoding.UTF8.GetBytes("apiToken:apiSecret"));
       Assert.Equal($"Basic {hash}", request.Headers.Authorization.ToString());
     }
+
+    [Fact]
+    public void TestCreateGetRequest()
+    {
+      var api = new Client("userId", "apiToken", "apiSecret");
+      var request = api.CreateGetRequest("http://host/path");
+      Assert.Equal(HttpMethod.Get, request.Method);
+      Assert.Equal("http://host/path", request.RequestUri.ToString());
+      var hash = Convert.ToBase64String(Encoding.UTF8.GetBytes("apiToken:apiSecret"));
+      Assert.Equal($"Basic {hash}", request.Headers.Authorization.ToString());
+    }
+
 
     [Fact]
     public async void TestMakeRequest()
