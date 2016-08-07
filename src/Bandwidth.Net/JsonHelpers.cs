@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -17,11 +16,7 @@ namespace Bandwidth.Net
       {
         ContractResolver = new CamelCasePropertyNamesContractResolver()
       };
-      settings.Converters.Add(new StringEnumConverter
-      {
-        CamelCaseText = true,
-        AllowIntegerValues = false
-      });
+      settings.Converters.Add(new JsonStringEnumConverter());
       settings.DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate;
       return settings;
     }
