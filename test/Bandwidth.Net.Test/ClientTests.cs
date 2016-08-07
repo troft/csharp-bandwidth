@@ -58,7 +58,7 @@ namespace Bandwidth.Net.Test
     public async void TestMakeRequest()
     {
       var context = new MockContext<IHttp>();
-      var api = new Client("userId", "apiToken", "apiSecret", null, new Mocks.Http(context));
+      var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
       var request = new HttpRequestMessage(HttpMethod.Get, "/test");
       context.Arrange(c => c.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
@@ -70,7 +70,7 @@ namespace Bandwidth.Net.Test
     public async void TestMakeJsonTRequest()
     {
       var context = new MockContext<IHttp>();
-      var api = new Client("userId", "apiToken", "apiSecret", null, new Mocks.Http(context));
+      var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
       context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.IsAnyValue, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("{\"test\": \"value\"}", Encoding.UTF8, "application/json") }));
       var result = await api.MakeJsonRequest<MakeJsonRequestDemo>(HttpMethod.Get, "/test");
@@ -81,7 +81,7 @@ namespace Bandwidth.Net.Test
     public async void TestMakeJsonRequest()
     {
       var context = new MockContext<IHttp>();
-      var api = new Client("userId", "apiToken", "apiSecret", null, new Mocks.Http(context));
+      var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
       context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.IsAnyValue, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
       var response = await api.MakeJsonRequest(HttpMethod.Get, "/test");
@@ -92,7 +92,7 @@ namespace Bandwidth.Net.Test
     public async void TestMakeJsonRequestWithBody()
     {
       var context = new MockContext<IHttp>();
-      var api = new Client("userId", "apiToken", "apiSecret", null, new Mocks.Http(context));
+      var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
       context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.IsAnyValue, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
       var response = await api.MakeJsonRequest(HttpMethod.Get, "/test", null, new { Field = "value" });
