@@ -82,7 +82,7 @@ namespace Bandwidth.Net.Test
     {
       var context = new MockContext<IHttp>();
       var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
-      context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.IsAnyValue, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
+      context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.Is(m => IsValidRequestWithoutBody(m)), HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
       var response = await api.MakeJsonRequest(HttpMethod.Get, "/test");
       Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -93,12 +93,21 @@ namespace Bandwidth.Net.Test
     {
       var context = new MockContext<IHttp>();
       var api = new Client("userId", "apiToken", "apiSecret", "http://host", new Mocks.Http(context));
-      context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.IsAnyValue, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
+      context.Arrange(c => c.SendAsync(The<HttpRequestMessage>.Is(m => IsValidRequestWithBody(m)), HttpCompletionOption.ResponseContentRead, CancellationToken.None))
           .Returns(Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)));
-      var response = await api.MakeJsonRequest(HttpMethod.Get, "/test", null, new { Field = "value" });
+      var response = await api.MakeJsonRequest(HttpMethod.Get, "/test", null,  null, new { Field = "value" });
       Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-      // Assert.Equal("application/json", request.Content.Headers.ContentType.MediaType);
-      // Assert.Equal("{\"field\":\"value\"}", await request.Content.ReadAsStringAsync());
+    }
+
+    public static bool IsValidRequestWithBody(HttpRequestMessage request)
+    {
+      return request.Content.Headers.ContentType.MediaType == "application/json" 
+        && request.Content.ReadAsStringAsync().Result == "{\"field\":\"value\"}";
+    }
+
+    public static bool IsValidRequestWithoutBody(HttpRequestMessage request)
+    {
+      return request.Content == null; 
     }
 
     public class MakeJsonRequestDemo
