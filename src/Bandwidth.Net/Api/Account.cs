@@ -15,7 +15,7 @@ namespace Bandwidth.Net.Api
     /// Get information about account
     /// </summary>
     /// <param name="cancellationToken">Optional token to cancel async operation</param>
-    /// <returns></returns>
+    /// <returns>Task with <see cref="Account"/> Account instance</returns>
     Task<Account> Get(CancellationToken? cancellationToken = null);
 
     /// <summary>
@@ -23,15 +23,13 @@ namespace Bandwidth.Net.Api
     /// </summary>
     /// <param name="query">Optional query parameters</param>
     /// <param name="cancellationToken">>Optional token to cancel async operation</param>
-    /// <returns></returns>
+    /// <returns>Collection with <see cref="AccountTransaction"/> Account instances</returns>
     IEnumerable<AccountTransaction> GetTransactions(AccountTransactionQuery query = null,
       CancellationToken? cancellationToken = null);
   }
 
-  internal class AccountApi: IAccount
+  internal class AccountApi: ApiBase, IAccount
   {
-    internal Client Client { get; set; }
-
     public Task<Account> Get(CancellationToken? cancellationToken = null)
     {
       return Client.MakeJsonRequest<Account>(HttpMethod.Get, $"/users/{Client.UserId}/account", cancellationToken);

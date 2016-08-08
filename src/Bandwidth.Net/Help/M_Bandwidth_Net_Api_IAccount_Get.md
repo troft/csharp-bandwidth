@@ -19,7 +19,7 @@ Task<Account> Get(
 &nbsp;<dl><dt>cancellationToken (Optional)</dt><dd>Type: <a href="http://msdn2.microsoft.com/en-us/library/b3h38hb0" target="_blank">System.Nullable</a>(<a href="http://msdn2.microsoft.com/en-us/library/dd384802" target="_blank">CancellationToken</a>)<br />Optional token to cancel async operation</dd></dl>
 
 #### Return Value
-Type: <a href="http://msdn2.microsoft.com/en-us/library/dd321424" target="_blank">Task</a>(<a href ="T_Bandwidth_Net_Api_Account.md">Account</a>)<br />\[Missing <returns> documentation for "M:Bandwidth.Net.Api.IAccount.Get(System.Nullable{System.Threading.CancellationToken})"\]
+Type: <a href="http://msdn2.microsoft.com/en-us/library/dd321424" target="_blank">Task</a>(<a href ="T_Bandwidth_Net_Api_Account.md">Account</a>)<br />Task with <a href ="T_Bandwidth_Net_Api_Account.md">Account</a> Account instance
 
 ## See Also
 
