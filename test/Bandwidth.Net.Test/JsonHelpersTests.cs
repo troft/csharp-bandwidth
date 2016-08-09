@@ -14,9 +14,8 @@ namespace Bandwidth.Net.Test
     {
       var settings = JsonHelpers.GetSerializerSettings();
       Assert.Equal(DefaultValueHandling.IgnoreAndPopulate, settings.DefaultValueHandling);
-      var converter = settings.Converters[0] as StringEnumConverter;
+      var converter = settings.Converters[0] as JsonStringEnumConverter;
       Assert.NotNull(converter);
-      Assert.True(converter.CamelCaseText);
     }
 
     [Fact]
