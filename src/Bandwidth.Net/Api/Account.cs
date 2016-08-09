@@ -23,7 +23,7 @@ namespace Bandwidth.Net.Api
     /// </summary>
     /// <param name="query">Optional query parameters</param>
     /// <param name="cancellationToken">>Optional token to cancel async operation</param>
-    /// <returns>Collection with <see cref="AccountTransaction"/> Account instances</returns>
+    /// <returns>Collection with <see cref="AccountTransaction"/> instances</returns>
     IEnumerable<AccountTransaction> GetTransactions(AccountTransactionQuery query = null,
       CancellationToken? cancellationToken = null);
   }

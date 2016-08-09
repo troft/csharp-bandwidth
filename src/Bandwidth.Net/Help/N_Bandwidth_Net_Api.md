@@ -1,4 +1,8 @@
 ﻿# Bandwidth.Net.Api Namespace
+ 
+
+Api classes
+
 
 ## Classes
 &nbsp;<table><tr><th></th><th>Class</th><th>Description</th></tr><tr><td>![Public class](media/pubclass.gif "Public class")</td><td><a href ="T_Bandwidth_Net_Api_Account.md">Account</a></td><td>
