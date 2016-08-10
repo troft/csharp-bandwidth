@@ -11,10 +11,13 @@
     - [IHttp Interface](T_Bandwidth_Net_IHttp)
       - [IHttp Methods](Methods_T_Bandwidth_Net_IHttp)
         - [IHttp.SendAsync Method](M_Bandwidth_Net_IHttp_SendAsync)
+<<<<<<< HEAD
     - [ILazyInstance(*T*) Interface](T_Bandwidth_Net_ILazyInstance_1)
       - [ILazyInstance(*T*) Properties](Properties_T_Bandwidth_Net_ILazyInstance_1)
         - [ILazyInstance(*T*).Id Property](P_Bandwidth_Net_ILazyInstance_1_Id)
         - [ILazyInstance(*T*).Instance Property](P_Bandwidth_Net_ILazyInstance_1_Instance)
+=======
+>>>>>>> v3-preview
     - [InvalidBaseUrlException Class](T_Bandwidth_Net_InvalidBaseUrlException)
       - [InvalidBaseUrlException Constructor](M_Bandwidth_Net_InvalidBaseUrlException__ctor)
     - [MissingCredentialsException Class](T_Bandwidth_Net_MissingCredentialsException)
