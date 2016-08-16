@@ -4,6 +4,12 @@ namespace Bandwidth.Net
 {
   public partial class Client
   {
+
+    /// <summary>
+    /// Access to Error Api
+    /// </summary>
+    public IError Error { get; private set; }
+
     /// <summary>
     /// Access to Account Api
     /// </summary>
@@ -32,6 +38,7 @@ namespace Bandwidth.Net
 
     private void SetupApis()
     {
+      Error = new ErrorApi { Client = this };
       Account = new AccountApi {Client = this};
       Application = new ApplicationApi { Client = this };
       AvailableNumber = new AvailableNumberApi { Client = this };
