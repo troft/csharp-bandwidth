@@ -216,6 +216,20 @@ namespace Bandwidth.Net.Test {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to {
+        ///	&quot;id&quot; : &quot;domainId&quot;, 
+        ///		&quot;name&quot; : &quot;mycoolapp&quot;, 
+        ///	&quot;description&quot; : &quot;disruptive app that&apos;s going to revolutonize telecom&quot;, 
+        ///		&quot;endpoints&quot; : &quot;/v1/users/{user-id}/domains/dom-xyz123/endpoints&quot;
+        ///	}.
+        /// </summary>
+        public static string Domain {
+            get {
+                return ResourceManager.GetString("Domain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to [
         ///    {
         ///        &quot;number&quot;: &quot;{number1}&quot;,
