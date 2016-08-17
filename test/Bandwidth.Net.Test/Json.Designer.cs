@@ -216,6 +216,26 @@ namespace Bandwidth.Net.Test {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to {
+        ///	&quot;name&quot; : &quot;jsmith-mobile&quot;, 
+        ///	&quot;description&quot; : &quot;John Smiths mobile client&quot;, 
+        ///	&quot;domainId&quot; : &quot;domainId&quot;, 
+        ///	&quot;applicationId&quot; : &quot;applicationId&quot;, 
+        ///	&quot;enabled&quot; : &quot;true&quot;, 
+        ///	&quot;sipUri&quot; : &quot;jsmith-mobile@doname.bwapp.bwsipp.io&quot;, 
+        ///	&quot;credentials&quot; : { 
+        ///		&quot;realm&quot; : &quot;doname.bwapp.bwsipp.io&quot;, 
+        ///		&quot;username&quot; : &quot;jsmith-mobile&quot;
+        ///	}
+        ///}.
+        /// </summary>
+        public static string Endpoint {
+            get {
+                return ResourceManager.GetString("Endpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to [
         ///    {
         ///        &quot;number&quot;: &quot;{number1}&quot;,
