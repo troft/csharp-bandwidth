@@ -224,13 +224,16 @@
 	"description" : "John Smiths mobile client", 
 	"domainId" : "domainId", 
 	"applicationId" : "applicationId", 
-	"enabled" : "true", 
+	"enabled" : true, 
 	"sipUri" : "jsmith-mobile@doname.bwapp.bwsipp.io", 
 	"credentials" : { 
 		"realm" : "doname.bwapp.bwsipp.io", 
 		"username" : "jsmith-mobile"
 	}
 }</value>
+  </data>
+  <data name="EndpointAuthToken" xml:space="preserve">
+    <value>{"token": "token", "expire": 3600}</value>
   </data>
   <data name="OrderedNumbers" xml:space="preserve">
     <value>[

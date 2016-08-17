@@ -137,7 +137,7 @@ namespace Bandwidth.Net.Api
 
     public Task DeleteAsync(string domainId, string endpointId, CancellationToken? cancellationToken = null)
     {
-      return Client.MakeJsonRequestAsync(HttpMethod.Post,
+      return Client.MakeJsonRequestAsync(HttpMethod.Delete,
         $"/users/{Client.UserId}/domains/{domainId}/endpoints/{endpointId}", cancellationToken);
     }
 
@@ -146,8 +146,7 @@ namespace Bandwidth.Net.Api
       CancellationToken? cancellationToken = null)
     {
       return Client.MakeJsonRequestAsync<EndpointAuthToken>(HttpMethod.Post,
-        $"/users/{Client.UserId}/domains/{domainId}/endpoints/{endpointId}/tokens", cancellationToken, null,
-        data ?? new CreateAuthTokenData());
+        $"/users/{Client.UserId}/domains/{domainId}/endpoints/{endpointId}/tokens", cancellationToken, null, data);
     }
   }
 
@@ -185,7 +184,6 @@ namespace Bandwidth.Net.Api
     /// <summary>
     ///   If endpoint enabled/disabled
     /// </summary>
-    [JsonConverter(typeof (StringBooleanConverter))]
     public bool Enabled { get; set; }
 
     /// <summary>
@@ -277,7 +275,6 @@ namespace Bandwidth.Net.Api
     /// <summary>
     ///   If endpoint enabled/disabled
     /// </summary>
-    [JsonConverter(typeof (StringBooleanConverter))]
     public bool? Enabled { get; set; }
 
     /// <summary>

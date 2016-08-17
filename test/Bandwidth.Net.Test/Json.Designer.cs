@@ -221,7 +221,7 @@ namespace Bandwidth.Net.Test {
         ///	&quot;description&quot; : &quot;John Smiths mobile client&quot;, 
         ///	&quot;domainId&quot; : &quot;domainId&quot;, 
         ///	&quot;applicationId&quot; : &quot;applicationId&quot;, 
-        ///	&quot;enabled&quot; : &quot;true&quot;, 
+        ///	&quot;enabled&quot; : true, 
         ///	&quot;sipUri&quot; : &quot;jsmith-mobile@doname.bwapp.bwsipp.io&quot;, 
         ///	&quot;credentials&quot; : { 
         ///		&quot;realm&quot; : &quot;doname.bwapp.bwsipp.io&quot;, 
