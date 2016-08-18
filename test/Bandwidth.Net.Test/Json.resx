@@ -218,6 +218,14 @@
         "textUrl": "{url-to-full-text}"
     }</value>
   </data>
+  <data name="NumberInfo" xml:space="preserve">
+    <value>{
+  "created": "2013-09-23T16:31:15Z",
+  "name": "Name",
+  "number": "number",
+  "updated": "2013-09-23T16:42:18Z"
+}</value>
+  </data>
   <data name="OrderedNumbers" xml:space="preserve">
     <value>[
     {
