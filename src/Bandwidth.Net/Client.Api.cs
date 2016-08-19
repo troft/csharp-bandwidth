@@ -40,11 +40,7 @@ namespace Bandwidth.Net
     /// </summary>
     public ICall Call { get; private set; }
 
-    /// <summary>
-    /// Access to Endpoint Api
-    /// </summary>
-    public IEndpoint Endpoint { get; private set; }
-
+    
     /// <summary>
     /// Access to Conference Api
     /// </summary>
@@ -95,7 +91,6 @@ namespace Bandwidth.Net
       Bridge = new BridgeApi{ Client = this };
       Domain = new DomainApi{ Client = this };
       Call = new CallApi { Client = this };
-      Endpoint = new EndpointApi { Client = this };
       Conference = new ConferenceApi { Client = this };
       Message = new MessageApi { Client = this };
       NumberInfo = new NumberInfoApi { Client = this };
