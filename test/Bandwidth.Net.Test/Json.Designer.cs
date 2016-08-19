@@ -172,7 +172,7 @@ namespace Bandwidth.Net.Test {
         ///  &quot;reason&quot;: &quot;max-digits&quot;,
         ///  &quot;createdTime&quot;: &quot;2014-02-12T19:33:56Z&quot;,
         ///  &quot;completedTime&quot;: &quot;2014-02-12T19:33:59Z&quot;,
-        ///  &quot;call&quot;: &quot;https://api.catapult.inetwork.com/v1/users/{userId}/calls/{callId}&quot;,
+        ///  &quot;call&quot;: &quot;https://api.catapult.inetwork.com/v1/users/{userId}/calls/callId&quot;,
         ///  &quot;digits&quot;: &quot;1&quot;
         ///}.
         /// </summary>
@@ -216,33 +216,7 @@ namespace Bandwidth.Net.Test {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to  {
-        ///      &quot;time&quot; : &quot;2012-11-15T01:30:16.208Z&quot;,
-        ///      &quot;category&quot; : &quot;unavailable&quot;,
-        ///      &quot;id&quot; : &quot;errorId&quot;,
-        ///      &quot;details&quot; : [
-        ///         {
-        ///            &quot;id&quot; : &quot;{userErrorDetailId1}&quot;
-        ///,            &quot;name&quot; : &quot;applicationId&quot;,
         ///            &quot;value&quot; : &quot;{applicationId}&quot;,
-        ///         },
-        ///         {
-        ///            &quot;id&quot; : &quot;{userErrorDetailId2}&quot;
-        ///,            &quot;name&quot; : &quot;number&quot;,
-        ///            &quot;value&quot; : &quot;{number}&quot;,
-        ///         },
-        ///         {
-        ///            &quot;id&quot; : &quot;{userErrorDetailId3}&quot;
-        ///,            &quot;name&quot; : &quot;callId&quot;,
-        ///            &quot;value&quot; : &quot;{call [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string Error {
-            get {
-                return ResourceManager.GetString("Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///    Looks up a localized string similar to [
         ///    {
         ///        &quot;number&quot;: &quot;{number1}&quot;,

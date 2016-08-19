@@ -26,14 +26,24 @@ namespace Bandwidth.Net
     public IAvailableNumber AvailableNumber { get; private set; }
 
     /// <summary>
-    /// Access to AvailableNumber Api
+    /// Access to Bridge Api
     /// </summary>
     public IBridge Bridge { get; private set; }
+
+    /// <summary>
+    /// Access to Domain Api
+    /// </summary>
+    public IDomain Domain { get; private set; }
 
     /// <summary>
     /// Access to Call Api
     /// </summary>
     public ICall Call { get; private set; }
+
+    /// <summary>
+    /// Access to Conference Api
+    /// </summary>
+    public IConference Conference { get; private set; }
 
 
     private void SetupApis()
@@ -43,7 +53,9 @@ namespace Bandwidth.Net
       Application = new ApplicationApi { Client = this };
       AvailableNumber = new AvailableNumberApi { Client = this };
       Bridge = new BridgeApi{ Client = this };
+      Domain = new DomainApi{ Client = this };
       Call = new CallApi { Client = this };
+      Conference = new ConferenceApi { Client = this };
     }
   }
 }
