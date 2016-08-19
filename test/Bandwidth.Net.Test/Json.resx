@@ -218,6 +218,33 @@
         "textUrl": "{url-to-full-text}"
     }</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>{
+      "time" : "2012-11-15T01:30:16.208Z",
+      "category" : "unavailable",
+      "id" : "errorId",
+      "details" : [
+         {
+            "id" : "{userErrorDetailId1}"
+,            "name" : "applicationId",
+            "value" : "{applicationId}",
+         },
+         {
+            "id" : "{userErrorDetailId2}"
+,            "name" : "number",
+            "value" : "{number}",
+         },
+         {
+            "id" : "{userErrorDetailId3}"
+,            "name" : "callId",
+            "value" : "{callId}",
+         }
+      ],
+      "message" : "Application {applicationId} (\"Dial a Tune\") for number 
+                   {number} does not specify a URL for call events",
+      "code" : "no-callback-for-call"
+   }</value>
+  </data>
   <data name="Domain" xml:space="preserve">
     <value>{
 	"id" : "domainId", 
