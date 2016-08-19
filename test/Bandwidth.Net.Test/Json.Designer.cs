@@ -217,34 +217,15 @@ namespace Bandwidth.Net.Test {
         
         /// <summary>
         ///    Looks up a localized string similar to {
-        ///    &quot;activeMembers&quot;: 0,
-        ///    &quot;createdTime&quot;: &quot;2013-07-12T15:22:47-02&quot;,
-        ///    &quot;from&quot;: &quot;+19703255647&quot;,
-        ///    &quot;id&quot;: &quot;conferenceId&quot;,
-        ///    &quot;state&quot;: &quot;created&quot;
-        ///}.
+        ///	&quot;id&quot; : &quot;domainId&quot;, 
+        ///		&quot;name&quot; : &quot;mycoolapp&quot;, 
+        ///	&quot;description&quot; : &quot;disruptive app that&apos;s going to revolutonize telecom&quot;, 
+        ///		&quot;endpoints&quot; : &quot;/v1/users/{user-id}/domains/dom-xyz123/endpoints&quot;
+        ///	}.
         /// </summary>
-        public static string Conference {
+        public static string Domain {
             get {
-                return ResourceManager.GetString("Conference", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///    Looks up a localized string similar to {
-        ///      &quot;addedTime&quot;: &quot;2013-07-12T15:54:47-02&quot;,
-        ///      &quot;hold&quot;: false,
-        ///      &quot;id&quot;: &quot;memberId&quot;,
-        ///      &quot;mute&quot;: false,
-        ///      &quot;state&quot;: &quot;active&quot;,
-        ///      &quot;joinTone&quot;: false,
-        ///      &quot;leavingTone&quot;: false,
-        ///      &quot;call&quot;: &quot;https://localhost:8444/v1/users/{userId}/calls/callId1&quot;
-        ///  }.
-        /// </summary>
-        public static string ConferenceMember {
-            get {
-                return ResourceManager.GetString("ConferenceMember", resourceCulture);
+                return ResourceManager.GetString("Domain", resourceCulture);
             }
         }
         

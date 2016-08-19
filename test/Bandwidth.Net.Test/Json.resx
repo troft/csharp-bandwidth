@@ -218,6 +218,14 @@
         "textUrl": "{url-to-full-text}"
     }</value>
   </data>
+  <data name="Domain" xml:space="preserve">
+    <value>{
+	"id" : "domainId", 
+		"name" : "mycoolapp", 
+	"description" : "disruptive app that's going to revolutonize telecom", 
+		"endpoints" : "/v1/users/{user-id}/domains/dom-xyz123/endpoints"
+	}</value>
+  </data>
   <data name="Conference" xml:space="preserve">
     <value>{
     "activeMembers": 0,
