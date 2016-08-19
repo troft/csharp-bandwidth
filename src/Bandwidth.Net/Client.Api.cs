@@ -1,4 +1,4 @@
-﻿using Bandwidth.Net.Api;
+using Bandwidth.Net.Api;
 
 namespace Bandwidth.Net
 {
