@@ -225,6 +225,7 @@
 	"description" : "disruptive app that's going to revolutonize telecom", 
 		"endpoints" : "/v1/users/{user-id}/domains/dom-xyz123/endpoints"
 	}</value>
+  </data>
   <data name="Conference" xml:space="preserve">
     <value>{
     "activeMembers": 0,
