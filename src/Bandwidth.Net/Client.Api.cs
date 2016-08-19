@@ -40,6 +40,7 @@ namespace Bandwidth.Net
     /// </summary>
     public ICall Call { get; private set; }
 
+    
     /// <summary>
     /// Access to Conference Api
     /// </summary>

@@ -226,6 +226,31 @@
   "updated": "2013-09-23T16:42:18Z"
 }</value>
   </data>
+  <data name="Endpoint" xml:space="preserve">
+    <value>{
+	"name" : "jsmith-mobile", 
+	"description" : "John Smiths mobile client", 
+	"domainId" : "domainId", 
+	"applicationId" : "applicationId", 
+	"enabled" : true, 
+	"sipUri" : "jsmith-mobile@doname.bwapp.bwsipp.io", 
+	"credentials" : { 
+		"realm" : "doname.bwapp.bwsipp.io", 
+		"username" : "jsmith-mobile"
+	}
+}</value>
+  </data>
+  <data name="EndpointAuthToken" xml:space="preserve">
+    <value>{"token": "token", "expire": 3600}</value>
+  </data>
+  <data name="MediaFile" xml:space="preserve">
+    <value>{
+    "contentLength": 10,
+    "mediaName": "mediaName1",
+    "content": "api.catapult.inetwork.com/.../media/mediaName1"
+    }
+    </value>
+  </data>  
   <data name="Error" xml:space="preserve">
     <value>{
       "time" : "2012-11-15T01:30:16.208Z",
