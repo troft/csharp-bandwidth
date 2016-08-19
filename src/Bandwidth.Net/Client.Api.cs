@@ -45,6 +45,31 @@ namespace Bandwidth.Net
     /// </summary>
     public IConference Conference { get; private set; }
 
+    /// <summary>
+    /// Access to Message Api
+    /// </summary>
+    public IMessage Message { get; private set; }
+
+    /// <summary>
+    /// Access to NumberInfo Api
+    /// </summary>
+    public INumberInfo NumberInfo { get; private set; }
+
+    /// <summary>
+    /// Access to PhoneNumber Api
+    /// </summary>
+    public IPhoneNumber PhoneNumber { get; private set; }
+
+    /// <summary>
+    /// Access to Recording Api
+    /// </summary>
+    public IRecording Recording { get; private set; }
+
+    /// <summary>
+    /// Access to Transcription Api
+    /// </summary>
+    public ITranscription Transcription { get; private set; }
+
 
     private void SetupApis()
     {
@@ -56,6 +81,11 @@ namespace Bandwidth.Net
       Domain = new DomainApi{ Client = this };
       Call = new CallApi { Client = this };
       Conference = new ConferenceApi { Client = this };
+      Message = new MessageApi { Client = this };
+      NumberInfo = new NumberInfoApi { Client = this };
+      PhoneNumber = new PhoneNumberApi { Client = this };
+      Recording = new RecordingApi { Client = this };
+      Transcription = new TranscriptionApi { Client = this };
     }
   }
 }
