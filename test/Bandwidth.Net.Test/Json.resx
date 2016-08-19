@@ -235,6 +235,14 @@
   <data name="EndpointAuthToken" xml:space="preserve">
     <value>{"token": "token", "expire": 3600}</value>
   </data>
+  <data name="MediaFile" xml:space="preserve">
+    <value>{
+    "contentLength": 10,
+    "mediaName": "mediaName1",
+    "content": "api.catapult.inetwork.com/.../media/mediaName1"
+    }
+    </value>
+  </data>  
   <data name="Error" xml:space="preserve">
     <value>{
       "time" : "2012-11-15T01:30:16.208Z",
