@@ -70,6 +70,16 @@ namespace Bandwidth.Net
     /// </summary>
     public ITranscription Transcription { get; private set; }
 
+    /// <summary>
+    /// Access to Media Api
+    /// </summary>
+    public IMedia Media { get; private set; }
+
+    /// <summary>
+    /// Access to Endpoint Api
+    /// </summary>
+    public IEndpoint Endpoint { get; private set; }
+
 
     private void SetupApis()
     {
@@ -86,6 +96,8 @@ namespace Bandwidth.Net
       PhoneNumber = new PhoneNumberApi { Client = this };
       Recording = new RecordingApi { Client = this };
       Transcription = new TranscriptionApi { Client = this };
+      Media = new MediaApi { Client = this };
+      Endpoint = new EndpointApi { Client = this };
     }
   }
 }
