@@ -344,7 +344,14 @@
 }</value>
   </data>
   <data name="Recording" xml:space="preserve">
-    <value>TODO</value>
+    <value>{
+    "endTime": "2013-02-08T13:17:12.181Z",
+    "id": "recordingId",
+    "media": "https://.../v1/users/.../media/{callId1}-1.wav",
+    "call": "https://.../v1/users/.../calls/{callId1}",
+    "startTime": "2013-02-08T13:15:47.587Z",
+    "state": "complete"
+  }</value>
   </data>
   <data name="Transciption" xml:space="preserve">
     <value>TODO</value>
