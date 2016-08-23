@@ -15,6 +15,7 @@ namespace Bandwidth.Net.Xml.Verbs
     public Call()
     {
       RequestUrlTimeout = 30000;
+      Timeout = 30;
     }
 
     /// <summary>
@@ -32,7 +33,7 @@ namespace Bandwidth.Net.Xml.Verbs
     /// <summary>
     ///   This is the timeout (seconds) for the call to answer
     /// </summary>
-    [XmlAttribute("timeout"), DefaultValue(30000)]
+    [XmlAttribute("timeout")]
     public int Timeout { get; set; }
 
     /// <summary>

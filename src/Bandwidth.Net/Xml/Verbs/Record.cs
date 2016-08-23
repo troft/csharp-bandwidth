@@ -24,6 +24,12 @@ namespace Bandwidth.Net.Xml.Verbs
     public string RequestUrl { get; set; }
 
     /// <summary>
+    ///   The format that the recording will be saved - mp3 or wav.
+    /// </summary>
+    [XmlAttribute("fileFormat")]
+    public string FileFormat { get; set; }
+
+    /// <summary>
     ///   The time in milliseconds to wait for requestUrl response
     /// </summary>
     [XmlAttribute("requestUrlTimeout"), DefaultValue(0)]

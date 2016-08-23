@@ -20,5 +20,11 @@ namespace Bandwidth.Net.Xml.Verbs
     /// </summary>
     [XmlAttribute("requestUrlTimeout"), DefaultValue(0)]
     public int RequestUrlTimeout { get; set; }
+
+    /// <summary>
+    ///   Specify any call Id or message Id where the redirect will be applied to.
+    /// </summary>
+    [XmlAttribute("context")]
+    public string Context { get; set; }
   }
 }
