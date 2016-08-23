@@ -23,7 +23,7 @@ namespace Bandwidth.Net.Xml
     ///   Constructor
     /// </summary>
     /// <param name="bxmlResponse">BXML response object</param>
-    private BandwidthXmlContent(Response bxmlResponse) : base(bxmlResponse.ToXml(), Encoding.UTF8, "text/xml")
+    public BandwidthXmlContent(Response bxmlResponse) : base(bxmlResponse.ToXml(), Encoding.UTF8, "text/xml")
     {
     }
   }
