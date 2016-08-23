@@ -13,7 +13,7 @@ namespace Bandwidth.Net.Test.Xml
       {
         Assert.Equal("text/xml", content.Headers.ContentType.MediaType);
         var xml = await content.ReadAsStringAsync();
-        Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Response>\r\n  <Hangup />\r\n</Response>", xml);
+        Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <Hangup />\n</Response>", xml.Replace("\r\n", "\n"));
       }
     }
   }

@@ -10,7 +10,7 @@ namespace Bandwidth.Net.Test.Xml
     public void TestToXml()
     {
       var response = new Response();
-      Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Response />", response.ToXml());
+      Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response />", response.ToXml().Replace("\r\n", "\n"));
     }
 
     [Fact]
@@ -21,7 +21,9 @@ namespace Bandwidth.Net.Test.Xml
         StringValue = "Test",
         Attribute1 = 10
       });
-      Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Response>\r\n  <TestItem Attribute1=\"10\">\r\n    <StringValue>Test</StringValue>\r\n  </TestItem>\r\n</Response>", response.ToXml());
+      Assert.Equal(
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <TestItem Attribute1=\"10\">\n    <StringValue>Test</StringValue>\n  </TestItem>\n</Response>",
+        response.ToXml().Replace("\r\n", "\n"));
     }
 
     [Fact]
@@ -33,7 +35,9 @@ namespace Bandwidth.Net.Test.Xml
         StringValue = "Test",
         Attribute1 = 10
       });
-      Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Response>\r\n  <TestItem Attribute1=\"10\">\r\n    <StringValue>Test</StringValue>\r\n  </TestItem>\r\n</Response>", response.ToXml());
+      Assert.Equal(
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <TestItem Attribute1=\"10\">\n    <StringValue>Test</StringValue>\n  </TestItem>\n</Response>",
+        response.ToXml().Replace("\r\n", "\n"));
     }
 
     [Fact]
@@ -43,15 +47,17 @@ namespace Bandwidth.Net.Test.Xml
       response.Add(new TestItem
       {
         Attribute1 = 10,
-        Nested = new TestItem { Attribute1 = 20}
+        Nested = new TestItem {Attribute1 = 20}
       });
-      Assert.Equal("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<Response>\r\n  <TestItem Attribute1=\"10\">\r\n    <Nested Attribute1=\"20\" />\r\n  </TestItem>\r\n</Response>", response.ToXml());
+      Assert.Equal(
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <TestItem Attribute1=\"10\">\n    <Nested Attribute1=\"20\" />\n  </TestItem>\n</Response>",
+        response.ToXml().Replace("\r\n", "\n"));
     }
 
     public class TestItem : IVerb
     {
       public string StringValue { get; set; }
-      
+
       [XmlAttribute]
       public int Attribute1 { get; set; }
 
