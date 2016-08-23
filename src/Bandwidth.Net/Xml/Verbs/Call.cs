@@ -49,6 +49,12 @@ namespace Bandwidth.Net.Xml.Verbs
     public string RequestUrl { get; set; }
 
     /// <summary>
+    ///   A collection of phone numbers to transfer the call to.
+    /// </summary>
+    [XmlElement("PhoneNumber")]
+    public string[] PhoneNumbers { get; set; }
+
+    /// <summary>
     /// PlayAudio sub-verb
     /// </summary>
     public PlayAudio PlayAudio { get; set; }
