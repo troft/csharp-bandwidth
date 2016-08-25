@@ -1,5 +1,6 @@
 {
   "version": "3.0.0-preview",
+  "description": "Bandwidth.Net is client library for the Bandwidth Application Platform",
   "buildOptions": {
     "debugType": "portable",
     "xmlDoc": true
@@ -97,7 +98,6 @@
           "type": "git",
           "url": "https://github.com/bandwidthcom/csharp-bandwidth"
       },
-      "summary": "Client library for the Bandwidth Application Platform",
       "tags": [
           "bandwidth", 
           "catapult"
