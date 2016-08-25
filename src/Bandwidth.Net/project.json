@@ -22,16 +22,13 @@
       "buildOptions": {
         "debugType": "full"
       },
-      "dependencies": {
-        "System.Net.Http": "4.*"
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
       }
     },
     "net46": {
-      "buildOptions": {
-        "debugType": "full"
-      },
-      "dependencies": {
-        "System.Net.Http": "4.*"
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
       }
     },
     ".NETPortable,Version=v4.5,Profile=Profile111": {
