@@ -89,5 +89,18 @@
         "mscorlib": "2.0.5.0"
       }
     }
+  },
+  "packOptions": {
+      "projectUrl": "https://github.com/bandwidthcom/csharp-bandwidth",
+      "iconUrl": "http://bandwidth.com/sites/all/themes/bandwidth/images/logo.png",
+      "repository": {
+          "type": "git",
+          "url": "https://github.com/bandwidthcom/csharp-bandwidth"
+      },
+      "summary": "Client library for the Bandwidth Application Platform",
+      "tags": [
+          "bandwidth", 
+          "catapult"
+      ]
   }
 }
