@@ -37,7 +37,7 @@ All interaction with the API is done through a class `Client`. The `Client` cons
 
 | Argument  | Description           | Default value                       | Required |
 |-------------|-----------------------|-------------------------------------|----------|
-| `userId`    | Your Bandwidth user ID | none                         | Yes      |
+| `userId`    | Your user ID | none                         | Yes      |
 | `apiToken`  | Your API token        | none                         | Yes      |
 | `apiSecret` | Your API secret       | none                         | Yes      |
 | `baseUrl`   | The Bandwidth API URL  | `https://api.catapult.inetwork.com` | No       |
@@ -104,7 +104,7 @@ Send a SMS
 
 ```csharp
 var message = await client.Message.SendAsync(new MessageData {
-	From = "+12345678901", // This must be a Catapult number on your account
+	From = "+12345678901", // This must be a Bandwidth number on your account
 	To   = "+12345678902",
 	Text = "Hello world."
 });
@@ -115,7 +115,7 @@ Make a call
 
 ```csharp
 var call = await client.Call.CreateAsync(new CreateCallData {
-	From = "+12345678901", // This must be a Catapult number on your account
+	From = "+12345678901", // This must be a Bandwidth number on your account
 	To   = "+12345678902"
 });
 Console.WriteLine($"Call Id is {call.Id}");
