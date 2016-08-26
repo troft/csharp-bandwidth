@@ -3,18 +3,18 @@
 
 The gender of the voice used to synthesize the sentence. It will be considered only if sentence is not null. The female gender will be used by default.
 
-**Namespace:**&nbsp;<a href ="N_Bandwidth_Net.md">Bandwidth.Net</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-preview
+**Namespace:**&nbsp;<a href ="N_Bandwidth_Net.md">Bandwidth.Net</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0
 
 ## Syntax
 
 **C#**<br />
 ``` C#
-public string Gender { get; set; }
+public Nullable<Gender> Gender { get; set; }
 ```
 
 
 #### Property Value
-Type: <a href="http://msdn2.microsoft.com/en-us/library/s1wwdcbf" target="_blank">String</a>
+Type: <a href="http://msdn2.microsoft.com/en-us/library/b3h38hb0" target="_blank">Nullable</a>(<a href ="T_Bandwidth_Net_Gender.md">Gender</a>)
 
 ## See Also
 
