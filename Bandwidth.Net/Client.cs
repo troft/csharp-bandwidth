@@ -64,7 +64,7 @@ namespace Bandwidth.Net
             }
             JsonSerializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolverInternal()
             };
             JsonSerializerSettings.Converters.Add(new StringEnumConverter
             {
@@ -327,7 +327,19 @@ namespace Bandwidth.Net
         }
     }
 
-    public class ClientOptions
+  internal class CamelCasePropertyNamesContractResolverInternal : CamelCasePropertyNamesContractResolver
+  {
+    protected override string ResolvePropertyName(string propertyName)
+    {
+      if (propertyName.StartsWith("X-"))
+      {
+        return propertyName; // don't change fields `X-ABCD`
+      }
+      return base.ResolvePropertyName(propertyName);
+    }
+  }
+
+  public class ClientOptions
     {
         public string UserId { get; set; }
         public string ApiToken { get; set; }
