@@ -224,6 +224,7 @@
   <HelpKINode Title="Bandwidth.Net.Api.WhisperAudio class" Url="html/T_Bandwidth_Net_Api_WhisperAudio.htm" />
   <HelpKINode Title="Bandwidth.Net.BandwidthException class" Url="html/T_Bandwidth_Net_BandwidthException.htm" />
   <HelpKINode Title="Bandwidth.Net.Client class" Url="html/T_Bandwidth_Net_Client.htm" />
+  <HelpKINode Title="Bandwidth.Net.DefaultConverter class" Url="html/T_Bandwidth_Net_DefaultConverter.htm" />
   <HelpKINode Title="Bandwidth.Net.Gender enumeration" Url="html/T_Bandwidth_Net_Gender.htm" />
   <HelpKINode Title="Bandwidth.Net.IHttp interface" Url="html/T_Bandwidth_Net_IHttp.htm" />
   <HelpKINode Title="Bandwidth.Net.ILazyInstance(Of T) interface" Url="html/T_Bandwidth_Net_ILazyInstance_1.htm" />
@@ -412,6 +413,7 @@
     <HelpKINode Title="Call.CallTimeout Property " Url="html/P_Bandwidth_Net_Api_Call_CallTimeout.htm" />
     <HelpKINode Title="CreateCallData.CallTimeout Property " Url="html/P_Bandwidth_Net_Api_CreateCallData_CallTimeout.htm" />
   </HelpKINode>
+  <HelpKINode Title="CanConvert method" Url="html/M_Bandwidth_Net_DefaultConverter_CanConvert.htm" />
   <HelpKINode Title="Category property" Url="html/P_Bandwidth_Net_Api_Error_Category.htm" />
   <HelpKINode Title="Charge enumeration member" Url="html/T_Bandwidth_Net_Api_AccountTransactionType.htm" />
   <HelpKINode Title="ChargeableDuration property">
@@ -699,6 +701,17 @@
   </HelpKINode>
   <HelpKINode Title="Data property" Url="html/P_Bandwidth_Net_Api_CallEvent_Data.htm" />
   <HelpKINode Title="DateTime to MessageQueryDateTime conversion" Url="html/M_Bandwidth_Net_Api_MessageQueryDateTime_op_Implicit_1.htm" />
+  <HelpKINode Title="DefaultConverter class">
+    <HelpKINode Title="DefaultConverter Class" Url="html/T_Bandwidth_Net_DefaultConverter.htm" />
+    <HelpKINode Title="about DefaultConverter class" Url="html/T_Bandwidth_Net_DefaultConverter.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Bandwidth_Net_DefaultConverter__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Bandwidth_Net_DefaultConverter.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Bandwidth_Net_DefaultConverter.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DefaultConverter.CanConvert method" Url="html/M_Bandwidth_Net_DefaultConverter_CanConvert.htm" />
+  <HelpKINode Title="DefaultConverter.DefaultConverter constructor" Url="html/M_Bandwidth_Net_DefaultConverter__ctor.htm" />
+  <HelpKINode Title="DefaultConverter.ReadJson method" Url="html/M_Bandwidth_Net_DefaultConverter_ReadJson.htm" />
+  <HelpKINode Title="DefaultConverter.WriteJson method" Url="html/M_Bandwidth_Net_DefaultConverter_WriteJson.htm" />
   <HelpKINode Title="DeleteAsync method">
     <HelpKINode Title="IApplication.DeleteAsync Method " Url="html/M_Bandwidth_Net_Api_IApplication_DeleteAsync.htm" />
     <HelpKINode Title="IDomain.DeleteAsync Method " Url="html/M_Bandwidth_Net_Api_IDomain_DeleteAsync.htm" />
@@ -1491,6 +1504,7 @@
   <HelpKINode Title="ReadAsByteArrayAsync method" Url="html/M_Bandwidth_Net_Api_DownloadMediaFileData_ReadAsByteArrayAsync.htm" />
   <HelpKINode Title="ReadAsStreamAsync method" Url="html/M_Bandwidth_Net_Api_DownloadMediaFileData_ReadAsStreamAsync.htm" />
   <HelpKINode Title="ReadAsStringAsync method" Url="html/M_Bandwidth_Net_Api_DownloadMediaFileData_ReadAsStringAsync.htm" />
+  <HelpKINode Title="ReadJson method" Url="html/M_Bandwidth_Net_DefaultConverter_ReadJson.htm" />
   <HelpKINode Title="Realm property" Url="html/P_Bandwidth_Net_Api_EndpointCredentials_Realm.htm" />
   <HelpKINode Title="Reason property" Url="html/P_Bandwidth_Net_Api_CallGather_Reason.htm" />
   <HelpKINode Title="ReceiptRequested property">
@@ -1874,5 +1888,6 @@
   <HelpKINode Title="WhisperAudio.Sentence property" Url="html/P_Bandwidth_Net_Api_WhisperAudio_Sentence.htm" />
   <HelpKINode Title="WhisperAudio.Voice property" Url="html/P_Bandwidth_Net_Api_WhisperAudio_Voice.htm" />
   <HelpKINode Title="WhisperAudio.WhisperAudio constructor" Url="html/M_Bandwidth_Net_Api_WhisperAudio__ctor.htm" />
+  <HelpKINode Title="WriteJson method" Url="html/M_Bandwidth_Net_DefaultConverter_WriteJson.htm" />
   <HelpKINode Title="Zip property" Url="html/P_Bandwidth_Net_Api_LocalNumberQuery_Zip.htm" />
 </HelpKI>
