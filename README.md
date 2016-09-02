@@ -2,7 +2,7 @@
 
 A .Net client library for the [Bandwidth Application Platform](http://bandwidth.com/products/application-platform?utm_medium=social&utm_source=github&utm_campaign=dtolb&utm_content=_)
 
-The current version is v3.0, released ## August, 2016. Version 2.14 is available  [here](https://github.com/bandwidthcom/csharp-bandwidth/tree/v2.14).
+The current version is v3.0, released ## August, 2016. Version 2.15 is available  [here](https://github.com/bandwidthcom/csharp-bandwidth/tree/v2.15).
 
 
 [![Build on .Net 4.5 (Windows)](https://ci.appveyor.com/api/projects/status/bhv8hs3fx9k6c33i?svg=true)](https://ci.appveyor.com/project/avbel/csharp-bandwidth)
@@ -16,14 +16,14 @@ The current version is v3.0, released ## August, 2016. Version 2.14 is available
 
 `Bandwidth.Net` is available on Nuget (Nuget 3.0+ is required):
 
-	Install-Package Bandwidth.Net
+	Install-Package Bandwidth.Net -Pre
 
 ## Supported Versions
-`Bandwidth.Net` should work on all levels of .Net Framework 4.5+. 
+`Bandwidth.Net` should work on all levels of .Net Framework 4.5+.
 
 | Version | Support Level |
 |---------|---------------|
-| <4.5 | Unsupported | 
+| <4.5 | Unsupported |
 | 4.5 | Supported |
 | 4.6 | Supported |
 | .Net Core (netstandard1.6)  | Supported |
@@ -60,7 +60,7 @@ Your `client` object is now ready to use the API.
 
 This library uses lazy evalutions in next cases:
     - Object creation,
-    - Get list of objects 
+    - Get list of objects
 
 #### Object Creation
 
@@ -93,9 +93,9 @@ foreach(var call in calls) // a request to Catapult API will be executed here
 
 var list = calls.ToList(); // a request to Catapult API will be executed here
 
-``` 
+```
 
-#### 
+####
 
 
 ### Examples
