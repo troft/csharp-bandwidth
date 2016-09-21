@@ -51,5 +51,11 @@ namespace Bandwidth.Net.Xml.Verbs
         /// </summary>
         [XmlAttribute("transcribeCallbackUrl")]
         public string TranscribeCallbackUrl { get; set; }
-    }
+
+        /// <summary>
+        /// The file format of the recorded call.
+        /// </summary>
+        [XmlAttribute("recordingFileFormat")]
+        public string RecordingFileFormat { get; set; }
+  }
 }
