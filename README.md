@@ -228,3 +228,7 @@ For current discussions on 3.0 please see the [3.0 issues section on GitHub](htt
     * [X] Create
     * [X] Get info for single transcription
     * [X] Get all transcriptions for a recording
+    
+## Build Notes
+
+If you are going to build the library to sources with mobile OSes support you should have installed Xamarin tools. 
