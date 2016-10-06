@@ -77,8 +77,8 @@ namespace Bandwidth.Net
       {
         return "";
       }
-      var type = query.GetType().GetTypeInfo();
-      return string.Join("&", from p in type.GetProperties()
+      var type = query.GetType();
+      return string.Join("&", from p in type.GetRuntimeProperties()
                               let v = p.GetValue(query)
                               where v != null
                               let tv = TransformQueryParameterValue(v)
@@ -93,7 +93,7 @@ namespace Bandwidth.Net
 
     private static string TransformQueryParameterValue(object value)
     {
-      if (value is DateTime || value is DateTime?)
+      if (value is DateTime)
       {
         return ((DateTime)value).ToUniversalTime().ToString("o");
       }
@@ -132,11 +132,10 @@ namespace Bandwidth.Net
     {
       using (var response = await MakeJsonRequestAsync(method, path, cancellationToken, query, body))
       {
-        return await response.ReadAsJsonAsync<T>();
+        return await response.Content.ReadAsJsonAsync<T>();
       }
     }
 
-    //TODO check all usage calls Dispose()
     internal async Task<HttpResponseMessage> MakeJsonRequestAsync(HttpMethod method, string path, CancellationToken? cancellationToken = null, object query = null, object body = null)
     {
       var request = CreateRequest(method, path, query);
@@ -148,10 +147,20 @@ namespace Bandwidth.Net
       return await MakeRequestAsync(request, cancellationToken);
     }
 
+    internal async Task MakeJsonRequestWithoutResponseAsync(HttpMethod method, string path,
+      CancellationToken? cancellationToken = null, object query = null, object body = null)
+    {
+      using (await MakeJsonRequestAsync(method, path, cancellationToken, query, body))
+      {
+      }
+    }
+
     internal async Task<string> MakePostJsonRequestAsync(string path, CancellationToken? cancellationToken = null, object body = null)
     {
-      var response = await MakeJsonRequestAsync(HttpMethod.Post, path, cancellationToken, null, body);
-      return (response.Headers.Location ?? new Uri("http://localhost") ).AbsolutePath.Split('/').LastOrDefault();
+      using (var response = await MakeJsonRequestAsync(HttpMethod.Post, path, cancellationToken, null, body))
+      {
+        return (response.Headers.Location ?? new Uri("http://localhost")).AbsolutePath.Split('/').LastOrDefault();
+      }
     }
   }
 }

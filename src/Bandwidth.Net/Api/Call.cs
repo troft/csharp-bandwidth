@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Bandwidth.Net.Api
 {
@@ -34,7 +37,7 @@ namespace Bandwidth.Net.Api
     /// <returns>Instance of created call</returns>
     /// <example>
     ///   <code>
-    /// var call = await client.Call.CreateAsync(new CreateCallData{ CallIds = new[]{"callId"}});
+    /// var call = await client.Call.CreateAsync(new CreateCallData{ From = "+1234567890", To = "+1234567891"});
     /// </code>
     /// </example>
     Task<ILazyInstance<Call>> CreateAsync(CreateCallData data, CancellationToken? cancellationToken = null);
@@ -59,13 +62,14 @@ namespace Bandwidth.Net.Api
     /// <param name="callId">Id of call to change</param>
     /// <param name="data">Changed data</param>
     /// <param name="cancellationToken">Optional token to cancel async operation</param>
+    /// <param name="disposeResponse">Set false if you are going to free response resources yourselves</param>
     /// <returns>Http response message</returns>
     /// <example>
     ///   <code>
     /// await client.Call.UpdateAsync("callId", new UpdateCallData {CallAudio = true});
     /// </code>
     /// </example>
-    Task<HttpResponseMessage> UpdateAsync(string callId, UpdateCallData data, CancellationToken? cancellationToken = null);
+    Task<HttpResponseMessage> UpdateAsync(string callId, UpdateCallData data, CancellationToken? cancellationToken = null, bool disposeResponse = true);
 
     /// <summary>
     ///   Send DTMF (phone keypad digit presses)
@@ -201,16 +205,21 @@ namespace Bandwidth.Net.Api
         $"/users/{Client.UserId}/calls/{callId}", cancellationToken);
     }
 
-    public Task<HttpResponseMessage> UpdateAsync(string callId, UpdateCallData data,
-      CancellationToken? cancellationToken = null)
+    public async Task<HttpResponseMessage> UpdateAsync(string callId, UpdateCallData data,
+      CancellationToken? cancellationToken = null, bool disposeResponse = true)
     {
-      return Client.MakeJsonRequestAsync(HttpMethod.Post,
+      var response =  await Client.MakeJsonRequestAsync(HttpMethod.Post,
         $"/users/{Client.UserId}/calls/{callId}", cancellationToken, null, data);
+      if (disposeResponse)
+      {
+        response.Dispose();
+      }
+      return response;
     }
 
     public Task SendDtmfAsync(string callId, SendDtmfData data, CancellationToken? cancellationToken = null)
     {
-      return Client.MakeJsonRequestAsync(HttpMethod.Post,
+      return Client.MakeJsonRequestWithoutResponseAsync(HttpMethod.Post,
         $"/users/{Client.UserId}/calls/{callId}/dtmf", cancellationToken, null, data);
     }
 
@@ -256,14 +265,14 @@ namespace Bandwidth.Net.Api
     public Task UpdateGatherAsync(string callId, string gatherId, UpdateGatherData data,
       CancellationToken? cancellationToken = null)
     {
-      return Client.MakeJsonRequestAsync(HttpMethod.Post,
+      return Client.MakeJsonRequestWithoutResponseAsync(HttpMethod.Post,
         $"/users/{Client.UserId}/calls/{callId}/gather/{gatherId}", cancellationToken, null, data);
     }
 
     public Task PlayAudioAsync(string callId, PlayAudioData data, CancellationToken? cancellationToken = null)
     {
       return
-        Client.MakeJsonRequestAsync(HttpMethod.Post,
+        Client.MakeJsonRequestWithoutResponseAsync(HttpMethod.Post,
           $"/users/{Client.UserId}/calls/{callId}/audio", cancellationToken, null, data);
     }
   }
@@ -372,15 +381,17 @@ namespace Bandwidth.Net.Api
     /// </example>
     public static async Task<string> TransferAsync(this ICall call, string callId, string to, string callerId = null, WhisperAudio whisperAudio = null, string callbackUrl = null, CancellationToken ? cancellationToken = null)
     {
-      var response = await call.UpdateAsync(callId, new UpdateCallData
+      using (var response = await call.UpdateAsync(callId, new UpdateCallData
       {
         State = CallState.Transferring,
         TransferTo = to,
         TransferCallerId = callerId,
         CallbackUrl = callbackUrl,
         WhisperAudio = whisperAudio
-      }, cancellationToken);
-      return response.Headers.Location.AbsolutePath.Split('/').Last();
+      }, cancellationToken, false))
+      {
+        return response.Headers.Location.AbsolutePath.Split('/').Last();
+      }
     }
   }
 
@@ -513,6 +524,7 @@ namespace Bandwidth.Net.Api
     /// <summary>
     /// Map of Sip headers prefixed by "X-". Up to 5 headers can be sent per call.
     /// </summary>
+    [JsonConverter(typeof(DefaultConverter))]
     public Dictionary<string, string> SipHeaders { get; set; }
   }
 
@@ -700,6 +712,11 @@ namespace Bandwidth.Net.Api
     public bool? RecordingEnabled { get; set; }
 
     /// <summary>
+    /// The file format of the recorded call.
+    /// </summary>
+    public string RecordingFileFormat { get; set; }
+
+    /// <summary>
     /// Indicates the maximum duration of call recording in seconds
     /// </summary>
     public int? RecordingMaxDuration { get; set; }
@@ -717,6 +734,7 @@ namespace Bandwidth.Net.Api
     /// <summary>
     /// Map of Sip headers prefixed by "X-". Up to 5 headers can be sent per call.
     /// </summary>
+    [JsonConverter(typeof(DefaultConverter))]
     public Dictionary<string, string> SipHeaders { get; set; }
   }
 
@@ -745,7 +763,11 @@ namespace Bandwidth.Net.Api
     /// </summary>
     public bool RecordingEnabled { get; set; }
 
-
+    /// <summary>
+    /// The file format of the recorded call.
+    /// </summary>
+    public string RecordingFileFormat { get; set; }
+    
     /// <summary>
     /// Audio to be played to the number that the call will be transfered to
     /// </summary>
@@ -935,5 +957,4 @@ namespace Bandwidth.Net.Api
     /// </summary>
     public string DtmfOut { get; set; }
   }
-
 }

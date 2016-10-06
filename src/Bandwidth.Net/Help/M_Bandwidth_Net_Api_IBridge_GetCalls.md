@@ -3,7 +3,7 @@
 
 Get a list of calls of bridge
 
-**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-preview
+**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0
 
 ## Syntax
 
@@ -25,7 +25,7 @@ Type: <a href="http://msdn2.microsoft.com/en-us/library/9eekhta0" target="_blank
 ## Examples
 
 ```
-var bridges = client.Bridge.List();
+var calls = client.Bridge.GetCalls();
 ```
 
 
