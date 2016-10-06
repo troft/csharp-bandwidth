@@ -12,7 +12,8 @@ PlayAudio sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Pu
 Record sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_RequestUrl.md">RequestUrl</a></td><td>
 Relative or absolute URL to send event and request new BXML document when call is answered or call is hung up.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_RequestUrlTimeout.md">RequestUrlTimeout</a></td><td>
 Integer time in milliseconds to wait for requestUrl response</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_SpeakSentence.md">SpeakSentence</a></td><td>
-SpeakSentence sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Timeout.md">Timeout</a></td><td>
+SpeakSentence sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Tag.md">Tag</a></td><td>
+Additional data for the call</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Timeout.md">Timeout</a></td><td>
 This is the timeout (seconds) for the call to answer</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_To.md">To</a></td><td>
 Defines the number the call will be called to.</td></tr></table>&nbsp;
 <a href="#call-properties">Back to Top</a>

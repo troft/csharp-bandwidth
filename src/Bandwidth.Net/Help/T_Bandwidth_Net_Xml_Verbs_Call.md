@@ -6,7 +6,7 @@ The Call verb is used to create call to another number.
 
 ## Inheritance Hierarchy
 <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">System.Object</a><br />&nbsp;&nbsp;Bandwidth.Net.Xml.Verbs.Call<br />
-**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Xml_Verbs.md">Bandwidth.Net.Xml.Verbs</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-beta2
+**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Xml_Verbs.md">Bandwidth.Net.Xml.Verbs</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-beta3
 
 ## Syntax
 
@@ -31,7 +31,8 @@ PlayAudio sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Pu
 Record sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_RequestUrl.md">RequestUrl</a></td><td>
 Relative or absolute URL to send event and request new BXML document when call is answered or call is hung up.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_RequestUrlTimeout.md">RequestUrlTimeout</a></td><td>
 Integer time in milliseconds to wait for requestUrl response</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_SpeakSentence.md">SpeakSentence</a></td><td>
-SpeakSentence sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Timeout.md">Timeout</a></td><td>
+SpeakSentence sub-verb</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Tag.md">Tag</a></td><td>
+Additional data for the call</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_Timeout.md">Timeout</a></td><td>
 This is the timeout (seconds) for the call to answer</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Xml_Verbs_Call_To.md">To</a></td><td>
 Defines the number the call will be called to.</td></tr></table>&nbsp;
 <a href="#call-class">Back to Top</a>

@@ -56,5 +56,15 @@ namespace Bandwidth.Net.Xml.Verbs
     /// </summary>
     [XmlAttribute("bargeable"), DefaultValue(true)]
     public bool Bargeable { get; set; }
+
+    /// <summary>
+    ///  Using the SpeakSentence inside the Gather verb will speak the text to the callee.
+    /// </summary>
+    public SpeakSentence SpeakSentence { get; set; }
+
+    /// <summary>
+    /// Using the PlayAudio inside the Gather verb will play the media to the callee.
+    /// </summary>
+    public PlayAudio PlayAudio { get; set; }
   }
 }

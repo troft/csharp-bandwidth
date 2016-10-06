@@ -54,6 +54,13 @@ namespace Bandwidth.Net.Xml.Verbs
     [XmlElement("PhoneNumber")]
     public string[] PhoneNumbers { get; set; }
 
+
+    /// <summary>
+    /// Additional data for the call
+    /// </summary>
+    [XmlAttribute("tag")]
+    public string Tag { get; set; }
+
     /// <summary>
     /// PlayAudio sub-verb
     /// </summary>
