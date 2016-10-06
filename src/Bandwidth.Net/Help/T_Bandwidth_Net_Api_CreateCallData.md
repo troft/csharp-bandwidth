@@ -6,7 +6,7 @@ Parameters to create an call
 
 ## Inheritance Hierarchy
 <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">System.Object</a><br />&nbsp;&nbsp;Bandwidth.Net.Api.CreateCallData<br />
-**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0
+**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-beta2
 
 ## Syntax
 
@@ -33,7 +33,8 @@ Determine how long should the platform wait for call answer before timing out in
 Id of the conference where the call will be added</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_FallbackUrl.md">FallbackUrl</a></td><td>
 The server URL used to send the call events if the request to callbackUrl fails.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_From.md">From</a></td><td>
 The phone number or SIP address that made the call. Phone numbers are in E.164 format (e.g. +15555555555) -or- SIP addresses (e.g. identify@domain.com).</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_RecordingEnabled.md">RecordingEnabled</a></td><td>
-Indicates if the call should be recorded after being created</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_RecordingMaxDuration.md">RecordingMaxDuration</a></td><td>
+Indicates if the call should be recorded after being created</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_RecordingFileFormat.md">RecordingFileFormat</a></td><td>
+The file format of the recorded call.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_RecordingMaxDuration.md">RecordingMaxDuration</a></td><td>
 Indicates the maximum duration of call recording in seconds</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_SipHeaders.md">SipHeaders</a></td><td>
 Map of Sip headers prefixed by "X-". Up to 5 headers can be sent per call.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_Tag.md">Tag</a></td><td>
 A string that will be included in the callback events of the call</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_CreateCallData_To.md">To</a></td><td>

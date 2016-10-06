@@ -23,12 +23,17 @@
         "xunit.runner.console": "2.1.0",
         "System.Runtime": "4.0.0.0",
         "System.Threading.Tasks": "4.0.0.0"
+      },
+      "frameworkAssemblies": {
+        "System.Xml": "4.0.0.0",
+        "System.Xml.Serialization": "4.0.0.0"
       }
     },
     "netcoreapp1.0": {
       "dependencies": {
         "System.Runtime.Serialization.Primitives": "4.1.1",
         "dotnet-test-xunit": "2.2.0-preview2-build1029",
+        "System.Xml.XmlSerializer": "4.0.11",        
         "Microsoft.NETCore.App": {
           "type": "platform",
           "version": "1.0.0"
