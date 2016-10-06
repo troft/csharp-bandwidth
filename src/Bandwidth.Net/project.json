@@ -31,7 +31,9 @@
     },
     "net46": {
       "frameworkAssemblies": {
-        "System.Net.Http": "4.0.0.0"
+        "System.Net.Http": "4.0.0.0",
+        "System.Xml": "4.0.0.0",
+        "System.Xml.Serialization": "4.0.0.0"
       }
     },
     ".NETPortable,Version=v4.5,Profile=Profile111": {
@@ -40,7 +42,8 @@
       },
       "dependencies": {
         "System.Net.Http": "4.*",
-        "System.Net.Primitives": "4.*"
+        "System.Net.Primitives": "4.*",
+        "System.Xml.XmlSerializer": "4.*"
       },
       "frameworkAssemblies": {
         "System.Core": "4.0.0.0",
@@ -56,13 +59,13 @@
         "System.Net.Http": "4.*",
         "System.Net.Primitives": "4.*",
         "System.IO": "4.*",
-        "System.Reflection": "4.*",
-        "System.Xml": "4.*",
-        "System.Xml.Serialization": "4.*"
+        "System.Reflection": "4.*"
       },
       "frameworkAssemblies": {
         "System.Core": "2.0.5.0",
         "System": "2.0.5.0",
+        "System.Xml": "2.0.5.0",
+        "System.Xml.Serialization": "2.0.5.0",
         "mscorlib": "2.0.5.0"
       }
     },
@@ -71,13 +74,13 @@
         "System.Net.Http": "4.*",
         "System.Net.Primitives": "4.*",
         "System.IO": "4.*",
-        "System.Reflection": "4.*",
-        "System.Xml": "4.*",
-        "System.Xml.Serialization": "4.*"
+        "System.Reflection": "4.*"
       },
       "frameworkAssemblies": {
         "System.Core": "2.0.5.0",
         "System": "2.0.5.0",
+        "System.Xml": "2.0.5.0",
+        "System.Xml.Serialization": "2.0.5.0",
         "mscorlib": "2.0.5.0"
       }
     },
@@ -86,13 +89,13 @@
         "System.Net.Http": "4.*",
         "System.Net.Primitives": "4.*",
         "System.IO": "4.*",
-        "System.Reflection": "4.*",
-        "System.Xml": "4.*",
-        "System.Xml.Serialization": "4.*"
+        "System.Reflection": "4.*"
       },
       "frameworkAssemblies": {
         "System.Core": "2.0.5.0",
         "System": "2.0.5.0",
+        "System.Xml": "2.0.5.0",
+        "System.Xml.Serialization": "2.0.5.0",
         "mscorlib": "2.0.5.0"
       }
     }
