@@ -6,7 +6,7 @@ Parameters of a call to change
 
 ## Inheritance Hierarchy
 <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">System.Object</a><br />&nbsp;&nbsp;Bandwidth.Net.Api.UpdateCallData<br />
-**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0
+**Namespace:**&nbsp;<a href ="N_Bandwidth_Net_Api.md">Bandwidth.Net.Api</a><br />**Assembly:**&nbsp;Bandwidth.Net (in Bandwidth.Net.dll) Version: 3.0.0-beta2
 
 ## Syntax
 
@@ -26,7 +26,8 @@ Initializes a new instance of the UpdateCallData class</td></tr></table>&nbsp;
 ## Properties
 &nbsp;<table><tr><th></th><th>Name</th><th>Description</th></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_CallbackUrl.md">CallbackUrl</a></td><td>
 The server URL where the call events related to the call will be sent.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_RecordingEnabled.md">RecordingEnabled</a></td><td>
-Indicates if the call should be recorded after being created</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_State.md">State</a></td><td>
+Indicates if the call should be recorded after being created</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_RecordingFileFormat.md">RecordingFileFormat</a></td><td>
+The file format of the recorded call.</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_State.md">State</a></td><td>
 Call state</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_TransferCallerId.md">TransferCallerId</a></td><td>
 This is the caller id that will be used when the call is transferred</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_TransferTo.md">TransferTo</a></td><td>
 Number that the call is going to be transferred to</td></tr><tr><td>![Public property](media/pubproperty.gif "Public property")</td><td><a href ="P_Bandwidth_Net_Api_UpdateCallData_WhisperAudio.md">WhisperAudio</a></td><td>

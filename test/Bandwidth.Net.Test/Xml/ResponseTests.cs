@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Bandwidth.Net.Xml;
 using Xunit;
 
@@ -52,6 +53,20 @@ namespace Bandwidth.Net.Test.Xml
       Assert.Equal(
         "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Response>\n  <TestItem Attribute1=\"10\">\n    <Nested Attribute1=\"20\" />\n  </TestItem>\n</Response>",
         response.ToXml().Replace("\r\n", "\n"));
+    }
+
+    [Fact]
+    public void TestReadXml()
+    {
+      var response = new Response() as IXmlSerializable;
+      Assert.Throws<NotImplementedException>(() => response.ReadXml(null));
+    }
+
+    [Fact]
+    public void TestGetSchema()
+    {
+      var response = new Response() as IXmlSerializable;
+      Assert.Null(response.GetSchema());
     }
 
     public class TestItem : IVerb
