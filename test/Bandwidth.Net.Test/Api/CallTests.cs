@@ -34,31 +34,18 @@ namespace Bandwidth.Net.Test.Api
     {
       var response = new HttpResponseMessage(HttpStatusCode.Created);
       response.Headers.Location = new Uri("http://localhost/path/id");
-      var getResponse = new HttpResponseMessage
-      {
-        Content = Helpers.GetJsonContent("Call")
-      };
       var context = new MockContext<IHttp>();
       context.Arrange(
         m =>
           m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidCreateRequest(r)), HttpCompletionOption.ResponseContentRead,
             null)).Returns(Task.FromResult(response));
-      context.Arrange(
-        m =>
-          m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetRequest(r)), HttpCompletionOption.ResponseContentRead,
-            null)).Returns(Task.FromResult(getResponse));
       var api = Helpers.GetClient(context).Call;
-      var call = await api.CreateAsync(new CreateCallData{From = "+1234567890", To = "+1234567981"});
+      var callId = await api.CreateAsync(new CreateCallData{From = "+1234567890", To = "+1234567981"});
       context.Assert(
         m =>
           m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetRequest(r)), HttpCompletionOption.ResponseContentRead,
             null), Invoked.Never);
-      Assert.Equal("id", call.Id);
-      ValidateCall(call.Instance);
-      context.Assert(
-        m =>
-          m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetRequest(r)), HttpCompletionOption.ResponseContentRead,
-            null), Invoked.Once);
+      Assert.Equal("id", callId);
     }
 
     [Fact]
@@ -187,31 +174,18 @@ namespace Bandwidth.Net.Test.Api
     {
       var response = new HttpResponseMessage(HttpStatusCode.Created);
       response.Headers.Location = new Uri("http://localhost/path/gatherId");
-      var getResponse = new HttpResponseMessage
-      {
-        Content = Helpers.GetJsonContent("CallGather")
-      };
       var context = new MockContext<IHttp>();
       context.Arrange(
         m =>
           m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidCreateGatherRequest(r)), HttpCompletionOption.ResponseContentRead,
             null)).Returns(Task.FromResult(response));
-      context.Arrange(
-        m =>
-          m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetGatherRequest(r)), HttpCompletionOption.ResponseContentRead,
-            null)).Returns(Task.FromResult(getResponse));
       var api = Helpers.GetClient(context).Call;
-      var gather = await api.CreateGatherAsync("id", new CreateGatherData {MaxDigits = "1"});
+      var gatherId = await api.CreateGatherAsync("id", new CreateGatherData {MaxDigits = "1"});
       context.Assert(
         m =>
           m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetGatherRequest(r)), HttpCompletionOption.ResponseContentRead,
             null), Invoked.Never);
-      Assert.Equal("gatherId", gather.Id);
-      ValidateCallGather(gather.Instance);
-      context.Assert(
-        m =>
-          m.SendAsync(The<HttpRequestMessage>.Is(r => IsValidGetGatherRequest(r)), HttpCompletionOption.ResponseContentRead,
-            null), Invoked.Once);
+      Assert.Equal("gatherId", gatherId);
     }
 
     [Fact]
